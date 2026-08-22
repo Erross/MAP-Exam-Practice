@@ -35,13 +35,18 @@ for(let seed=1;seed<=100;seed++){
   assert.equal(form.length,2,"all machine-scorable parts of the chosen PE must stay together");
 }
 
-const blueprint={assessmentId:"fixture",officialPointTarget:6,verified:true,supportedPointTarget:6,constraints:[
+const executableRules=[
   {field:"reportingCategory",value:"A",minPoints:3,maxPoints:3},
   {field:"reportingCategory",value:"B",minPoints:3,maxPoints:3}
-]};
+];
+const blueprint={
+  assessmentId:"fixture",officialPointTarget:6,officialPointTargetVerified:true,
+  officialConstraints:[{code:"A",label:"A",minPoints:3,maxPoints:3},{code:"B",label:"B",minPoints:3,maxPoints:3}],
+  officialRangesVerified:true,verified:true,executable:true,supportedPointTarget:6,constraints:executableRules
+};
 for(let seed=1;seed<=100;seed++){
   const form=drawBlueprintForm(bank,blueprint,{rng:seededRandom(seed)});
   assert.deepEqual(validateBlueprintForm(form,blueprint),[]);
   assert.deepEqual(new Set(form.map(i=>i.id)),new Set(["a1","a2","a3","b1","b2","b3"]));
 }
-console.log("PASS: practice and blueprint drawers preserve stimulus groups; MAP math Session 3 delivers one complete performance event.");
+console.log("PASS: practice and executable-blueprint drawers preserve stimulus groups; MAP math Session 3 delivers one complete performance event.");

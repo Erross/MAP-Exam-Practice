@@ -15,6 +15,8 @@ for(const g of [3,4,5]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=
 for(const g of [6,7,8]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorAllowed===true),true);
 assert.deepEqual(ASSESSMENTS["g8-math"].sessions.map(s=>s.guidelineMinutes),[[30,50],[30,50],[30,40]]);
 assert.deepEqual(ASSESSMENTS["g8-science"].sessions.map(s=>s.guidelineMinutes),[[55,75],[55,75]]);
+assert.equal(ASSESSMENTS["g5-science"].sessions.every(s=>s.calculatorLevel==="four-function"),true);
+assert.equal(ASSESSMENTS["g8-science"].sessions.every(s=>s.calculatorLevel==="scientific"),true);
 assert.equal(ASSESSMENTS["g8-ela"].sessions[3].deferred.includes("listening-audio"),true);
 
 const ids=new Set(); let count=0;
@@ -27,5 +29,28 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
   }
 }
 assert(count>=40,"Expected at least 40 development items");
+
+const fixture=(itemType,scoring,extra={})=>({id:`fixture-${itemType}`,grade:8,subject:"math",standard:"fixture",strand:"fixture",dok:1,itemType,points:1,sessionEligibility:[1],prompt:"fixture",scoring,rationale:"fixture",provenance:"original-synthetic",...extra});
+const scoringCases=[
+  [fixture("multiple_choice",{answer:"B"},{options:["A","B","C","D"]}),"B","A"],
+  [fixture("multi_select",{answers:["A","C"]},{options:["A","B","C","D"]}),["C","A"],["A","B"]],
+  [fixture("dropdown",{answer:"red"},{options:["red","blue"]}),"red","blue"],
+  [fixture("hot_text",{answer:"word"},{options:["word","other"]}),"word","other"],
+  [fixture("hotspot",{answer:"region-b"},{regions:["region-a","region-b"]}),"region-b","region-a"],
+  [fixture("matching",{matches:{A:"x",B:"y"}},{pairs:[{key:"A"},{key:"B"}],choices:["x","y"]}),{A:"x",B:"y"},{A:"y",B:"x"}],
+  [fixture("matching_table",{matches:{A:"yes",B:"no"}},{rows:[{key:"A"},{key:"B"}],columns:["yes","no"]}),{A:"yes",B:"no"},{A:"no",B:"yes"}],
+  [fixture("drag_drop",{order:["a","b","c"]},{tokens:["a","b","c"]}),["a","b","c"],["b","a","c"]],
+  [fixture("numeric_input",{answer:3.5,tolerance:0.01}),3.5,3.6],
+  [fixture("number_line",{answer:2.25,tolerance:0.05}),2.27,2.4],
+  [fixture("angle_input",{answer:65,tolerance:0}),65,64],
+  [fixture("coordinate_point",{answer:{x:2,y:-1}}),{x:2,y:-1},{x:2,y:1}],
+  [fixture("coordinate_line",{answer:{x1:0,y1:1,x2:2,y2:3}}),{x1:0,y1:1,x2:2,y2:3},{x1:0,y1:1,x2:3,y2:2}],
+  [fixture("bar_graph",{answer:[2,4,6]},{fields:["a","b","c"]}),[2,4,6],[2,4,5]],
+  [fixture("line_plot",{answer:[1,2,1]},{fields:["a","b","c"]}),[1,2,1],[1,1,2]],
+  [fixture("clock_input",{answer:{hour:4,minute:35}}),{hour:4,minute:35},{hour:4,minute:30}],
+  [fixture("ebsr",{answers:["A","D"]},{parts:[{options:["A","B"]},{options:["C","D"]}]}),["A","D"],["A","C"]]
+];
+for(const [item,good,bad] of scoringCases){assert.equal(scoreResponse(item,good).earned,1,`${item.itemType} should score correct`);assert.equal(scoreResponse(item,bad).earned,0,`${item.itemType} should score incorrect`);}
+
 const sanity=BANKS["g8-math"].find(i=>i.id==="g8m-005"); assert.equal(scoreResponse(sanity,7).earned,1); assert.equal(scoreResponse(sanity,6).earned,0);
-console.log(`PASS: ${count} development items; 14 assessment configs; core invariants green.`);
+console.log(`PASS: ${count} development items; 14 assessment configs; ${scoringCases.length} response-type scoring fixtures; core invariants green.`);

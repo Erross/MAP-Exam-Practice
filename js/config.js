@@ -26,7 +26,7 @@ const elaSessions = {
 };
 
 const mathGuides = {3:[[30,55],[30,55],[15,30]],4:[[30,55],[30,55],[15,30]],5:[[35,60],[35,60],[15,30]],6:[[30,50],[30,50],[30,40]],7:[[30,50],[30,50],[30,40]],8:[[30,50],[30,50],[30,40]]};
-const mathSessions = grade => mathGuides[grade].map((range,index)=>S(index+1,index===2?"Session 3 — Performance Event":`Session ${index+1}`,grade>=6,{performanceEvent:index===2,deferred:index===2?["human-scored-written-pe-parts"]:[]}));
+const mathSessions = grade => mathGuides[grade].map((range,index)=>S(index+1,index===2?"Session 3 — Performance Event":`Session ${index+1}`,range,grade>=6,{performanceEvent:index===2,deferred:index===2?["human-scored-written-pe-parts"]:[]}));
 const scienceSessions = grade => [S(1,"Session 1",grade===5?[60,80]:[55,75],true,{deferred:["human-scored-constructed-response"]}),S(2,"Session 2",grade===5?[60,80]:[55,75],true,{deferred:["human-scored-constructed-response"]})];
 
 const assessments = {};

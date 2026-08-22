@@ -1,0 +1,8 @@
+const base={grade:5,subject:"math",provenance:"original-synthetic",alignmentStatus:"development-needs-clean-room",strand:"Data & Statistics",sessionEligibility:[1,2]};
+export const BANK_G5_MATH_DIVERSITY_DS=[
+{...base,id:"g5m-div-d001",standard:"5.DS.A.2",dok:2,itemType:"numeric_input",points:1,prompt:"The plant heights are 6, 7, 7, 8, and 10 cm. How many plants are 7 cm tall?",scoring:{answer:2,tolerance:0},rationale:"The value 7 appears twice."},
+{...base,id:"g5m-div-d002",standard:"5.DS.A.2",dok:2,itemType:"line_plot",points:1,prompt:"Four measurements are 2, 3, 3, and 5. Enter the frequencies for 2, 3, 4, and 5 in that order.",fields:["2","3","4","5"],scoring:{answer:[1,2,0,1]},rationale:"There is one 2, two 3s, no 4s, and one 5."},
+{...base,id:"g5m-div-d003",standard:"5.DS.A.2",dok:2,itemType:"numeric_input",points:1,prompt:"A line plot has 3 marks at 1/2, 2 marks at 3/4, and 1 mark at 1. How many data values are shown?",scoring:{answer:6,tolerance:0},rationale:"3+2+1=6 values."},
+{...base,id:"g5m-div-d004",standard:"5.DS.A.2",dok:3,itemType:"numeric_input",points:1,prompt:"Five ribbon lengths are 1/2, 1/2, 3/4, 3/4, and 3/4 meter. How many more ribbons are 3/4 meter than 1/2 meter?",scoring:{answer:1,tolerance:0},rationale:"There are three 3/4-meter ribbons and two 1/2-meter ribbons."},
+{...base,id:"g5m-div-d005",standard:"5.DS.A.2",dok:3,itemType:"numeric_input",points:1,prompt:"A line plot represents the values 1.25, 1.5, 1.5, 1.75, and 2. What is the difference between the greatest and least values?",scoring:{answer:0.75,tolerance:0.001},rationale:"2-1.25=0.75."}
+];

@@ -18,7 +18,7 @@ function currentSession(){return state.assessment?.sessions.find(s=>s.id===state
 function launchable(a){return a.status==="released"||(DEV&&bankFor(a).length>0);}
 function calculatorSummary(session){
   if(session.calculatorPolicy==="item-designated") return "Calculator availability varies by item";
-  if(session.calculatorPolicy==="available") return `${session.calculatorLevel==="scientific"?"Scientific":"Four-function"} calculator available`;
+  if(session.calculatorPolicy==="available") return session.calculatorLabel||`${session.calculatorLevel==="scientific"?"Scientific":"Four-function"} calculator available`;
   return "Calculator not allowed / not applicable";
 }
 function calculatorLevelForItem(session,item){

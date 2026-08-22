@@ -31,11 +31,12 @@ const mathSessions = grade => mathGuides[grade].map((range,index)=>S(
   index+1,
   index===2?"Session 3 — Performance Event":`Session ${index+1}`,
   range,
-  grade>=6?"item-designated":"none",
+  grade>=6?"available":"none",
   {
     performanceEvent:index===2,
     deferred:index===2?["human-scored-written-pe-parts"]:[],
-    calculatorLevel:grade>=6?"scientific":"none"
+    calculatorLevel:grade>=6?"scientific":"none",
+    calculatorLabel:grade>=6?"Calculator available":"Calculator not allowed"
   }
 ));
 const scienceSessions = grade => [

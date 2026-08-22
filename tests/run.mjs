@@ -38,7 +38,7 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
     for(let seed=1;seed<=100;seed++){ const draw=drawPracticeSession(bank,sessionId,{maxItems:12,rng:seededRandom(seed)}); const variants=draw.map(i=>i.variantFamily||i.id); assert.equal(new Set(variants).size,variants.length); }
   }
 }
-assert(count>=78,"Expected at least 78 development items across Grade 5 and Grade 8");
+assert(count>=112,"Expected at least 112 development items across Grade 3, Grade 5, and Grade 8");
 
 const fixture=(itemType,scoring,extra={})=>({id:`fixture-${itemType}`,grade:8,subject:"math",standard:"fixture",strand:"fixture",dok:1,itemType,points:1,sessionEligibility:[1],prompt:"fixture",scoring,rationale:"fixture",provenance:"original-synthetic",...extra});
 const scoringCases=[

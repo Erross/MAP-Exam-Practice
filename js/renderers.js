@@ -61,6 +61,15 @@ function clockInput(current,onChange){
   const send=()=>onChange({hour:hour.value===""?"":Number(hour.value),minute:minute.value===""?"":Number(minute.value)}); hour.onchange=send; minute.onchange=send; d.append(hour,document.createTextNode(" : "),minute); return d;
 }
 
+function constructedResponse(item,current,onChange){
+  const d=document.createElement("div"); d.className="constructed-response";
+  const textarea=document.createElement("textarea"); textarea.rows=Number(item.responseRows||6); textarea.value=typeof current==="string"?current:""; textarea.setAttribute("aria-label","Constructed response");
+  if(Number.isFinite(item.maxLength)&&item.maxLength>0) textarea.maxLength=item.maxLength;
+  textarea.oninput=()=>onChange(textarea.value,{rerender:false});
+  const help=document.createElement("small"); help.textContent="Your response is saved for manual review. This practice site does not automatically score written responses.";
+  d.append(textarea,help); return d;
+}
+
 export function renderControl(item,current,onChange){
   if(item.itemType==="multiple_choice"||item.itemType==="hot_text") return choices(item,current,onChange,false);
   if(item.itemType==="multi_select") return choices(item,current,onChange,true);
@@ -75,6 +84,7 @@ export function renderControl(item,current,onChange){
   if(item.itemType==="drag_drop") return ordering(item,current,onChange);
   if(item.itemType==="bar_graph"||item.itemType==="line_plot") return dataEntry(item,current,onChange);
   if(item.itemType==="clock_input") return clockInput(current,onChange);
+  if(item.itemType==="constructed_response") return constructedResponse(item,current,onChange);
   if(item.itemType==="ebsr"){
     const d=document.createElement("div"); d.className="ebsr"; const vals=Array.isArray(current)?current:[];
     (item.parts||[]).forEach((part,idx)=>{ const fs=document.createElement("fieldset"); const lg=document.createElement("legend"); lg.textContent=`Part ${idx+1}: ${part.prompt}`; fs.append(lg); const pseudo={...item,id:`${item.id}-p${idx}`,options:part.options}; fs.append(choices(pseudo,vals[idx],v=>{const n=[...vals]; n[idx]=v; onChange(n);},Boolean(part.multi))); d.append(fs);}); return d;

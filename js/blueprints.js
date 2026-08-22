@@ -1,11 +1,126 @@
 import { deliveryBundles } from "./core/form-builder.js";
 
 const freeze=o=>Object.freeze(o);
+const frozenRules=rules=>freeze(rules.map(rule=>freeze({...rule})));
 
 const pointTargets={
   "g3-ela":56,"g4-ela":56,"g5-ela":56,"g6-ela":56,"g7-ela":52,"g8-ela":56,
   "g3-math":48,"g4-math":48,"g5-math":48,"g6-math":54,"g7-math":54,"g8-math":54,
   "g5-science":60,"g8-science":60
+};
+
+// These ranges are the current transcription target recorded in BLUEPRINT_TRANSCRIPTION.md.
+// They remain non-release evidence until independently confirmed against the current DESE primary PDF.
+const officialConstraints={
+  "g3-math":[
+    {code:"NBT",label:"Number Sense and Operations in Base Ten",minPoints:8,maxPoints:10},
+    {code:"NF",label:"Number Sense and Operations in Fractions",minPoints:8,maxPoints:10},
+    {code:"RA",label:"Relationships and Algebraic Thinking",minPoints:8,maxPoints:18},
+    {code:"GM+DS",label:"Geometry/Measurement + Data/Statistics",minPoints:7,maxPoints:16},
+    {code:"PE",label:"Performance Event",minPoints:6,maxPoints:6,component:"performance-event"}
+  ],
+  "g4-math":[
+    {code:"NBT",label:"Number Sense and Operations in Base Ten",minPoints:9,maxPoints:11},
+    {code:"NF",label:"Number Sense and Operations in Fractions",minPoints:8,maxPoints:14},
+    {code:"RA",label:"Relationships and Algebraic Thinking",minPoints:5,maxPoints:11},
+    {code:"GM",label:"Geometry and Measurement",minPoints:7,maxPoints:13},
+    {code:"DS",label:"Data and Statistics",minPoints:3,maxPoints:5},
+    {code:"PE",label:"Performance Event",minPoints:6,maxPoints:6,component:"performance-event"}
+  ],
+  "g5-math":[
+    {code:"NBT",label:"Number Sense and Operations in Base Ten",minPoints:7,maxPoints:9},
+    {code:"NF",label:"Number Sense and Operations in Fractions",minPoints:11,maxPoints:15},
+    {code:"RA",label:"Relationships and Algebraic Thinking",minPoints:5,maxPoints:11},
+    {code:"GM",label:"Geometry and Measurement",minPoints:6,maxPoints:14},
+    {code:"DS",label:"Data and Statistics",minPoints:2,maxPoints:4},
+    {code:"PE",label:"Performance Event",minPoints:6,maxPoints:6,component:"performance-event"}
+  ],
+  "g6-math":[
+    {code:"RP",label:"Ratios and Proportional Relationships",minPoints:7,maxPoints:9},
+    {code:"NS",label:"Number Sense",minPoints:9,maxPoints:14},
+    {code:"EEI",label:"Expressions, Equations and Inequalities",minPoints:12,maxPoints:18},
+    {code:"GM+DSP",label:"Geometry/Measurement + Data/Statistics/Probability",minPoints:10,maxPoints:15},
+    {code:"PE",label:"Performance Event",minPoints:8,maxPoints:8,component:"performance-event"}
+  ],
+  "g7-math":[
+    {code:"RP",label:"Ratios and Proportional Relationships",minPoints:10,maxPoints:12},
+    {code:"NS",label:"Number Sense",minPoints:8,maxPoints:10},
+    {code:"EEI",label:"Expressions, Equations and Inequalities",minPoints:11,maxPoints:15},
+    {code:"GM",label:"Geometry and Measurement",minPoints:4,maxPoints:8},
+    {code:"DSP",label:"Data/Statistics/Probability",minPoints:5,maxPoints:10},
+    {code:"PE",label:"Performance Event",minPoints:8,maxPoints:8,component:"performance-event"}
+  ],
+  "g8-math":[
+    {code:"NS",label:"Number Sense",minPoints:2,maxPoints:4},
+    {code:"EEI",label:"Expressions, Equations and Inequalities",minPoints:15,maxPoints:21},
+    {code:"GM",label:"Geometry and Measurement",minPoints:9,maxPoints:15},
+    {code:"DSP",label:"Data/Statistics/Probability",minPoints:3,maxPoints:5},
+    {code:"F",label:"Functions",minPoints:7,maxPoints:11},
+    {code:"PE",label:"Performance Event",minPoints:8,maxPoints:8,component:"performance-event"}
+  ],
+  "g3-ela":[
+    {code:"RL",label:"Reading Literary",minPoints:12,maxPoints:14},
+    {code:"RI",label:"Reading Informational",minPoints:12,maxPoints:14},
+    {code:"RES",label:"Research",minPoints:7,maxPoints:9},
+    {code:"W",label:"Writing / Writing Process",minPoints:7,maxPoints:9},
+    {code:"L",label:"Language",minPoints:5,maxPoints:7},
+    {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
+  ],
+  "g4-ela":[
+    {code:"RL",label:"Reading Literary",minPoints:12,maxPoints:14},
+    {code:"RI",label:"Reading Informational",minPoints:12,maxPoints:14},
+    {code:"RES",label:"Research",minPoints:7,maxPoints:9},
+    {code:"WP",label:"Writing Process",minPoints:2,maxPoints:2},
+    {code:"WT",label:"Compose well-developed writing text",minPoints:8,maxPoints:8,component:"writing-task"},
+    {code:"L",label:"Language",minPoints:4,maxPoints:4},
+    {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
+  ],
+  "g5-ela":[
+    {code:"RL",label:"Reading Literary",minPoints:12,maxPoints:14},
+    {code:"RI",label:"Reading Informational",minPoints:12,maxPoints:14},
+    {code:"RES",label:"Research",minPoints:7,maxPoints:9},
+    {code:"W",label:"Writing / Writing Process",minPoints:7,maxPoints:9},
+    {code:"L",label:"Language",minPoints:5,maxPoints:7},
+    {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
+  ],
+  "g6-ela":[
+    {code:"RL",label:"Reading Literary",minPoints:13,maxPoints:15},
+    {code:"RI",label:"Reading Informational",minPoints:13,maxPoints:15},
+    {code:"RES",label:"Research",minPoints:7,maxPoints:9},
+    {code:"W",label:"Writing",minPoints:8,maxPoints:8,component:"writing-task"},
+    {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
+  ],
+  "g7-ela":[
+    {code:"RL",label:"Reading Literary",minPoints:13,maxPoints:15},
+    {code:"RI",label:"Reading Informational",minPoints:13,maxPoints:15},
+    {code:"RES",label:"Research",minPoints:7,maxPoints:9},
+    {code:"W",label:"Writing",minPoints:7,maxPoints:9,component:"writing-task"},
+    {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
+  ],
+  "g8-ela":[
+    {code:"RL",label:"Reading Literary",minPoints:13,maxPoints:15},
+    {code:"RI",label:"Reading Informational",minPoints:13,maxPoints:15},
+    {code:"RES",label:"Research",minPoints:7,maxPoints:9},
+    {code:"WW",label:"Writing — Approaching the Task as a Writer",minPoints:8,maxPoints:8,component:"writing-task"},
+    {code:"WR",label:"Writing — Approaching the Task as a Reader",minPoints:4,maxPoints:4,component:"writing-task"},
+    {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
+  ],
+  "g5-science":[
+    {code:"PS",label:"Physical Science",minPoints:17,maxPoints:26},
+    {code:"LS",label:"Life Science",minPoints:15,maxPoints:22},
+    {code:"ESS",label:"Earth and Space Science",minPoints:15,maxPoints:22}
+  ],
+  "g8-science":[
+    {code:"PS",label:"Physical Science",minPoints:15,maxPoints:23},
+    {code:"LS",label:"Life Science",minPoints:15,maxPoints:23},
+    {code:"ESS",label:"Earth and Space Science",minPoints:15,maxPoints:23}
+  ]
+};
+
+const blockersFor=assessmentId=>{
+  if(assessmentId.endsWith("-ela")) return ["current-DESE-range-primary-confirmation","writing/listening-auto-score-gap","supported-subset-constraints-not-finalized"];
+  if(assessmentId.endsWith("-science")) return ["current-DESE-range-primary-confirmation","constructed-response-scoring-gap","supported-subset-constraints-not-finalized"];
+  return ["current-DESE-range-primary-confirmation","complete-operational-performance-events-needed","ordinary-category-alignment-not-finalized"];
 };
 
 export const BLUEPRINTS=freeze(Object.fromEntries(Object.entries(pointTargets).map(([assessmentId,officialPointTarget])=>[
@@ -14,9 +129,15 @@ export const BLUEPRINTS=freeze(Object.fromEntries(Object.entries(pointTargets).m
     id:assessmentId,
     assessmentId,
     officialPointTarget,
+    officialConstraints:frozenRules(officialConstraints[assessmentId]||[]),
+    officialPointTargetVerified:true,
+    officialRangesVerified:false,
+    officialRangeEvidence:"corroborating-copy-transcribed-primary-current-file-confirmation-pending",
     verified:false,
-    verificationStatus:"current-DESE-range-transcription-pending",
-    sourceRecord:"OFFICIAL_MAP_SOURCES.md",
+    executable:false,
+    verificationStatus:"official-total-verified-ranges-pending-primary-confirmation-execution-blocked",
+    sourceRecord:"BLUEPRINT_TRANSCRIPTION.md",
+    executionBlockers:freeze(blockersFor(assessmentId)),
     supportedPointTarget:null,
     constraints:freeze([])
   })
@@ -41,9 +162,16 @@ export function validateBlueprintSpec(blueprint){
   if(!blueprint||typeof blueprint!=="object")return ["blueprint missing"];
   if(typeof blueprint.assessmentId!=="string")errors.push("assessmentId required");
   if(!Number.isFinite(blueprint.officialPointTarget)||blueprint.officialPointTarget<=0)errors.push("officialPointTarget must be positive");
+  if(!Array.isArray(blueprint.officialConstraints)||!blueprint.officialConstraints.length)errors.push("officialConstraints required");
+  for(const [index,rule] of (blueprint.officialConstraints||[]).entries()){
+    if(rule.minPoints!==undefined&&(!Number.isFinite(rule.minPoints)||rule.minPoints<0))errors.push(`official constraint ${index}: invalid minPoints`);
+    if(rule.maxPoints!==undefined&&(!Number.isFinite(rule.maxPoints)||rule.maxPoints<0))errors.push(`official constraint ${index}: invalid maxPoints`);
+  }
   if(blueprint.verified){
+    if(blueprint.officialRangesVerified!==true)errors.push("verified blueprint requires primary-current official range verification");
+    if(blueprint.executable!==true)errors.push("verified blueprint must be executable");
     if(!Number.isFinite(blueprint.supportedPointTarget)||blueprint.supportedPointTarget<=0)errors.push("verified blueprint requires supportedPointTarget");
-    if(!Array.isArray(blueprint.constraints)||!blueprint.constraints.length)errors.push("verified blueprint requires constraints");
+    if(!Array.isArray(blueprint.constraints)||!blueprint.constraints.length)errors.push("verified blueprint requires executable constraints");
   }
   for(const [index,rule] of (blueprint.constraints||[]).entries()){
     if(rule.minPoints!==undefined&&(!Number.isFinite(rule.minPoints)||rule.minPoints<0))errors.push(`constraint ${index}: invalid minPoints`);
@@ -95,7 +223,7 @@ function addBundle(selected,bundle,usedVariants,usedIds,blueprint){
 export function drawBlueprintForm(bank,blueprint,{rng=Math.random,maxAttempts=500}={}){
   const specErrors=validateBlueprintSpec(blueprint);
   if(specErrors.length)throw new Error(`Invalid blueprint: ${specErrors.join("; ")}`);
-  if(!blueprint.verified)throw new Error(`${blueprint.assessmentId}: blueprint is not independently verified`);
+  if(!blueprint.verified||!blueprint.executable)throw new Error(`${blueprint.assessmentId}: blueprint is not independently verified and executable`);
 
   const allBundles=deliveryBundles(bank);
   for(let attempt=0;attempt<maxAttempts;attempt++){

@@ -56,7 +56,7 @@ export const assessmentList = () => Object.values(ASSESSMENTS);
 export const getAssessment = id => ASSESSMENTS[id] || null;
 
 export const SUPPORTED_ITEM_TYPES = Object.freeze([
-  "multiple_choice","multi_select","ebsr","dropdown","matching","matching_table","drag_drop","hot_text","hotspot","numeric_input","number_line","coordinate_point","coordinate_line","line_plot","bar_graph","clock_input","angle_input"
+  "multiple_choice","multi_select","ebsr","dropdown","matching","matching_table","drag_drop","hot_text","hotspot","numeric_input","number_line","coordinate_point","coordinate_line","line_plot","bar_graph","clock_input","angle_input","constructed_response"
 ]);
 
 export function sessionHasDeferredContent(session){ return Boolean(session?.deferred?.length); }

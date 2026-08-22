@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/delivery-groups.mjs && node tests/pe-contract.mjs",
+    "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/delivery-groups.mjs && node tests/pe-contract.mjs && node tests/blueprint-capacity.mjs",
     "diagnose": "node scripts/tell-diagnostics.mjs",
     "diagnose:alignment": "node scripts/bank-alignment.mjs",
     "audit": "node scripts/release-audit.mjs",

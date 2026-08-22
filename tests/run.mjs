@@ -16,8 +16,13 @@ for(const a of Object.values(ASSESSMENTS)){
   assert.equal(BLUEPRINTS[a.blueprintId].assessmentId,a.id);
   assert.equal(BLUEPRINTS[a.blueprintId].officialPointTarget,a.points);
 }
-for(const g of [3,4,5]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="none"),true);
-for(const g of [6,7,8]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="item-designated"),true);
+for(const g of [3,4,5]){
+  assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="none"&&!s.calculatorAllowed),true);
+}
+for(const g of [6,7,8]){
+  assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorAllowed),true);
+  assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorLabel==="Calculator available"),true);
+}
 assert.deepEqual(ASSESSMENTS["g8-math"].sessions.map(s=>s.guidelineMinutes),[[30,50],[30,50],[30,40]]);
 assert.deepEqual(ASSESSMENTS["g8-science"].sessions.map(s=>s.guidelineMinutes),[[55,75],[55,75]]);
 assert.equal(ASSESSMENTS["g5-science"].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorLevel==="four-function"),true);
@@ -38,7 +43,7 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
     for(let seed=1;seed<=100;seed++){ const draw=drawPracticeSession(bank,sessionId,{maxItems:12,rng:seededRandom(seed)}); const variants=draw.map(i=>i.variantFamily||i.id); assert.equal(new Set(variants).size,variants.length); }
   }
 }
-assert(count>=390,"Expected at least 390 development items across all 14 Grade-Level banks");
+assert(count>=462,"Expected at least 462 development items across all 14 Grade-Level banks");
 
 const fixture=(itemType,scoring,extra={})=>({id:`fixture-${itemType}`,grade:8,subject:"math",standard:"fixture",strand:"fixture",dok:1,itemType,points:1,sessionEligibility:[1],prompt:"fixture",scoring,rationale:"fixture",provenance:"original-synthetic",...extra});
 const scoringCases=[

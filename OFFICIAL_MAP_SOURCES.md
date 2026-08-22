@@ -22,6 +22,8 @@ When DESE pages from different administration years disagree, the project does n
 
 Science Grade-Level materials may assess expectations introduced in earlier elementary grades. Therefore an item delivered in a Grade 5 Science practice bank is not required to carry a `5.*` expectation code; its standard tag must identify the actual Missouri expectation being assessed.
 
+For Mathematics, DESE's current assessment-resource description states that the item specifications include a **Calculator Designation** indicating whether a calculator is available for questions written to a particular expectation. The application therefore models Grades 6-8 Math as `item-designated`, not as a blanket calculator-on condition. A released Grades 6-8 Math item must carry an independently verified `calculatorLevel` (`none`, `four-function`, or `scientific`). Grade 3-5 Math remains calculator-prohibited absent an accommodation. Science calculator availability is modeled at the assessment/session level from the governing administration guidance.
+
 ## Current operational facts encoded by the project
 
 - ELA and Mathematics: Grades 3-8; Science: Grades 5 and 8.
@@ -32,9 +34,13 @@ Science Grade-Level materials may assess expectations introduced in earlier elem
 - Science: 2 sessions; operational assessment includes multiple-choice, TE, and constructed-response items.
 - DESE timing ranges are guidelines; Grade-Level assessments do not use a student countdown time limit.
 - Students may not return to a session after it is completed/submitted.
-- Mathematics calculators: not allowed Grades 3-5; allowed Grades 6-8.
-- Science calculators: allowed Grades 5 and 8.
+- Mathematics calculators: not allowed in Grades 3-5 without an accommodation; Grades 6-8 availability must follow the expectation/item calculator designation rather than a blanket grade-level switch.
+- Science calculators: allowed in Grades 5 and 8 under the administration guidance encoded by the project.
 - Current point targets: Math G3-5 48, Math G6-8 54; ELA G3-6 and G8 56, ELA G7 52; Science G5/G8 60.
+
+## Blueprint transcription status
+
+`js/blueprints.js` contains a record for all 14 Grade-Level assessments and the official total-point target for each. Those records intentionally remain `verified: false` until the current DESE blueprint category/item/point ranges have been independently transcribed and checked. The release audit refuses to release an assessment without a verified blueprint and then requires 5,000 blueprint-constrained full-form draws. This prevents a generic random-draw bank from being promoted merely because its total item count looks plausible.
 
 ## Scope caveat
 

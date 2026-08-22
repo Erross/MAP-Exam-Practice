@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { PROGRAM, ASSESSMENTS, SUPPORTED_ITEM_TYPES } from "../js/config.js";
 import { BANKS } from "../js/banks.js";
 import { validateItem, scoreResponse } from "../js/core/item-types.js";
+import { scoreAttempt } from "../js/core/scoring.js";
 import { drawPracticeSession, deliveryGroupKey, seededRandom } from "../js/core/form-builder.js";
 import { drawBlueprintForm,validateBlueprintForm,validateBlueprintSpec,BLUEPRINTS } from "../js/blueprints.js";
 import { newAttempt,materializeItems,isRestorableAttempt,setResponse } from "../js/core/session.js";
@@ -9,6 +10,8 @@ import { newAttempt,materializeItems,isRestorableAttempt,setResponse } from "../
 assert.equal(PROGRAM.family,"map"); assert.equal(PROGRAM.timingPolicy,"guideline");
 assert.equal(Object.keys(ASSESSMENTS).length,14,"Expected 14 Grade-Level assessment configs");
 assert.equal(Object.keys(BLUEPRINTS).length,14,"Expected blueprint records for all 14 Grade-Level assessments");
+assert.equal(SUPPORTED_ITEM_TYPES.length,18,"Expected 17 auto-scored response types plus constructed response capture");
+assert(SUPPORTED_ITEM_TYPES.includes("constructed_response"));
 for(const a of Object.values(ASSESSMENTS)){
   assert.equal(a.sessions.every(s=>s.timingPolicy==="guideline"),true);
   assert.equal(a.sessions.every(s=>Array.isArray(s.guidelineMinutes)&&s.guidelineMinutes.length===2&&s.guidelineMinutes.every(Number.isFinite)),true,`${a.id}: every session needs a numeric guideline range`);
@@ -68,7 +71,7 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
     for(let seed=1;seed<=100;seed++){ const draw=drawPracticeSession(bank,sessionId,{maxItems:12,rng:seededRandom(seed)}); const variants=draw.map(i=>i.variantFamily||i.id); assert.equal(new Set(variants).size,variants.length); }
   }
 }
-assert(count>=791,"Expected at least 791 development items across all 14 Grade-Level banks");
+assert(count>=1175,"Expected at least 1175 development items across all 14 Grade-Level banks");
 
 const fixture=(itemType,scoring,extra={})=>({id:`fixture-${itemType}`,grade:8,subject:"math",standard:"fixture",strand:"fixture",dok:1,itemType,points:1,sessionEligibility:[1],prompt:"fixture",scoring,rationale:"fixture",provenance:"original-synthetic",...extra});
 const scoringCases=[
@@ -91,6 +94,17 @@ const scoringCases=[
   [fixture("ebsr",{answers:["A","D"]},{parts:[{options:["A","B"]},{options:["C","D"]}]}),["A","D"],["A","C"]]
 ];
 for(const [item,good,bad] of scoringCases){assert.equal(scoreResponse(item,good).earned,1,`${item.itemType} should score correct`);assert.equal(scoreResponse(item,bad).earned,0,`${item.itemType} should score incorrect`);}
+
+const manualFixture=fixture("constructed_response",{mode:"manual",rubric:{maxPoints:2,criteria:["Explains the reasoning with relevant evidence."]}},{id:"fixture-constructed-response",points:2});
+assert.deepEqual(validateItem(manualFixture),[],"manual constructed-response fixture should validate");
+const manualResult=scoreResponse(manualFixture,"A written explanation.");
+assert.equal(manualResult.earned,0); assert.equal(manualResult.possible,0); assert.equal(manualResult.correct,null); assert.equal(manualResult.requiresManualScore,true); assert.equal(manualResult.manualPossible,2); assert.equal(manualResult.answered,true);
+const emptyManualResult=scoreResponse(manualFixture,""); assert.equal(emptyManualResult.answered,false); assert.equal(emptyManualResult.manualPossible,2);
+const invalidAutoKeyedManual={...manualFixture,scoring:{...manualFixture.scoring,answer:"model answer"}};
+assert(validateItem(invalidAutoKeyedManual).some(e=>e.includes("must not contain an automatic answer key")),"constructed response must reject automatic answer keys");
+const autoFixture=fixture("multiple_choice",{answer:"B"},{id:"fixture-auto-with-manual",options:["A","B","C","D"]});
+const mixedScore=scoreAttempt([autoFixture,manualFixture],{"fixture-auto-with-manual":"B","fixture-constructed-response":"A written explanation."});
+assert.equal(mixedScore.earned,1); assert.equal(mixedScore.possible,1); assert.equal(mixedScore.manualPossible,2); assert.equal(mixedScore.totalPossible,3); assert.equal(mixedScore.percent,100); assert.equal(mixedScore.manualItems,1); assert.equal(mixedScore.manualAnswered,1);
 
 const shuffleItem=fixture("multiple_choice",{answer:"B"},{id:"shuffle-fixture",options:["A","B","C","D"]});
 const attempt=newAttempt("g8-math",1,[shuffleItem],()=>0);
@@ -129,4 +143,4 @@ assert.throws(()=>drawBlueprintForm(blueprintBank,{...blueprintFixture,verified:
 assert.throws(()=>drawBlueprintForm(BANKS["g8-math"],BLUEPRINTS["g8-math"]),/not independently verified and executable/);
 
 const sanity=BANKS["g8-math"].find(i=>i.id==="g8m-005"); assert.equal(scoreResponse(sanity,7).earned,1); assert.equal(scoreResponse(sanity,6).earned,0);
-console.log(`PASS: ${count} development items across ${Object.keys(BANKS).length} banks; 14 assessment configs/official blueprint records; ${scoringCases.length} response-type scoring fixtures; persisted option randomization; executable-blueprint guards; core invariants green.`);
+console.log(`PASS: ${count} development items across ${Object.keys(BANKS).length} banks; 14 assessment configs/official blueprint records; ${scoringCases.length} auto-scored response fixtures plus manual constructed response; persisted option randomization; executable-blueprint guards; core invariants green.`);

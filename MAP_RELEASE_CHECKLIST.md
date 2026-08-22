@@ -21,6 +21,7 @@
 - [ ] Every stimulus-backed released item has a stable stimulus/set identifier.
 - [ ] Stimulus/set metadata and displayed prose/data are internally consistent.
 - [ ] Passage/set delivery behavior preserves intended grouping and does not strand stimulus questions unpredictably.
+- [ ] Constructed responses use manual scoring mode, have a point-matched rubric, and contain no automatic answer key.
 
 ## Content correctness and grade fit
 - [ ] Every answer independently reviewed.
@@ -39,11 +40,13 @@
 - [ ] Stimulus families stay intact where required.
 - [ ] Variant siblings never collide.
 - [ ] Deferred official components are never silently replaced with extra auto-scored content.
+- [ ] Manual-review points are excluded from automatic earned/possible totals and clearly disclosed to the user.
 - [ ] Generic 12-item development-session draws are not presented as release evidence.
 
 ## Retake diversity
 - [ ] 5,000 independent verified-blueprint attempt pairs measured.
 - [ ] Mean exact-item overlap <=40% for release-scale banks.
+- [ ] Mean point-weighted overlap <=40% for release-scale Math banks.
 - [ ] Mean stimulus/set overlap <=50% where stimulus-backed content exists.
 - [ ] Stimulus/set overlap is reported separately from item overlap.
 
@@ -53,8 +56,10 @@
 - [ ] Timing ranges labeled guidance, not limits.
 - [ ] Calculator policy correct for grade/subject/session/item.
 - [ ] Supported TE interactions keyboard-accessible where practicable.
+- [ ] Constructed-response text persists without losing focus and is labeled as requiring human scoring.
 - [ ] Answers and randomized displayed option order persist through navigation/refresh.
 - [ ] Submitted session locks against re-entry.
+- [ ] Results clearly separate auto-scored points from any manual-review points.
 - [ ] Results label themselves unofficial practice performance; no invented MAP scale score/proficiency classification.
 - [ ] Audio/written omissions are clear before starting.
 

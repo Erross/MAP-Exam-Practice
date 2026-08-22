@@ -27,6 +27,14 @@ for(let seed=1;seed<=100;seed++){
   }
 }
 
+const pe=(id,group)=>({id,grade:5,subject:"math",standard:"fixture",strand:"Performance Event",dok:2,itemType:"numeric_input",points:1,sessionEligibility:[3],prompt:id,scoring:{answer:1},rationale:"fixture",provenance:"original-synthetic",stimulus:{id:group,title:group,text:group}});
+const peBank=[pe("pe-a1","pe-a"),pe("pe-a2","pe-a"),pe("pe-b1","pe-b"),pe("pe-b2","pe-b"),pe("pe-c1","pe-c"),pe("pe-c2","pe-c")];
+for(let seed=1;seed<=100;seed++){
+  const form=drawPracticeSession(peBank,3,{maxItems:12,rng:seededRandom(seed)});
+  assert.equal(new Set(form.map(i=>i.stimulus.id)).size,1,"MAP math practice Session 3 must deliver one performance event");
+  assert.equal(form.length,2,"all machine-scorable parts of the chosen PE must stay together");
+}
+
 const blueprint={assessmentId:"fixture",officialPointTarget:6,verified:true,supportedPointTarget:6,constraints:[
   {field:"reportingCategory",value:"A",minPoints:3,maxPoints:3},
   {field:"reportingCategory",value:"B",minPoints:3,maxPoints:3}
@@ -36,4 +44,4 @@ for(let seed=1;seed<=100;seed++){
   assert.deepEqual(validateBlueprintForm(form,blueprint),[]);
   assert.deepEqual(new Set(form.map(i=>i.id)),new Set(["a1","a2","a3","b1","b2","b3"]));
 }
-console.log("PASS: practice and blueprint drawers preserve stimulus delivery groups.");
+console.log("PASS: practice and blueprint drawers preserve stimulus groups; MAP math Session 3 delivers one complete performance event.");

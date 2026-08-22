@@ -3,6 +3,7 @@ import { PROGRAM, ASSESSMENTS, SUPPORTED_ITEM_TYPES } from "../js/config.js";
 import { BANKS } from "../js/banks.js";
 import { validateItem, scoreResponse } from "../js/core/item-types.js";
 import { drawPracticeSession, seededRandom } from "../js/core/form-builder.js";
+import { newAttempt,materializeItems,isRestorableAttempt,setResponse } from "../js/core/session.js";
 
 assert.equal(PROGRAM.family,"map"); assert.equal(PROGRAM.timingPolicy,"guideline");
 assert.equal(Object.keys(ASSESSMENTS).length,14,"Expected 14 Grade-Level assessment configs");
@@ -52,5 +53,14 @@ const scoringCases=[
 ];
 for(const [item,good,bad] of scoringCases){assert.equal(scoreResponse(item,good).earned,1,`${item.itemType} should score correct`);assert.equal(scoreResponse(item,bad).earned,0,`${item.itemType} should score incorrect`);}
 
+const shuffleItem=fixture("multiple_choice",{answer:"B"},{id:"shuffle-fixture",options:["A","B","C","D"]});
+const attempt=newAttempt("g8-math",1,[shuffleItem],()=>0);
+assert.equal(isRestorableAttempt(attempt),true);
+const displayed=materializeItems([shuffleItem],attempt)[0];
+assert.deepEqual(displayed.options,["B","C","D","A"],"display order should follow persisted shuffle");
+assert.equal(scoreResponse(displayed,"B").earned,1,"semantic key survives option shuffle");
+assert.deepEqual(materializeItems([shuffleItem],attempt)[0].options,displayed.options,"resume materializes same option order");
+const locked={...attempt,submitted:true}; assert.throws(()=>setResponse(locked,"shuffle-fixture","B"),/locked/);
+
 const sanity=BANKS["g8-math"].find(i=>i.id==="g8m-005"); assert.equal(scoreResponse(sanity,7).earned,1); assert.equal(scoreResponse(sanity,6).earned,0);
-console.log(`PASS: ${count} development items; 14 assessment configs; ${scoringCases.length} response-type scoring fixtures; core invariants green.`);
+console.log(`PASS: ${count} development items; 14 assessment configs; ${scoringCases.length} response-type scoring fixtures; persisted option randomization; core invariants green.`);

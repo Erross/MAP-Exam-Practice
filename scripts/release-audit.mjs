@@ -9,6 +9,7 @@ const wordCount=value=>String(value??"").trim().split(/\s+/).filter(Boolean).len
 const pct=(n,d)=>d?100*n/d:0;
 const round=n=>Math.round(n*10)/10;
 const stimulusKey=item=>item.stimulusId||item.stimulus?.id||item.stimulus?.title||null;
+const stableStimulusKey=item=>item.stimulusId||item.stimulus?.id||null;
 
 function selectedResponseMetrics(bank){
   const mc=bank.filter(i=>i.itemType==="multiple_choice"&&Array.isArray(i.options)&&i.options.length===4);
@@ -81,7 +82,7 @@ for(const [id,bank] of Object.entries(BANKS)){
     assert(item.sessionEligibility.every(s=>validSessions.has(s)),`${item.id}: invalid session eligibility`);
     if(item.itemType==="multiple_choice") assert(item.options.includes(item.scoring.answer),`${item.id}: MC key not in choices`);
     if(item.itemType==="multi_select") assert(item.scoring.answers.every(a=>item.options.includes(a)),`${item.id}: multi-select key not in choices`);
-    if(assessment.status==="released"&&item.stimulus) assert(typeof item.stimulusId==="string"&&item.stimulusId.length>0,`${item.id}: released stimulus-backed item needs stable stimulusId`);
+    if(assessment.status==="released"&&item.stimulus) assert(typeof stableStimulusKey(item)==="string"&&stableStimulusKey(item).length>0,`${item.id}: released stimulus-backed item needs stable stimulusId or stimulus.id`);
     if(assessment.status==="released"&&assessment.subject==="math"&&assessment.grade>=6){
       assert(["none","four-function","scientific"].includes(item.calculatorLevel),`${item.id}: released Grade ${assessment.grade} Math item needs verified calculatorLevel`);
     }

@@ -7,8 +7,9 @@
     "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/delivery-groups.mjs && node tests/pe-contract.mjs && node tests/blueprint-capacity.mjs",
     "diagnose": "node scripts/tell-diagnostics.mjs",
     "diagnose:alignment": "node scripts/bank-alignment.mjs",
+    "diagnose:math-forms": "node scripts/math-form-feasibility.mjs",
     "audit": "node scripts/release-audit.mjs",
-    "check": "npm test && npm run diagnose && npm run diagnose:alignment && npm run audit",
+    "check": "npm test && npm run diagnose && npm run diagnose:alignment && npm run diagnose:math-forms && npm run audit",
     "build": "node scripts/build.mjs"
   }
 }

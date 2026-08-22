@@ -14,6 +14,13 @@ Primary sources:
 6. Missouri DESE Mathematics curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/mathematics
 7. Missouri DESE Science curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/science
 8. Grade-specific Performance Level Descriptors and current practice forms/scoring guides linked from the Grade-Level hub.
+9. 2025-2026 Missouri Instructional Testlet Administration Guide, used only as corroborating evidence for current expectation-code usage and grade-level testlet mappings, not as a substitute for the summative blueprint/item specifications.
+
+## Source precedence
+
+When DESE pages from different administration years disagree, the project does not average or silently choose values. For operational session behavior in this build, the current complete **2025-2026 Examiner's Manual** takes precedence over older general-guide timing tables. The current blueprint and grade/subject item specifications control content distribution and assessment boundaries; practice forms control interaction/style only when they do not conflict with the governing operational documents.
+
+Science Grade-Level materials may assess expectations introduced in earlier elementary grades. Therefore an item delivered in a Grade 5 Science practice bank is not required to carry a `5.*` expectation code; its standard tag must identify the actual Missouri expectation being assessed.
 
 ## Current operational facts encoded by the project
 

@@ -2,13 +2,36 @@ function shuffled(values,rng=Math.random){ const a=[...values]; for(let i=a.leng
 
 export function eligibleForSession(bank,sessionId){ return bank.filter(item=>item.sessionEligibility.includes(Number(sessionId))); }
 
+export function deliveryGroupKey(item){
+  return item.deliveryGroup || item.stimulusId || item.stimulus?.id || item.stimulus?.title || null;
+}
+
+export function deliveryBundles(items){
+  const grouped=new Map(),bundles=[];
+  for(const item of items){
+    const key=deliveryGroupKey(item);
+    if(!key){bundles.push([item]);continue;}
+    if(!grouped.has(key)){const bundle=[];grouped.set(key,bundle);bundles.push(bundle);}
+    grouped.get(key).push(item);
+  }
+  return bundles;
+}
+
+function bundleVariants(bundle){return bundle.map(item=>item.variantFamily||item.id);}
+function bundleFitsVariants(bundle,usedVariants){
+  const families=bundleVariants(bundle);
+  return new Set(families).size===families.length && families.every(family=>!usedVariants.has(family));
+}
+
 export function drawPracticeSession(bank,sessionId,{maxItems=12,rng=Math.random}={}){
-  const eligible=shuffled(eligibleForSession(bank,sessionId),rng), usedVariants=new Set(), out=[];
-  for(const item of eligible){
-    const family=item.variantFamily||item.id;
-    if(usedVariants.has(family)) continue;
-    out.push(item); usedVariants.add(family);
-    if(out.length>=maxItems) break;
+  const eligible=eligibleForSession(bank,sessionId), bundles=shuffled(deliveryBundles(eligible),rng), usedVariants=new Set(), out=[];
+  for(const rawBundle of bundles){
+    const bundle=shuffled(rawBundle,rng);
+    if(out.length+bundle.length>maxItems) continue;
+    if(!bundleFitsVariants(bundle,usedVariants)) continue;
+    out.push(...bundle);
+    for(const family of bundleVariants(bundle)) usedVariants.add(family);
+    if(out.length===maxItems) break;
   }
   return out;
 }

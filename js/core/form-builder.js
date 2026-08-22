@@ -22,14 +22,20 @@ function bundleFitsVariants(bundle,usedVariants){
   const families=bundleVariants(bundle);
   return new Set(families).size===families.length && families.every(family=>!usedVariants.has(family));
 }
+function isPerformanceEventSession(eligible){
+  return eligible.length>0&&eligible.every(item=>item.strand==="Performance Event");
+}
 
-export function drawPracticeSession(bank,sessionId,{maxItems=12,rng=Math.random}={}){
+export function drawPracticeSession(bank,sessionId,{maxItems=12,maxBundles=null,rng=Math.random}={}){
   const eligible=eligibleForSession(bank,sessionId), bundles=shuffled(deliveryBundles(eligible),rng), usedVariants=new Set(), out=[];
+  const bundleLimit=Number.isInteger(maxBundles)&&maxBundles>0?maxBundles:(isPerformanceEventSession(eligible)?1:Infinity);
+  let bundlesUsed=0;
   for(const rawBundle of bundles){
+    if(bundlesUsed>=bundleLimit) break;
     const bundle=shuffled(rawBundle,rng);
     if(out.length+bundle.length>maxItems) continue;
     if(!bundleFitsVariants(bundle,usedVariants)) continue;
-    out.push(...bundle);
+    out.push(...bundle);bundlesUsed++;
     for(const family of bundleVariants(bundle)) usedVariants.add(family);
     if(out.length===maxItems) break;
   }

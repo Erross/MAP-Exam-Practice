@@ -3,6 +3,7 @@ import { BANKS } from "../js/banks.js";
 import { ASSESSMENTS } from "../js/config.js";
 import { BLUEPRINTS,drawBlueprintForm,validateBlueprintForm,validateBlueprintSpec } from "../js/blueprints.js";
 import { drawPracticeSession, seededRandom } from "../js/core/form-builder.js";
+import { newAttempt,materializeItems } from "../js/core/session.js";
 
 const wordCount=value=>String(value??"").trim().split(/\s+/).filter(Boolean).length;
 const pct=(n,d)=>d?100*n/d:0;
@@ -10,13 +11,31 @@ const round=n=>Math.round(n*10)/10;
 
 function selectedResponseMetrics(bank){
   const mc=bank.filter(i=>i.itemType==="multiple_choice"&&Array.isArray(i.options)&&i.options.length===4);
-  const positions=[0,0,0,0]; let uniqueLongestCorrect=0, correctWords=0, distractorWords=0, distractorCount=0;
+  const sourcePositions=[0,0,0,0]; let uniqueLongestCorrect=0, correctWords=0, distractorWords=0, distractorCount=0;
   for(const item of mc){
-    const keyIndex=item.options.indexOf(item.scoring.answer); assert(keyIndex>=0,`${item.id}: keyed answer not among choices`); positions[keyIndex]++;
+    const keyIndex=item.options.indexOf(item.scoring.answer); assert(keyIndex>=0,`${item.id}: keyed answer not among choices`); sourcePositions[keyIndex]++;
     const lengths=item.options.map(wordCount), max=Math.max(...lengths); if(lengths[keyIndex]===max&&lengths.filter(n=>n===max).length===1) uniqueLongestCorrect++;
     correctWords+=lengths[keyIndex]; item.options.forEach((o,i)=>{if(i!==keyIndex){distractorWords+=lengths[i];distractorCount++;}});
   }
-  return {count:mc.length,keyPositionPct:positions.map(n=>round(pct(n,mc.length))),uniqueLongestCorrectPct:round(pct(uniqueLongestCorrect,mc.length)),meanCorrectWords:mc.length?round(correctWords/mc.length):0,meanDistractorWords:distractorCount?round(distractorWords/distractorCount):0};
+
+  const displayedPositions=[0,0,0,0]; let displayedCount=0;
+  if(mc.length){
+    for(let seed=1;seed<=1000;seed++){
+      const attempt=newAttempt("audit",1,mc,seededRandom(seed));
+      for(const item of materializeItems(mc,attempt)){
+        const index=item.options.indexOf(item.scoring.answer); assert(index>=0,`${item.id}: shuffled key not among displayed choices`);
+        displayedPositions[index]++; displayedCount++;
+      }
+    }
+  }
+  return {
+    count:mc.length,
+    sourceKeyPositionPct:sourcePositions.map(n=>round(pct(n,mc.length))),
+    displayedKeyPositionPct:displayedPositions.map(n=>round(pct(n,displayedCount))),
+    uniqueLongestCorrectPct:round(pct(uniqueLongestCorrect,mc.length)),
+    meanCorrectWords:mc.length?round(correctWords/mc.length):0,
+    meanDistractorWords:distractorCount?round(distractorWords/distractorCount):0
+  };
 }
 
 function meanRetakeOverlap(bank,sessionId,trials=5000){
@@ -78,8 +97,8 @@ for(const [id,bank] of Object.entries(BANKS)){
     assert(overlap<=40,`${id}: release blueprint-form overlap ${overlap}% > 40%`);
     if(metrics.count>=20){
       assert(metrics.uniqueLongestCorrectPct<=25,`${id}: unique-longest-correct tell exceeds 25%`);
-      metrics.keyPositionPct.forEach((v,i)=>assert(v>=15&&v<=35,`${id}: answer position ${i+1} at ${v}% outside 15-35%`));
+      metrics.displayedKeyPositionPct.forEach((v,i)=>assert(v>=15&&v<=35,`${id}: browser-effective answer position ${i+1} at ${v}% outside 15-35%`));
     }
   }
 }
-console.log(`PASS: ${draws.toLocaleString()} development practice-session draws plus retake/tell analysis. Any released bank additionally requires 5,000 verified-blueprint full-form draws and blueprint-form retake diversity.`);
+console.log(`PASS: ${draws.toLocaleString()} development practice-session draws plus retake/tell analysis. Answer-position release gates use browser-effective shuffled choices; source positions are reported only as authoring diagnostics. Any released bank additionally requires 5,000 verified-blueprint full-form draws and blueprint-form retake diversity.`);

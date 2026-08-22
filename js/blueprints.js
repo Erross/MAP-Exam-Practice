@@ -1,3 +1,5 @@
+import { deliveryBundles } from "./core/form-builder.js";
+
 const freeze=o=>Object.freeze(o);
 
 const pointTargets={
@@ -69,20 +71,25 @@ export function validateBlueprintForm(form,blueprint){
   return errors;
 }
 
-function violatesMaximums(selected,candidate,blueprint){
-  const next=[...selected,candidate];
+function bundleVariants(bundle){return bundle.map(item=>item.variantFamily||item.id);}
+function bundleViolatesMaximums(selected,bundle,blueprint){
+  const next=[...selected,...bundle];
   if(points(next)>blueprint.supportedPointTarget)return true;
   return (blueprint.constraints||[]).some(rule=>{
-    if(!matchesRule(candidate,rule))return false;
     const matching=next.filter(item=>matchesRule(item,rule));
     return (rule.maxPoints!==undefined&&points(matching)>rule.maxPoints)||(rule.maxItems!==undefined&&matching.length>rule.maxItems);
   });
 }
 
-function addCandidate(selected,item,usedVariants,blueprint){
-  const family=item.variantFamily||item.id;
-  if(usedVariants.has(family)||violatesMaximums(selected,item,blueprint))return false;
-  selected.push(item);usedVariants.add(family);return true;
+function addBundle(selected,bundle,usedVariants,usedIds,blueprint){
+  const families=bundleVariants(bundle),ids=bundle.map(item=>item.id);
+  if(new Set(families).size!==families.length)return false;
+  if(families.some(family=>usedVariants.has(family))||ids.some(id=>usedIds.has(id)))return false;
+  if(bundleViolatesMaximums(selected,bundle,blueprint))return false;
+  selected.push(...bundle);
+  families.forEach(family=>usedVariants.add(family));
+  ids.forEach(id=>usedIds.add(id));
+  return true;
 }
 
 export function drawBlueprintForm(bank,blueprint,{rng=Math.random,maxAttempts=500}={}){
@@ -90,27 +97,28 @@ export function drawBlueprintForm(bank,blueprint,{rng=Math.random,maxAttempts=50
   if(specErrors.length)throw new Error(`Invalid blueprint: ${specErrors.join("; ")}`);
   if(!blueprint.verified)throw new Error(`${blueprint.assessmentId}: blueprint is not independently verified`);
 
+  const allBundles=deliveryBundles(bank);
   for(let attempt=0;attempt<maxAttempts;attempt++){
-    const selected=[],usedVariants=new Set();
+    const selected=[],usedVariants=new Set(),usedIds=new Set();
     let failed=false;
     for(const rule of blueprint.constraints||[]){
-      const candidates=shuffled(bank.filter(item=>matchesRule(item,rule)),rng);
+      const candidates=shuffled(allBundles.filter(bundle=>bundle.some(item=>matchesRule(item,rule))),rng);
       const minPoints=rule.minPoints||0,minItems=rule.minItems||0;
-      for(const item of candidates){
+      for(const bundle of candidates){
         const matching=selected.filter(x=>matchesRule(x,rule));
         if(points(matching)>=minPoints&&matching.length>=minItems)break;
-        addCandidate(selected,item,usedVariants,blueprint);
+        addBundle(selected,shuffled(bundle,rng),usedVariants,usedIds,blueprint);
       }
       const matching=selected.filter(x=>matchesRule(x,rule));
       if(points(matching)<minPoints||matching.length<minItems){failed=true;break;}
     }
     if(failed)continue;
 
-    for(const item of shuffled(bank,rng)){
+    for(const bundle of shuffled(allBundles,rng)){
       if(points(selected)===blueprint.supportedPointTarget)break;
-      addCandidate(selected,item,usedVariants,blueprint);
+      addBundle(selected,shuffled(bundle,rng),usedVariants,usedIds,blueprint);
     }
-    if(validateBlueprintForm(selected,blueprint).length===0)return shuffled(selected,rng);
+    if(validateBlueprintForm(selected,blueprint).length===0)return selected;
   }
-  throw new Error(`${blueprint.assessmentId}: bank cannot satisfy verified blueprint after ${maxAttempts} attempts`);
+  throw new Error(`${blueprint.assessmentId}: bank cannot satisfy verified blueprint after ${maxAttempts} attempts while preserving delivery groups`);
 }

@@ -6,7 +6,11 @@ import { drawPracticeSession, seededRandom } from "../js/core/form-builder.js";
 
 assert.equal(PROGRAM.family,"map"); assert.equal(PROGRAM.timingPolicy,"guideline");
 assert.equal(Object.keys(ASSESSMENTS).length,14,"Expected 14 Grade-Level assessment configs");
-for(const a of Object.values(ASSESSMENTS)){ assert.equal(a.sessions.every(s=>s.timingPolicy==="guideline"),true); assert.equal(a.fullSimulationAvailable,false); }
+for(const a of Object.values(ASSESSMENTS)){
+  assert.equal(a.sessions.every(s=>s.timingPolicy==="guideline"),true);
+  assert.equal(a.sessions.every(s=>Array.isArray(s.guidelineMinutes)&&s.guidelineMinutes.length===2&&s.guidelineMinutes.every(Number.isFinite)),true,`${a.id}: every session needs a numeric guideline range`);
+  assert.equal(a.fullSimulationAvailable,false);
+}
 for(const g of [3,4,5]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorAllowed===false),true);
 for(const g of [6,7,8]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorAllowed===true),true);
 assert.deepEqual(ASSESSMENTS["g8-math"].sessions.map(s=>s.guidelineMinutes),[[30,50],[30,50],[30,40]]);

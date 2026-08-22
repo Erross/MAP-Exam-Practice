@@ -130,7 +130,8 @@ for(const grade of [3,4,5,6,7,8]){
     }
   }
   const meanItems=forms.reduce((sum,form)=>sum+form.length,0)/forms.length;
-  const itemPct=round(100*itemTotal/5000),pointPct=round(100*pointTotal/5000),stimulusPct=stimulusTrials?round(100*stimulusTotal/stimulusTrials):null;
+  const meanItemOverlap=itemTotal/5000,meanPointOverlap=pointTotal/5000;
+  const itemPct=round(100*meanItemOverlap),pointPct=round(100*meanPointOverlap),stimulusPct=stimulusTrials?round(100*stimulusTotal/stimulusTrials):null;
   console.log(`${assessmentId}: 5,000 transcribed-range development full forms constructed; mean ${round(meanItems)} items; full-form retake overlap ${itemPct}% by item / ${pointPct}% by points${stimulusPct===null?"":`; stimulus/set overlap ${stimulusPct}%`}. NOT release verification.`);
   const categorySummary=ordinaryRules.map(rule=>{
     const pool=categoryPoints(ordinary,grade,rule.code);
@@ -140,5 +141,7 @@ for(const grade of [3,4,5,6,7,8]){
     return `${rule.code}: pool ${pool}p, mean draw ${round(meanDraw)}p, retake ${itemReuse}% items/${pointReuse}% points`;
   });
   console.log(`${assessmentId} category reuse: ${categorySummary.join(" | ")}`);
+  assert(meanItemOverlap<=0.40,`${assessmentId}: full-form item retake overlap ${itemPct}% exceeds 40% development gate`);
+  assert(meanPointOverlap<=0.40,`${assessmentId}: full-form point retake overlap ${pointPct}% exceeds 40% development gate`);
 }
-console.log("PASS: all six Math banks can repeatedly construct full-point development forms under the transcribed blueprint ranges while preserving exactly one complete operational PE. These results are diagnostic only until current-primary DESE ranges are independently confirmed.");
+console.log("PASS: all six Math banks can repeatedly construct full-point development forms under the transcribed blueprint ranges, preserve exactly one complete operational PE, and hold <=40% full-form retake overlap by both item and points. These results are diagnostic only until current-primary DESE ranges are independently confirmed.");

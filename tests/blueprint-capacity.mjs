@@ -42,6 +42,13 @@ for(const [assessmentId,assessment] of Object.entries(ASSESSMENTS)){
     const ordinaryTarget=blueprint.officialPointTarget-peRule.minPoints;
     assert(points(ordinary)>=ordinaryTarget,`${assessmentId}: ordinary/non-PE capacity ${points(ordinary)} < ${ordinaryTarget}`);
   }
+  if(assessment.subject==="science"){
+    assert(points(bank)>=90,`${assessmentId}: development Science bank diversity floor ${points(bank)} < 90 points`);
+    for(const code of ["PS","LS","ESS"]){
+      const have=capacity.get(code)||0;
+      assert(have>=30,`${assessmentId}: development ${code} diversity floor ${have} < 30 points`);
+    }
+  }
 }
 
-console.log("PASS: Math ordinary-category/point capacity and Science strand capacity meet every transcribed non-deferred blueprint minimum. This is a bank-capacity gate, not evidence that the current non-executable official blueprints are release-verified.");
+console.log("PASS: Math ordinary-category/point capacity meets every transcribed minimum; Science meets transcribed strand minimums plus >=90 development bank points and >=30 points per strand. These are capacity/diversity gates, not evidence that current non-executable official blueprints are release-verified.");

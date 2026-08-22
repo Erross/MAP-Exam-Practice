@@ -31,6 +31,8 @@ Every browser-effective item must have a globally unique stable ID, grade, subje
 
 Selected-response items require distinct plausible options and exactly one unambiguous semantic key unless the item explicitly requires multiple selections. Multi-select items must state the required number of selections where applicable.
 
+Constructed-response items must use `scoring.mode: "manual"`, include an explicit rubric whose maximum equals the item point value, and must not contain an automatic answer key. Capturing a written response is not evidence that the response can be automatically scored.
+
 ## 5. Technology-enhanced items
 
 The response requested in prose must agree with the stored scoring model and rendered control. For graph/number-line/placement items, coordinates, tolerances, units, labels, and acceptable-equivalence rules must be explicit and independently checked.
@@ -41,7 +43,9 @@ Passage, science-set, table, chart, and performance-event material is atomic whe
 
 ## 7. Deferred official components
 
-Audio/listening and human-scored written responses are deferred in the current zero-cost scope. They must remain represented in assessment metadata and user-facing limitations. Do not replace a required writing, listening, or constructed-response component with extra multiple-choice questions and call the result structurally complete.
+Audio/listening and **human scoring** of written responses are deferred in the current zero-cost scope. The application may capture and persist a constructed response for later manual review, but those points must be excluded from automatic earned/possible totals until a human score exists. The user-facing result must clearly separate auto-scored points from manual-review points.
+
+Deferred components must remain represented in assessment metadata and user-facing limitations. Do not replace a required writing, listening, constructed-response, or written performance-event component with extra multiple-choice questions and call the result structurally complete.
 
 ## 8. Statistical tell gates
 
@@ -59,7 +63,7 @@ TE items require equivalent answer-pattern leakage checks appropriate to their r
 
 A complete releasable auto-scorable assessment must be tested with at least 5,000 independently seeded production draws. Each draw verifies session count/order, point totals represented by the supported scope, strand/standard distributions, item-type rules, stimulus integrity, calculator policy, variant exclusion, and deferred-component accounting.
 
-Run 5,000 independent retake pairs and target <=40% mean exact-item overlap, with stimulus/set overlap measured separately where relevant.
+Run 5,000 independent retake pairs and require <=40% mean exact-item overlap **and <=40% mean point-weighted overlap** for release-scale Math banks. Measure stimulus/set overlap separately where relevant. The development Math simulator enforces both full-form overlap thresholds in CI, but those development results do not substitute for verified-current-blueprint release evidence.
 
 ## 10. Independent clean-room review
 

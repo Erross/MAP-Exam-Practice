@@ -98,8 +98,14 @@ for(const [id,bank] of Object.entries(BANKS)){
     }
     const overlap=meanSessionRetake(bank,session.id);
     console.log(`${id} session ${session.id}: ${eligible.length} eligible items; mean development-session retake overlap ${overlap.itemPct}%${overlap.stimulusPct===null?"":`; stimulus overlap ${overlap.stimulusPct}%`}`);
+    assert(overlap.itemPct<=40,`${id} session ${session.id}: development retake overlap ${overlap.itemPct}% > 40% project gate`);
+    if(overlap.stimulusPct!==null) assert(overlap.stimulusPct<=50,`${id} session ${session.id}: development stimulus/set overlap ${overlap.stimulusPct}% > 50% project gate`);
   }
   const metrics=selectedResponseMetrics(bank); console.log(`${id} selected-response metrics: ${JSON.stringify(metrics)}`);
+  if(metrics.count>=20){
+    assert(metrics.uniqueLongestCorrectPct<=25,`${id}: unique-longest-correct tell ${metrics.uniqueLongestCorrectPct}% exceeds 25% project gate`);
+    metrics.displayedKeyPositionPct.forEach((v,i)=>assert(v>=15&&v<=35,`${id}: browser-effective answer position ${i+1} at ${v}% outside 15-35% project gate`));
+  }
 
   if(assessment.status==="released"){
     assert.equal(blueprint.verified,true,`${id}: release requires independently verified current DESE blueprint`);
@@ -112,10 +118,6 @@ for(const [id,bank] of Object.entries(BANKS)){
     console.log(`${id} blueprint-form mean retake overlap ${overlap.itemPct}%${overlap.stimulusPct===null?"":`; stimulus overlap ${overlap.stimulusPct}%`}`);
     assert(overlap.itemPct<=40,`${id}: release blueprint-form overlap ${overlap.itemPct}% > 40%`);
     if(overlap.stimulusPct!==null) assert(overlap.stimulusPct<=50,`${id}: release stimulus/set overlap ${overlap.stimulusPct}% > 50% project gate`);
-    if(metrics.count>=20){
-      assert(metrics.uniqueLongestCorrectPct<=25,`${id}: unique-longest-correct tell exceeds 25%`);
-      metrics.displayedKeyPositionPct.forEach((v,i)=>assert(v>=15&&v<=35,`${id}: browser-effective answer position ${i+1} at ${v}% outside 15-35%`));
-    }
   }
 }
-console.log(`PASS: ${draws.toLocaleString()} development practice-session draws plus item/stimulus retake and tell analysis. Answer-position release gates use browser-effective shuffled choices; source positions are authoring diagnostics. Any released bank additionally requires 5,000 verified-blueprint full-form draws, <=40% exact-item overlap, and <=50% stimulus/set overlap where applicable.`);
+console.log(`PASS: ${draws.toLocaleString()} development practice-session draws plus enforced <=40% item-retake, <=50% stimulus/set, and mature-bank tell gates. Any released bank additionally requires 5,000 verified-blueprint full-form draws and blueprint-form overlap validation.`);

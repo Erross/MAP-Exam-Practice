@@ -9,12 +9,14 @@ Primary sources:
 1. Missouri DESE Grade-Level assessment hub: https://dese.mo.gov/quality-schools/assessment/grade-level
 2. Guide to the Missouri Assessment Program: https://dese.mo.gov/quality-schools/assessment/guide-missouri-assessment-program
 3. 2025-2026 Grade-Level Examiner's Manual: https://dese.mo.gov/sites/g/files/zuston521/files/media/pdf/2026/04/2025-2026%20MAP%20Grade-Level%20EM_v2_AOD.pdf
-4. MAP Grade-Level Assessment Blueprints (linked from the Grade-Level hub).
+4. MAP Grade-Level Assessment Blueprints: https://dese.mo.gov/quality-schools/assessment/media/pdf/map-grade-level-assessment-blueprints
 5. Missouri DESE English Language Arts curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/english-language-arts
 6. Missouri DESE Mathematics curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/mathematics
 7. Missouri DESE Science curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/science
 8. Grade-specific Performance Level Descriptors and current practice forms/scoring guides linked from the Grade-Level hub.
 9. 2025-2026 Missouri Instructional Testlet Administration Guide, used only as corroborating evidence for current expectation-code usage and grade-level testlet mappings, not as a substitute for the summative blueprint/item specifications.
+
+The current DESE blueprint wrapper resolves to an April 2026 file named `MAP Grade-Level Assessment Blueprints_AOD.pdf`. The DESE web crawler and current Guide independently confirm the 14 Grade-Level assessment point totals encoded below. The DESE PDF is presented through an HTML PDF.js wrapper in the available review environment, so direct visual screenshots of that primary file were not available. Category/range tables have therefore been transcribed into `BLUEPRINT_TRANSCRIPTION.md` from an accessible Missouri blueprint copy and cross-checked against the current DESE point totals. Those category ranges remain explicitly marked **primary-current-file confirmation pending**; they must not by themselves flip an assessment to release-ready.
 
 ## Source precedence
 
@@ -22,7 +24,7 @@ When DESE pages from different administration years disagree, the project does n
 
 Science Grade-Level materials may assess expectations introduced in earlier elementary grades. Therefore an item delivered in a Grade 5 Science practice bank is not required to carry a `5.*` expectation code; its standard tag must identify the actual Missouri expectation being assessed.
 
-For Mathematics, DESE's current assessment-resource description states that the item specifications include a **Calculator Designation** indicating whether a calculator is available for questions written to a particular expectation. The application therefore models Grades 6-8 Math as `item-designated`, not as a blanket calculator-on condition. A released Grades 6-8 Math item must carry an independently verified `calculatorLevel` (`none`, `four-function`, or `scientific`). Grade 3-5 Math remains calculator-prohibited absent an accommodation. Science calculator availability is modeled at the assessment/session level from the governing administration guidance.
+For Mathematics, DESE item specifications include calculator designations that are useful authoring metadata for an expectation. They do **not** override the current administration-level policy encoded by this project. The 2025-2026 Grade-Level Examiner's Manual/timing guidance shows calculators unavailable in Grades 3-5 Mathematics and **allowed in all three Mathematics sessions in Grades 6-8**. Accordingly, the application exposes calculator availability throughout Grades 6-8 Math sessions. Item-level `calculatorLevel` may still be used to describe the most appropriate local practice keypad or whether a particular synthetic item actually benefits from calculator use; it is not used to turn the operational calculator permission on and off item-by-item.
 
 ## Current operational facts encoded by the project
 
@@ -34,14 +36,26 @@ For Mathematics, DESE's current assessment-resource description states that the 
 - Science: 2 sessions; operational assessment includes multiple-choice, TE, and constructed-response items.
 - DESE timing ranges are guidelines; Grade-Level assessments do not use a student countdown time limit.
 - Students may not return to a session after it is completed/submitted.
-- Mathematics calculators: not allowed in Grades 3-5 without an accommodation; Grades 6-8 availability must follow the expectation/item calculator designation rather than a blanket grade-level switch.
+- Mathematics calculators: not allowed in Grades 3-5 without an accommodation; allowed throughout Grades 6-8 Mathematics sessions under the current 2025-2026 administration guidance.
 - Science calculators: allowed in Grades 5 and 8 under the administration guidance encoded by the project.
 - Current point targets: Math G3-5 48, Math G6-8 54; ELA G3-6 and G8 56, ELA G7 52; Science G5/G8 60.
 
 ## Blueprint transcription status
 
-`js/blueprints.js` contains a record for all 14 Grade-Level assessments and the official total-point target for each. Those records intentionally remain `verified: false` until the current DESE blueprint category/item/point ranges have been independently transcribed and checked. The release audit refuses to release an assessment without a verified blueprint and then requires 5,000 blueprint-constrained full-form draws. This prevents a generic random-draw bank from being promoted merely because its total item count looks plausible.
+`js/blueprints.js` contains a record for all 14 Grade-Level assessments and the official total-point target for each. `BLUEPRINT_TRANSCRIPTION.md` records the currently transcribed category ranges and their evidence status.
+
+A critical distinction is retained between the **official complete MAP blueprint** and what this static practice application can currently execute automatically. ELA writing/listening and some written responses, plus Science constructed-response scoring, remain deferred. Mathematics Performance Events also need to be modeled as complete coherent 6-point (Grades 3-5) or 8-point (Grades 6-8) events before a generated full form can honestly claim operational PE fidelity. Therefore a green development bank is not equivalent to a complete operational form.
+
+Blueprint records must remain non-releasable until:
+
+- current DESE category/range tables have primary-source confirmation;
+- the schema distinguishes official full-test constraints from executable auto-scored subset constraints;
+- any deferred official components are represented explicitly rather than silently replaced;
+- complete Math PE bundles match the official PE point contribution; and
+- 5,000 blueprint-constrained full-form draws pass for any assessment that is actually executable.
+
+This prevents a generic random-draw bank from being promoted merely because its total item count and development-session overlap look plausible.
 
 ## Scope caveat
 
-Listening/audio and human-scored written responses are intentionally deferred. This repository must retain those official components in metadata and limitations rather than treating extra auto-scored questions as substitutes.
+Listening/audio and human-scored written responses are intentionally deferred in the current static/free implementation. The repository must retain those official components in metadata and limitations rather than treating extra auto-scored questions as substitutes. An assessment may provide highly faithful auto-scored practice while still being correctly labeled as **not a complete operational MAP simulation**.

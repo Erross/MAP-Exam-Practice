@@ -22,14 +22,19 @@ assert.equal(ASSESSMENTS["g8-ela"].sessions[3].deferred.includes("listening-audi
 
 const ids=new Set(); let count=0;
 for(const [assessmentId,bank] of Object.entries(BANKS)){
+  const assessment=ASSESSMENTS[assessmentId]; assert(assessment,`${assessmentId}: missing config`);
   assert(bank.length>0,`${assessmentId} bank empty`);
-  for(const item of bank){ count++; assert(!ids.has(item.id),`duplicate ${item.id}`); ids.add(item.id); const errs=validateItem(item); assert.deepEqual(errs,[],errs.join("\n")); assert(SUPPORTED_ITEM_TYPES.includes(item.itemType)); assert.equal(item.grade,8); assert.equal(item.provenance,"original-synthetic"); }
-  for(let sessionId=1;sessionId<=ASSESSMENTS[assessmentId].sessions.length;sessionId++){
+  for(const item of bank){
+    count++; assert(!ids.has(item.id),`duplicate ${item.id}`); ids.add(item.id);
+    const errs=validateItem(item); assert.deepEqual(errs,[],errs.join("\n")); assert(SUPPORTED_ITEM_TYPES.includes(item.itemType));
+    assert.equal(item.grade,assessment.grade,`${item.id}: grade mismatch`); assert.equal(item.subject,assessment.subject,`${item.id}: subject mismatch`); assert.equal(item.provenance,"original-synthetic");
+  }
+  for(let sessionId=1;sessionId<=assessment.sessions.length;sessionId++){
     const eligible=bank.filter(i=>i.sessionEligibility.includes(sessionId)); if(!eligible.length) continue;
     for(let seed=1;seed<=100;seed++){ const draw=drawPracticeSession(bank,sessionId,{maxItems:12,rng:seededRandom(seed)}); const variants=draw.map(i=>i.variantFamily||i.id); assert.equal(new Set(variants).size,variants.length); }
   }
 }
-assert(count>=40,"Expected at least 40 development items");
+assert(count>=78,"Expected at least 78 development items across Grade 5 and Grade 8");
 
 const fixture=(itemType,scoring,extra={})=>({id:`fixture-${itemType}`,grade:8,subject:"math",standard:"fixture",strand:"fixture",dok:1,itemType,points:1,sessionEligibility:[1],prompt:"fixture",scoring,rationale:"fixture",provenance:"original-synthetic",...extra});
 const scoringCases=[
@@ -63,4 +68,4 @@ assert.deepEqual(materializeItems([shuffleItem],attempt)[0].options,displayed.op
 const locked={...attempt,submitted:true}; assert.throws(()=>setResponse(locked,"shuffle-fixture","B"),/locked/);
 
 const sanity=BANKS["g8-math"].find(i=>i.id==="g8m-005"); assert.equal(scoreResponse(sanity,7).earned,1); assert.equal(scoreResponse(sanity,6).earned,0);
-console.log(`PASS: ${count} development items; 14 assessment configs; ${scoringCases.length} response-type scoring fixtures; persisted option randomization; core invariants green.`);
+console.log(`PASS: ${count} development items across ${Object.keys(BANKS).length} banks; 14 assessment configs; ${scoringCases.length} response-type scoring fixtures; persisted option randomization; core invariants green.`);

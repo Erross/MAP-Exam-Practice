@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { BANKS } from "../js/banks.js";
 import { ASSESSMENTS } from "../js/config.js";
+import { BLUEPRINTS,drawBlueprintForm,validateBlueprintForm,validateBlueprintSpec } from "../js/blueprints.js";
 import { drawPracticeSession, seededRandom } from "../js/core/form-builder.js";
 
 const wordCount=value=>String(value??"").trim().split(/\s+/).filter(Boolean).length;
@@ -28,14 +29,28 @@ function meanRetakeOverlap(bank,sessionId,trials=5000){
   return round(100*total/trials);
 }
 
+function meanBlueprintRetakeOverlap(bank,blueprint,trials=5000){
+  let total=0;
+  for(let t=1;t<=trials;t++){
+    const a=drawBlueprintForm(bank,blueprint,{rng:seededRandom(t*2-1)}),b=drawBlueprintForm(bank,blueprint,{rng:seededRandom(t*2)}),bIds=new Set(b.map(i=>i.id));
+    total+=a.filter(i=>bIds.has(i.id)).length/a.length;
+  }
+  return round(100*total/trials);
+}
+
 let draws=0;
 for(const [id,bank] of Object.entries(BANKS)){
   const assessment=ASSESSMENTS[id]; assert(assessment,`${id}: bank has no assessment config`);
+  const blueprint=BLUEPRINTS[assessment.blueprintId]; assert(blueprint,`${id}: blueprint record missing`);
+  assert.equal(blueprint.officialPointTarget,assessment.points,`${id}: config/blueprint official point target mismatch`);
   const validSessions=new Set(assessment.sessions.map(s=>s.id));
   for(const item of bank){
     assert(item.sessionEligibility.every(s=>validSessions.has(s)),`${item.id}: invalid session eligibility`);
     if(item.itemType==="multiple_choice") assert(item.options.includes(item.scoring.answer),`${item.id}: MC key not in choices`);
     if(item.itemType==="multi_select") assert(item.scoring.answers.every(a=>item.options.includes(a)),`${item.id}: multi-select key not in choices`);
+    if(assessment.status==="released"&&assessment.subject==="math"&&assessment.grade>=6){
+      assert(["none","four-function","scientific"].includes(item.calculatorLevel),`${item.id}: released Grade ${assessment.grade} Math item needs verified calculatorLevel`);
+    }
   }
   for(const session of assessment.sessions){
     const eligible=bank.filter(i=>i.sessionEligibility.includes(session.id)); if(!eligible.length) continue;
@@ -47,13 +62,24 @@ for(const [id,bank] of Object.entries(BANKS)){
       draws++;
     }
     const overlap=meanRetakeOverlap(bank,session.id);
-    console.log(`${id} session ${session.id}: ${eligible.length} eligible items; mean retake overlap ${overlap}%`);
-    if(assessment.status==="released") assert(overlap<=40,`${id} session ${session.id}: release overlap ${overlap}% > 40%`);
+    console.log(`${id} session ${session.id}: ${eligible.length} eligible items; mean development-session retake overlap ${overlap}%`);
   }
   const metrics=selectedResponseMetrics(bank); console.log(`${id} selected-response metrics: ${JSON.stringify(metrics)}`);
-  if(assessment.status==="released"&&metrics.count>=20){
-    assert(metrics.uniqueLongestCorrectPct<=25,`${id}: unique-longest-correct tell exceeds 25%`);
-    metrics.keyPositionPct.forEach((v,i)=>assert(v>=15&&v<=35,`${id}: answer position ${i+1} at ${v}% outside 15-35%`));
+
+  if(assessment.status==="released"){
+    assert.equal(blueprint.verified,true,`${id}: release requires independently verified current DESE blueprint`);
+    assert.deepEqual(validateBlueprintSpec(blueprint),[],`${id}: invalid release blueprint`);
+    for(let seed=1;seed<=5000;seed++){
+      const form=drawBlueprintForm(bank,blueprint,{rng:seededRandom(seed)});
+      assert.deepEqual(validateBlueprintForm(form,blueprint),[],`${id}: blueprint form invalid`);
+    }
+    const overlap=meanBlueprintRetakeOverlap(bank,blueprint);
+    console.log(`${id} blueprint-form mean retake overlap ${overlap}%`);
+    assert(overlap<=40,`${id}: release blueprint-form overlap ${overlap}% > 40%`);
+    if(metrics.count>=20){
+      assert(metrics.uniqueLongestCorrectPct<=25,`${id}: unique-longest-correct tell exceeds 25%`);
+      metrics.keyPositionPct.forEach((v,i)=>assert(v>=15&&v<=35,`${id}: answer position ${i+1} at ${v}% outside 15-35%`));
+    }
   }
 }
-console.log(`PASS: ${draws.toLocaleString()} development practice-session draws plus retake/tell analysis. Draft banks report release metrics without pretending they satisfy release-scale diversity.`);
+console.log(`PASS: ${draws.toLocaleString()} development practice-session draws plus retake/tell analysis. Any released bank additionally requires 5,000 verified-blueprint full-form draws and blueprint-form retake diversity.`);

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { PROGRAM, ASSESSMENTS, SUPPORTED_ITEM_TYPES } from "../js/config.js";
 import { BANKS } from "../js/banks.js";
 import { validateItem, scoreResponse } from "../js/core/item-types.js";
-import { drawPracticeSession, seededRandom } from "../js/core/form-builder.js";
+import { drawPracticeSession, deliveryGroupKey, seededRandom } from "../js/core/form-builder.js";
 import { drawBlueprintForm,validateBlueprintForm,validateBlueprintSpec,BLUEPRINTS } from "../js/blueprints.js";
 import { newAttempt,materializeItems,isRestorableAttempt,setResponse } from "../js/core/session.js";
 
@@ -28,6 +28,23 @@ assert.deepEqual(ASSESSMENTS["g8-science"].sessions.map(s=>s.guidelineMinutes),[
 assert.equal(ASSESSMENTS["g5-science"].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorLevel==="four-function"),true);
 assert.equal(ASSESSMENTS["g8-science"].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorLevel==="scientific"),true);
 assert.equal(ASSESSMENTS["g8-ela"].sessions[3].deferred.includes("listening-audio"),true);
+
+for(const g of [3,4,5,6,7,8]){
+  const assessmentId=`g${g}-math`, assessment=ASSESSMENTS[assessmentId], bank=BANKS[assessmentId];
+  const peSession=assessment.sessions.find(s=>s.performanceEvent===true);
+  assert(peSession,`${assessmentId}: missing declared Performance Event session`);
+  const eligible=bank.filter(i=>i.sessionEligibility.includes(peSession.id));
+  assert(eligible.length>0,`${assessmentId}: Performance Event session has no auto-scorable development items`);
+  const contaminants=eligible.filter(i=>i.strand!=="Performance Event").map(i=>i.id);
+  assert.deepEqual(contaminants,[],`${assessmentId}: non-PE items leaked into Performance Event session: ${contaminants.join(", ")}`);
+  const ungrouped=eligible.filter(i=>!deliveryGroupKey(i)).map(i=>i.id);
+  assert.deepEqual(ungrouped,[],`${assessmentId}: Performance Event items need stable delivery groups: ${ungrouped.join(", ")}`);
+  for(let seed=1;seed<=50;seed++){
+    const draw=drawPracticeSession(bank,peSession.id,{maxItems:12,rng:seededRandom(seed)});
+    assert(draw.length>0,`${assessmentId}: PE draw unexpectedly empty`);
+    assert.equal(new Set(draw.map(deliveryGroupKey)).size,1,`${assessmentId}: PE practice draw mixed multiple events`);
+  }
+}
 
 const ids=new Set(); let count=0;
 for(const [assessmentId,bank] of Object.entries(BANKS)){

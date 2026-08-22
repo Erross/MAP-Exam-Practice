@@ -15,6 +15,7 @@ const itemCode=(item,grade)=>{
   return domain;
 };
 const exactOverlap=(a,b)=>{if(!a.length)return 0;const ids=new Set(b.map(i=>i.id));return a.filter(i=>ids.has(i.id)).length/a.length;};
+const pointOverlap=(a,b)=>{const denominator=points(a);if(!denominator)return 0;const ids=new Set(b.map(i=>i.id));return points(a.filter(i=>ids.has(i.id)))/denominator;};
 const stimulusOverlap=(a,b)=>{
   const keys=a.map(deliveryGroupKey).filter(Boolean),unique=[...new Set(keys)];
   if(!unique.length)return null;
@@ -24,7 +25,8 @@ const stimulusOverlap=(a,b)=>{
 const round=n=>Math.round(n*10)/10;
 
 function bundleVariants(bundle){return bundle.map(item=>item.variantFamily||item.id);}
-function categoryPoints(items,grade,code){return points(items.filter(item=>itemCode(item,grade)===code));}
+function categoryItems(items,grade,code){return items.filter(item=>itemCode(item,grade)===code);}
+function categoryPoints(items,grade,code){return points(categoryItems(items,grade,code));}
 function canAdd(selected,bundle,grade,target,rules,usedIds,usedVariants){
   if(points(selected)+points(bundle)>target)return false;
   const ids=bundle.map(i=>i.id),variants=bundleVariants(bundle);
@@ -104,22 +106,39 @@ function validateDevelopmentMathForm(assessmentId,form){
 }
 
 for(const grade of [3,4,5,6,7,8]){
-  const assessmentId=`g${grade}-math`;
+  const assessmentId=`g${grade}-math`,blueprint=BLUEPRINTS[assessmentId],bank=BANKS[assessmentId];
+  const ordinaryRules=blueprint.officialConstraints.filter(rule=>rule.component!=="performance-event");
+  const ordinary=bank.filter(item=>itemCode(item,grade)!=="PE");
   const forms=[];
   for(let seed=1;seed<=5000;seed++){
     const form=drawDevelopmentMathForm(assessmentId,{rng:seededRandom(seed)});
     assert.deepEqual(validateDevelopmentMathForm(assessmentId,form),[],`${assessmentId}: invalid development form at seed ${seed}`);
     forms.push(form);
   }
-  let itemTotal=0,stimulusTotal=0,stimulusTrials=0;
+  let itemTotal=0,pointTotal=0,stimulusTotal=0,stimulusTrials=0;
+  const categoryReuse=Object.fromEntries(ordinaryRules.map(rule=>[rule.code,{pointOverlapTotal:0,itemOverlapTotal:0}]));
   for(let pair=1;pair<=5000;pair++){
     const a=drawDevelopmentMathForm(assessmentId,{rng:seededRandom(pair*2+100000)});
     const b=drawDevelopmentMathForm(assessmentId,{rng:seededRandom(pair*2+100001)});
     itemTotal+=exactOverlap(a,b);
+    pointTotal+=pointOverlap(a,b);
     const so=stimulusOverlap(a,b);if(so!==null){stimulusTotal+=so;stimulusTrials++;}
+    for(const rule of ordinaryRules){
+      const aCat=categoryItems(a,grade,rule.code),bCat=categoryItems(b,grade,rule.code);
+      categoryReuse[rule.code].pointOverlapTotal+=pointOverlap(aCat,bCat);
+      categoryReuse[rule.code].itemOverlapTotal+=exactOverlap(aCat,bCat);
+    }
   }
   const meanItems=forms.reduce((sum,form)=>sum+form.length,0)/forms.length;
-  const itemPct=round(100*itemTotal/5000),stimulusPct=stimulusTrials?round(100*stimulusTotal/stimulusTrials):null;
-  console.log(`${assessmentId}: 5,000 transcribed-range development full forms constructed; mean ${round(meanItems)} items; full-form retake overlap ${itemPct}%${stimulusPct===null?"":`; stimulus/set overlap ${stimulusPct}%`}. NOT release verification.`);
+  const itemPct=round(100*itemTotal/5000),pointPct=round(100*pointTotal/5000),stimulusPct=stimulusTrials?round(100*stimulusTotal/stimulusTrials):null;
+  console.log(`${assessmentId}: 5,000 transcribed-range development full forms constructed; mean ${round(meanItems)} items; full-form retake overlap ${itemPct}% by item / ${pointPct}% by points${stimulusPct===null?"":`; stimulus/set overlap ${stimulusPct}%`}. NOT release verification.`);
+  const categorySummary=ordinaryRules.map(rule=>{
+    const pool=categoryPoints(ordinary,grade,rule.code);
+    const meanDraw=forms.reduce((sum,form)=>sum+categoryPoints(form,grade,rule.code),0)/forms.length;
+    const pointReuse=round(100*categoryReuse[rule.code].pointOverlapTotal/5000);
+    const itemReuse=round(100*categoryReuse[rule.code].itemOverlapTotal/5000);
+    return `${rule.code}: pool ${pool}p, mean draw ${round(meanDraw)}p, retake ${itemReuse}% items/${pointReuse}% points`;
+  });
+  console.log(`${assessmentId} category reuse: ${categorySummary.join(" | ")}`);
 }
 console.log("PASS: all six Math banks can repeatedly construct full-point development forms under the transcribed blueprint ranges while preserving exactly one complete operational PE. These results are diagnostic only until current-primary DESE ranges are independently confirmed.");

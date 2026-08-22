@@ -7,5 +7,5 @@ const expected=[
 ];
 assert.deepEqual(Object.keys(BANKS).sort(),expected,"All 14 Grade-Level development banks must remain wired");
 const total=Object.values(BANKS).reduce((sum,bank)=>sum+bank.length,0);
-assert(total>=282,`Development bank floor regressed: ${total} < 282`);
+assert(total>=302,`Development bank floor regressed: ${total} < 302`);
 console.log(`PASS: catalog floor holds ${total} items across all ${expected.length} Grade-Level banks.`);

@@ -3,21 +3,25 @@ import { PROGRAM, ASSESSMENTS, SUPPORTED_ITEM_TYPES } from "../js/config.js";
 import { BANKS } from "../js/banks.js";
 import { validateItem, scoreResponse } from "../js/core/item-types.js";
 import { drawPracticeSession, seededRandom } from "../js/core/form-builder.js";
+import { drawBlueprintForm,validateBlueprintForm,validateBlueprintSpec,BLUEPRINTS } from "../js/blueprints.js";
 import { newAttempt,materializeItems,isRestorableAttempt,setResponse } from "../js/core/session.js";
 
 assert.equal(PROGRAM.family,"map"); assert.equal(PROGRAM.timingPolicy,"guideline");
 assert.equal(Object.keys(ASSESSMENTS).length,14,"Expected 14 Grade-Level assessment configs");
+assert.equal(Object.keys(BLUEPRINTS).length,14,"Expected blueprint records for all 14 Grade-Level assessments");
 for(const a of Object.values(ASSESSMENTS)){
   assert.equal(a.sessions.every(s=>s.timingPolicy==="guideline"),true);
   assert.equal(a.sessions.every(s=>Array.isArray(s.guidelineMinutes)&&s.guidelineMinutes.length===2&&s.guidelineMinutes.every(Number.isFinite)),true,`${a.id}: every session needs a numeric guideline range`);
   assert.equal(a.fullSimulationAvailable,false);
+  assert.equal(BLUEPRINTS[a.blueprintId].assessmentId,a.id);
+  assert.equal(BLUEPRINTS[a.blueprintId].officialPointTarget,a.points);
 }
-for(const g of [3,4,5]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorAllowed===false),true);
-for(const g of [6,7,8]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorAllowed===true),true);
+for(const g of [3,4,5]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="none"),true);
+for(const g of [6,7,8]) assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="item-designated"),true);
 assert.deepEqual(ASSESSMENTS["g8-math"].sessions.map(s=>s.guidelineMinutes),[[30,50],[30,50],[30,40]]);
 assert.deepEqual(ASSESSMENTS["g8-science"].sessions.map(s=>s.guidelineMinutes),[[55,75],[55,75]]);
-assert.equal(ASSESSMENTS["g5-science"].sessions.every(s=>s.calculatorLevel==="four-function"),true);
-assert.equal(ASSESSMENTS["g8-science"].sessions.every(s=>s.calculatorLevel==="scientific"),true);
+assert.equal(ASSESSMENTS["g5-science"].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorLevel==="four-function"),true);
+assert.equal(ASSESSMENTS["g8-science"].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorLevel==="scientific"),true);
 assert.equal(ASSESSMENTS["g8-ela"].sessions[3].deferred.includes("listening-audio"),true);
 
 const ids=new Set(); let count=0;
@@ -67,5 +71,24 @@ assert.equal(scoreResponse(displayed,"B").earned,1,"semantic key survives option
 assert.deepEqual(materializeItems([shuffleItem],attempt)[0].options,displayed.options,"resume materializes same option order");
 const locked={...attempt,submitted:true}; assert.throws(()=>setResponse(locked,"shuffle-fixture","B"),/locked/);
 
+const blueprintFixture={assessmentId:"fixture",officialPointTarget:4,verified:true,supportedPointTarget:4,constraints:[
+  {field:"reportingCategory",value:"A",minPoints:2,maxPoints:2},
+  {field:"reportingCategory",value:"B",minPoints:2,maxPoints:2}
+]};
+assert.deepEqual(validateBlueprintSpec(blueprintFixture),[]);
+const blueprintBank=[
+  fixture("multiple_choice",{answer:"a"},{id:"bp-a1",options:["a","b","c"],reportingCategory:"A"}),
+  fixture("multiple_choice",{answer:"a"},{id:"bp-a2",options:["a","b","c"],reportingCategory:"A"}),
+  fixture("multiple_choice",{answer:"a"},{id:"bp-a3",options:["a","b","c"],reportingCategory:"A"}),
+  fixture("multiple_choice",{answer:"a"},{id:"bp-b1",options:["a","b","c"],reportingCategory:"B"}),
+  fixture("multiple_choice",{answer:"a"},{id:"bp-b2",options:["a","b","c"],reportingCategory:"B"}),
+  fixture("multiple_choice",{answer:"a"},{id:"bp-b3",options:["a","b","c"],reportingCategory:"B"})
+];
+for(let seed=1;seed<=100;seed++){
+  const form=drawBlueprintForm(blueprintBank,blueprintFixture,{rng:seededRandom(seed)});
+  assert.equal(form.length,4);assert.deepEqual(validateBlueprintForm(form,blueprintFixture),[]);
+}
+assert.throws(()=>drawBlueprintForm(blueprintBank,{...blueprintFixture,verified:false}),/not independently verified|Invalid blueprint/);
+
 const sanity=BANKS["g8-math"].find(i=>i.id==="g8m-005"); assert.equal(scoreResponse(sanity,7).earned,1); assert.equal(scoreResponse(sanity,6).earned,0);
-console.log(`PASS: ${count} development items across ${Object.keys(BANKS).length} banks; 14 assessment configs; ${scoringCases.length} response-type scoring fixtures; persisted option randomization; core invariants green.`);
+console.log(`PASS: ${count} development items across ${Object.keys(BANKS).length} banks; 14 assessment configs/blueprint records; ${scoringCases.length} response-type scoring fixtures; persisted option randomization; blueprint assembly; core invariants green.`);

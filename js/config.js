@@ -17,7 +17,7 @@ const S = (id, label, guidelineMinutes, calculatorAllowed, options = {}) => Obje
 });
 
 const elaSessions = {
-  3: [S(1,"Session 1",[40,105],false),S(2,"Session 2",[25,55],false),S(3,"Session 3 — Listening",[15,35],false,{deferred:["listening-audio"]})],
+  3: [S(1,"Session 1",[45,105],false),S(2,"Session 2",[25,55],false),S(3,"Session 3 — Listening",[15,35],false,{deferred:["listening-audio"]})],
   4: [S(1,"Session 1 — Passage + Writing",[100,130],false,{deferred:["human-scored-writing"]}),S(2,"Session 2",[40,90],false),S(3,"Session 3",[15,40],false),S(4,"Session 4 — Listening",[15,35],false,{deferred:["listening-audio"]})],
   5: [S(1,"Session 1",[45,95],false),S(2,"Session 2",[25,50],false),S(3,"Session 3 — Listening",[15,35],false,{deferred:["listening-audio"]})],
   6: [S(1,"Session 1",[40,95],false),S(2,"Session 2",[20,40],false),S(3,"Session 3 — Listening",[15,30],false,{deferred:["listening-audio"]})],
@@ -25,7 +25,7 @@ const elaSessions = {
   8: [S(1,"Session 1 — Passage + Writing",[100,130],false,{deferred:["human-scored-writing"]}),S(2,"Session 2",[35,75],false),S(3,"Session 3",[15,30],false),S(4,"Session 4 — Listening",[15,25],false,{deferred:["listening-audio"]})]
 };
 
-const mathGuides = {3:[[30,55],[30,55],[15,30]],4:[[30,55],[30,55],[15,30]],5:[[35,60],[35,60],[15,30]],6:[[30,55],[30,55],[30,40]],7:[[30,55],[30,55],[30,40]],8:[[30,55],[30,55],[30,40]]};
+const mathGuides = {3:[[30,55],[30,55],[15,30]],4:[[30,55],[30,55],[15,30]],5:[[35,60],[35,60],[15,30]],6:[[30,50],[30,50],[30,40]],7:[[30,50],[30,50],[30,40]],8:[[30,50],[30,50],[30,40]]};
 const mathSessions = grade => mathGuides[grade].map((range,index)=>S(index+1,index===2?"Session 3 — Performance Event":`Session ${index+1}`,grade>=6,{performanceEvent:index===2,deferred:index===2?["human-scored-written-pe-parts"]:[]}));
 const scienceSessions = grade => [S(1,"Session 1",grade===5?[60,80]:[55,75],true,{deferred:["human-scored-constructed-response"]}),S(2,"Session 2",grade===5?[60,80]:[55,75],true,{deferred:["human-scored-constructed-response"]})];
 

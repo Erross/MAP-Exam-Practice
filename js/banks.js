@@ -12,6 +12,7 @@ import { BANK_G7_ELA } from "../data/grade-7/ela.js";
 import { BANK_G8_MATH } from "../data/grade-8/math.js";
 import { BANK_G8_ELA } from "../data/grade-8/ela.js";
 import { BANK_G8_SCIENCE } from "../data/grade-8/science.js";
+import { BANK_G8_SCIENCE_EXPANSION } from "../data/grade-8/science-expansion.js";
 
 export const BANKS=Object.freeze({
   "g3-math":BANK_G3_MATH,"g3-ela":BANK_G3_ELA,
@@ -19,6 +20,6 @@ export const BANKS=Object.freeze({
   "g5-math":BANK_G5_MATH,"g5-ela":BANK_G5_ELA,"g5-science":BANK_G5_SCIENCE,
   "g6-math":BANK_G6_MATH,"g6-ela":BANK_G6_ELA,
   "g7-math":BANK_G7_MATH,"g7-ela":BANK_G7_ELA,
-  "g8-math":BANK_G8_MATH,"g8-ela":BANK_G8_ELA,"g8-science":BANK_G8_SCIENCE
+  "g8-math":BANK_G8_MATH,"g8-ela":BANK_G8_ELA,"g8-science":[...BANK_G8_SCIENCE,...BANK_G8_SCIENCE_EXPANSION]
 });
 export const getBank=id=>BANKS[id]||[];

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/run.mjs && node tests/catalog-floor.mjs",
+    "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/delivery-groups.mjs",
     "audit": "node scripts/release-audit.mjs",
     "check": "npm test && npm run audit",
     "build": "node scripts/build.mjs"

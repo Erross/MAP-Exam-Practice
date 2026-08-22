@@ -14,7 +14,7 @@ Primary sources:
 6. Missouri DESE Mathematics curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/mathematics
 7. Missouri DESE Science curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/science
 8. Grade-specific Performance Level Descriptors and current practice forms/scoring guides linked from the Grade-Level hub.
-9. 2025-2026 Missouri Instructional Testlet Administration Guide, used only as corroborating evidence for current expectation-code usage and grade-level testlet mappings, not as a substitute for the summative blueprint/item specifications.
+9. 2025-2026 Missouri Instructional Testlet Administration Guide, used only as corroborating evidence for current expectation-code usage, grade-level testlet mappings, and the distinction between automatically scored interactions and educator-scored Text Input/Constructed Response items; it is not a substitute for the summative blueprint/item specifications.
 
 The current DESE blueprint wrapper resolves to an April 2026 file named `MAP Grade-Level Assessment Blueprints_AOD.pdf`. The DESE web crawler and current Guide independently confirm the 14 Grade-Level assessment point totals encoded below. The DESE PDF is presented through an HTML PDF.js wrapper in the available review environment, so direct visual screenshots of that primary file were not available. Category/range tables have therefore been transcribed into `BLUEPRINT_TRANSCRIPTION.md` from an accessible Missouri blueprint copy and cross-checked against the current DESE point totals. Those category ranges remain explicitly marked **primary-current-file confirmation pending**; they must not by themselves flip an assessment to release-ready.
 
@@ -25,6 +25,14 @@ When DESE pages from different administration years disagree, the project does n
 Science Grade-Level materials may assess expectations introduced in earlier elementary grades. Therefore an item delivered in a Grade 5 Science practice bank is not required to carry a `5.*` expectation code; its standard tag must identify the actual Missouri expectation being assessed.
 
 For Mathematics, DESE item specifications include calculator designations that are useful authoring metadata for an expectation. They do **not** override the current administration-level policy encoded by this project. The 2025-2026 Grade-Level Examiner's Manual/timing guidance shows calculators unavailable in Grades 3-5 Mathematics and **allowed in all three Mathematics sessions in Grades 6-8**. Accordingly, the application exposes calculator availability throughout Grades 6-8 Math sessions. Item-level `calculatorLevel` may still be used to describe the most appropriate local practice keypad or whether a particular synthetic item actually benefits from calculator use; it is not used to turn the operational calculator permission on and off item-by-item.
+
+## Constructed-response evidence and current limitation
+
+The current DESE Guide states that Grade-Level assessments may contain Constructed Response items, and the current Science resource page publishes separate Grade 5 and Grade 8 Science practice scoring guides and scoring-rubric guides. The 2025-2026 Missouri Instructional Testlet Administration Guide further distinguishes automatically scored drag/drop, multiple-choice, multi-part selected-response, and multi-select interactions from Text Input/Constructed Response items that are scored through an Educator Scoring Tool.
+
+This evidence is sufficient to justify the application's **manual-response capture boundary**: a constructed response may be entered and persisted, but it must declare manual scoring, include a rubric, contain no automatic answer key, and contribute no points to the automatic percentage until a human score exists.
+
+It is **not** sufficient evidence for a fixed summative Grade 5 or Grade 8 Science constructed-response point allocation. The currently transcribed Science blueprint ranges are strand ranges (Physical Science, Life Science, Earth and Space Science), not a separate CR point bucket. Therefore the project must not infer a Science auto-scored target such as 54/56 points merely from the current development-bank totals, and must not build or label a 60-point all-auto Science form as operationally faithful. Science full-form executability remains blocked until the current summative item-type/CR allocation is independently established or an explicitly partial supported-scope form is defined from authoritative evidence.
 
 ## Current operational facts encoded by the project
 
@@ -44,18 +52,18 @@ For Mathematics, DESE item specifications include calculator designations that a
 
 `js/blueprints.js` contains a record for all 14 Grade-Level assessments and the official total-point target for each. `BLUEPRINT_TRANSCRIPTION.md` records the currently transcribed category ranges and their evidence status.
 
-A critical distinction is retained between the **official complete MAP blueprint** and what this static practice application can currently execute automatically. ELA writing/listening and some written responses, plus Science constructed-response scoring, remain deferred. Mathematics Performance Events also need to be modeled as complete coherent 6-point (Grades 3-5) or 8-point (Grades 6-8) events before a generated full form can honestly claim operational PE fidelity. Therefore a green development bank is not equivalent to a complete operational form.
+A critical distinction is retained between the **official complete MAP blueprint** and what this static practice application can currently execute automatically. ELA writing/listening and human scoring of written responses, plus Science constructed-response scoring, remain deferred. Mathematics Performance Events have operational-size development bundles, but written/human-scored PE fidelity still remains a release consideration. Therefore a green development bank is not equivalent to a complete operational form.
 
 Blueprint records must remain non-releasable until:
 
 - current DESE category/range tables have primary-source confirmation;
-- the schema distinguishes official full-test constraints from executable auto-scored subset constraints;
+- the schema distinguishes official full-test constraints from executable auto-scored/manual-review subset constraints;
 - any deferred official components are represented explicitly rather than silently replaced;
-- complete Math PE bundles match the official PE point contribution; and
+- complete Math PE bundles match the official PE point contribution and any required written/manual-scored behavior is accounted for; and
 - 5,000 blueprint-constrained full-form draws pass for any assessment that is actually executable.
 
 This prevents a generic random-draw bank from being promoted merely because its total item count and development-session overlap look plausible.
 
 ## Scope caveat
 
-Listening/audio and human-scored written responses are intentionally deferred in the current static/free implementation. The repository must retain those official components in metadata and limitations rather than treating extra auto-scored questions as substitutes. An assessment may provide highly faithful auto-scored practice while still being correctly labeled as **not a complete operational MAP simulation**.
+Listening/audio and **human scoring** of written responses are intentionally deferred in the current static/free implementation. The application can now capture constructed-response text for manual review, but it does not automatically grade prose. The repository must retain those official components in metadata and limitations rather than treating extra auto-scored questions as substitutes. An assessment may provide highly faithful auto-scored practice while still being correctly labeled as **not a complete operational MAP simulation**.

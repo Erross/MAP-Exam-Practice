@@ -1,0 +1,9 @@
+const base={grade:3,subject:"math",provenance:"original-synthetic",alignmentStatus:"development-needs-clean-room",strand:"Number Sense & Operations",reportingCategory:"Number Sense & Operations",sessionEligibility:[1,2]};
+export const BANK_G3_MATH_BLUEPRINT_EXPANSION=[
+{...base,id:"g3m-cap-001",standard:"3.NBT.A.1",dok:1,itemType:"multiple_choice",points:1,prompt:"Round 347 to the nearest hundred.",options:["300","350","400","340"],scoring:{answer:"300"},rationale:"347 is less than 350, so it rounds to 300."},
+{...base,id:"g3m-cap-002",standard:"3.NBT.A.1",dok:2,itemType:"multiple_choice",points:1,prompt:"Which number rounds to 620 when rounded to the nearest ten?",options:["617","612","626","604"],scoring:{answer:"617"},rationale:"617 is closer to 620 than to 610; the other choices round to 610, 630, and 600."},
+{...base,id:"g3m-cap-003",standard:"3.NBT.A.2",dok:1,itemType:"multiple_choice",points:1,prompt:"Which is the expanded form of 42,305?",options:["40,000 + 2,000 + 300 + 5","40,000 + 200 + 30 + 5","4,000 + 2,000 + 300 + 5","40,000 + 2,000 + 30 + 5"],scoring:{answer:"40,000 + 2,000 + 300 + 5"},rationale:"42,305 has 4 ten-thousands, 2 thousands, 3 hundreds, 0 tens, and 5 ones."},
+{...base,id:"g3m-cap-004",standard:"3.NBT.A.2",dok:2,itemType:"numeric_input",points:1,prompt:"What is the value of the digit 6 in 36,214?",scoring:{answer:6000,tolerance:0},rationale:"The 6 is in the thousands place, so its value is 6,000."},
+{...base,id:"g3m-cap-005",standard:"3.NBT.A.3",dok:2,itemType:"numeric_input",points:1,prompt:"Find 684 - 257.",scoring:{answer:427,tolerance:0},rationale:"684 - 257 = 427."},
+{...base,id:"g3m-cap-006",standard:"3.NBT.A.4",dok:2,itemType:"multiple_choice",points:1,prompt:"What is 7 × 60?",options:["420","360","67","4,200"],scoring:{answer:"420"},rationale:"7 × 6 tens equals 42 tens, or 420."}
+];

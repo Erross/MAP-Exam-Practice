@@ -1,6 +1,6 @@
 import { assessmentList, getAssessment, assessmentDeferredComponents } from "./config.js";
 import { getBank } from "./banks.js";
-import { drawPracticeSession } from "./core/form-builder.js";
+import { drawPracticeSession,deliveryGroupKey } from "./core/form-builder.js";
 import { newAttempt,materializeItems,isRestorableAttempt,setResponse,toggleFlag,submitAttempt,saveAttempt,loadAttempt,clearAttempt } from "./core/session.js";
 import { scoreAttempt } from "./core/scoring.js";
 import { renderControl } from "./renderers.js";
@@ -30,6 +30,13 @@ function calculatorLevelForItem(session,item){
   }
   return null;
 }
+function groupContext(item,index){
+  const key=deliveryGroupKey(item); if(!key)return null;
+  const positions=state.items.map((q,i)=>deliveryGroupKey(q)===key?i:null).filter(i=>i!==null);
+  if(positions.length<2)return null;
+  const first=Math.min(...positions),last=Math.max(...positions);
+  return {first,last,count:positions.length,label:state.assessment?.subject==="science"?"stimulus set":"passage set",position:positions.indexOf(index)+1};
+}
 
 function home(){
   const resume=loadAttempt(); const grades=[3,4,5,6,7,8];
@@ -47,8 +54,11 @@ function preflightView(){
 function start(sessionId){ const a=state.assessment, baseItems=drawPracticeSession(bankFor(a),sessionId,{maxItems:12}); const attempt=newAttempt(a.id,sessionId,baseItems); const items=materializeItems(baseItems,attempt); saveAttempt(attempt); setState({view:"question",session:sessionId,items,attempt}); }
 function resumeAttempt(){ const a=loadAttempt(); if(!isRestorableAttempt(a))return; const assessment=getAssessment(a.assessmentId); if(!assessment||!launchable(assessment)){clearAttempt();return home();} const bank=getBank(a.assessmentId), byId=new Map(bank.map(i=>[i.id,i])), baseItems=a.itemIds.map(id=>byId.get(id)).filter(Boolean); if(baseItems.length!==a.itemIds.length){clearAttempt();return home();} setState({view:"question",assessment,session:a.sessionId,items:materializeItems(baseItems,a),attempt:a}); }
 function questionView(){
-  const a=state.attempt, item=state.items[a.index], session=currentSession(), calcLevel=calculatorLevelForItem(session,item);
-  root.innerHTML=`<header class="test-head"><div><strong>${state.assessment.label}</strong><span>Session ${state.session} • Untimed${calcLevel?` • Calculator available`:""}</span></div><div class="test-tools">${calcLevel?`<button id="calculator-toggle" class="secondary" aria-expanded="false">Calculator</button>`:""}<button id="home" class="link-button">Exit</button></div></header><div id="calculator-slot"></div><div class="test-layout"><aside class="navigator" aria-label="Question navigator">${state.items.map((q,i)=>`<button data-jump="${i}" class="${i===a.index?"current":""} ${a.responses[q.id]!==undefined?"answered":""}">${i+1}${a.flags[q.id]?" ⚑":""}</button>`).join("")}</aside><main class="question-panel">${item.stimulus?`<article class="stimulus"><h2>${item.stimulus.title}</h2>${item.stimulus.text.split("\n").map(p=>`<p>${p}</p>`).join("")}</article>`:""}<p class="question-number">Question ${a.index+1} of ${state.items.length} • ${item.points} point${item.points===1?"":"s"}</p><h1 class="prompt">${item.prompt}</h1><div id="control"></div><div class="question-actions"><button id="flag" class="secondary">${a.flags[item.id]?"Unflag":"Flag for review"}</button><div><button id="prev" class="secondary" ${a.index===0?"disabled":""}>Previous</button>${a.index===state.items.length-1?`<button id="submit">Review & submit</button>`:`<button id="next">Next</button>`}</div></div></main></div>`;
+  const a=state.attempt, item=state.items[a.index], session=currentSession(), calcLevel=calculatorLevelForItem(session,item), group=groupContext(item,a.index);
+  const groupNote=group?`<p class="set-context">Questions ${group.first+1}–${group.last+1} use this ${group.label}. You are on item ${group.position} of ${group.count} in the set.</p>`:"";
+  const stimulus=item.stimulus?`<article class="stimulus"><p class="eyebrow">${state.assessment.subject==="science"?"Stimulus":"Passage"}</p><h2>${item.stimulus.title}</h2>${item.stimulus.text.split("\n").map(p=>`<p>${p}</p>`).join("")}</article>`:"";
+  const questionBody=`<section class="question-body"><p class="question-number">Question ${a.index+1} of ${state.items.length} • ${item.points} point${item.points===1?"":"s"}</p>${groupNote}<h1 class="prompt">${item.prompt}</h1><div id="control"></div><div class="question-actions"><button id="flag" class="secondary">${a.flags[item.id]?"Unflag":"Flag for review"}</button><div><button id="prev" class="secondary" ${a.index===0?"disabled":""}>Previous</button>${a.index===state.items.length-1?`<button id="submit">Review & submit</button>`:`<button id="next">Next</button>`}</div></div></section>`;
+  root.innerHTML=`<header class="test-head"><div><strong>${state.assessment.label}</strong><span>Session ${state.session} • Untimed${calcLevel?` • Calculator available`:""}</span></div><div class="test-tools">${calcLevel?`<button id="calculator-toggle" class="secondary" aria-expanded="false">Calculator</button>`:""}<button id="home" class="link-button">Exit</button></div></header><div id="calculator-slot"></div><div class="test-layout"><aside class="navigator" aria-label="Question navigator">${state.items.map((q,i)=>`<button data-jump="${i}" class="${i===a.index?"current":""} ${a.responses[q.id]!==undefined?"answered":""}">${i+1}${a.flags[q.id]?" ⚑":""}</button>`).join("")}</aside><main class="question-panel"><div class="question-workspace ${item.stimulus?"with-stimulus":""}">${stimulus}${questionBody}</div></main></div>`;
   root.querySelector("#control").append(renderControl(item,a.responses[item.id],value=>{setResponse(a,item.id,value);saveAttempt(a);render();}));
   root.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>{a.index=Number(b.dataset.jump);saveAttempt(a);render();});
   root.querySelector("#flag").onclick=()=>{toggleFlag(a,item.id);saveAttempt(a);render();};

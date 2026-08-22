@@ -24,11 +24,25 @@ export function validateItem(item){
   if ((item.itemType==="matching"||item.itemType==="matching_table") && !item.scoring?.matches) errors.push(`${item.id}: matching requires scoring.matches`);
   if (item.itemType==="drag_drop" && !Array.isArray(item.scoring?.order)) errors.push(`${item.id}: drag_drop requires scoring.order`);
   if ((item.itemType==="hotspot"||item.itemType==="hot_text"||item.itemType==="dropdown") && item.scoring?.answer===undefined) errors.push(`${item.id}: ${item.itemType} requires scoring.answer`);
+  if (item.itemType==="constructed_response") {
+    const rubric=item.scoring?.rubric;
+    if (item.scoring?.mode!=="manual") errors.push(`${item.id}: constructed_response requires scoring.mode manual`);
+    if (!rubric || typeof rubric!=="object") errors.push(`${item.id}: constructed_response requires a manual scoring rubric`);
+    else {
+      if (Number(rubric.maxPoints)!==Number(item.points)) errors.push(`${item.id}: constructed_response rubric.maxPoints must equal item.points`);
+      if (!Array.isArray(rubric.criteria) || rubric.criteria.length===0) errors.push(`${item.id}: constructed_response rubric requires criteria`);
+    }
+    if (item.scoring?.answer!==undefined || item.scoring?.answers!==undefined) errors.push(`${item.id}: constructed_response must not contain an automatic answer key`);
+  }
   return errors;
 }
 
 export function scoreResponse(item,response){
-  if (response===undefined || response===null || response==="") return {earned:0,possible:item.points,correct:false};
+  if (item.itemType==="constructed_response") {
+    const answered=typeof response==="string" ? response.trim().length>0 : response!==undefined&&response!==null&&response!=="";
+    return {earned:0,possible:0,correct:null,requiresManualScore:true,manualPossible:item.points,answered};
+  }
+  if (response===undefined || response===null || response==="") return {earned:0,possible:item.points,correct:false,requiresManualScore:false,manualPossible:0,answered:false};
   const s=item.scoring||{};
   let correct=false;
   switch(item.itemType){
@@ -46,5 +60,5 @@ export function scoreResponse(item,response){
     case "clock_input": correct=Number(response?.hour)===Number(s.answer?.hour)&&Number(response?.minute)===Number(s.answer?.minute); break;
     default: correct=false;
   }
-  return {earned:correct?item.points:0,possible:item.points,correct};
+  return {earned:correct?item.points:0,possible:item.points,correct,requiresManualScore:false,manualPossible:0,answered:true};
 }

@@ -3,7 +3,7 @@ import { buildCleanRoomManifest } from "../scripts/clean-room-manifest.mjs";
 
 const blind=buildCleanRoomManifest();
 assert.equal(blind.includesAnswerKeys,false);
-assert.equal(blind.totalItems,1748,"blind clean-room manifest must represent the complete browser-effective catalog");
+assert.equal(blind.totalItems,1780,"blind clean-room manifest must represent the complete browser-effective catalog");
 assert.equal(blind.assessments.length,14);
 
 const ids=[];
@@ -29,4 +29,4 @@ for(const item of keyed.assessments[0].items){
 }
 assert.throws(()=>buildCleanRoomManifest({assessmentId:"not-real"}),/Unknown assessment/);
 
-console.log("PASS: clean-room manifest covers all 1,748 browser-effective items, stays blind by default, and exposes keys only in explicit reconciliation mode.");
+console.log("PASS: clean-room manifest covers all 1,780 browser-effective items, stays blind by default, and exposes keys only in explicit reconciliation mode.");

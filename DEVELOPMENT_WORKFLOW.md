@@ -28,7 +28,47 @@ Assessments remain `draft` until their supported scope has complete release-scal
 
 ## Independent clean-room handoff
 
-The clean-room reviewer should inspect the **browser-effective aggregate**, not the individual authoring layers. Generate the default blind manifest from the exact candidate tree:
+The clean-room reviewer must inspect the **browser-effective aggregate**, not the individual authoring layers, and must not see repository answer keys/rationales before recording independent judgments.
+
+### Preferred structured worksheet
+
+Generate a blind worksheet for one assessment from the exact candidate tree:
+
+```bash
+npm run audit:review-template -- --assessment=g5-science > g5-science-review.json
+```
+
+The worksheet contains the browser-effective item content plus empty reviewer fields for:
+
+- independent answer (for auto-scored items);
+- correctness;
+- ambiguity;
+- grade fit;
+- standard/expectation alignment;
+- manual-rubric quality for constructed responses; and
+- notes.
+
+It deliberately excludes `scoring` and `rationale`. The reviewer completes the entire worksheet **before** any keyed view is opened.
+
+After the blind review is complete, reconcile it against the candidate bank:
+
+```bash
+npm run audit:reconcile -- g5-science-review.json
+```
+
+Reconciliation exits nonzero when:
+
+- an auto-scored reviewer answer disagrees with the repository key;
+- any required reviewer field is incomplete;
+- the reviewer records any substantive finding;
+- a manual-response rubric is flagged; or
+- browser-effective item order/content identity has changed enough that the worksheet no longer matches the candidate tree.
+
+This is a review-handoff mechanism, **not** an independent reviewer. Test fixtures that mechanically populate repository keys only prove the tooling works and never count as clean-room evidence.
+
+### Raw manifest mode
+
+For reviewers who prefer their own notes/answer capture system, the deterministic blind manifest remains available:
 
 ```bash
 npm run audit:manifest > clean-room-blind.json
@@ -40,15 +80,15 @@ To review one assessment only:
 npm run audit:manifest -- --assessment=g5-science > g5-science-blind.json
 ```
 
-The default manifest deliberately excludes `scoring`, `rationale`, and other answer-key fields. The reviewer independently answers/checks the items before seeing repository keys. Only after that independent pass, generate the keyed reconciliation view:
+Only after independent answers are recorded, a keyed reconciliation view may be generated:
 
 ```bash
 npm run audit:manifest -- --assessment=g5-science --answers > g5-science-keyed.json
 ```
 
-Do not give the keyed manifest to the clean-room reviewer before their independent answers are recorded. The manifest is deterministic and retains browser-effective item order, stable IDs, standards, strands, DOK, item type, points, session eligibility, stimulus/set identifiers and displayed content.
+Do not give a keyed manifest to the clean-room reviewer before their independent answers and judgments are recorded. The blind manifest/template retain browser-effective item order, stable IDs, standards, strands, DOK, item type, points, session eligibility, stimulus/set identifiers, and displayed content.
 
-After substantive content repair, restart the complete clean-room audit from scratch and regenerate the blind manifest from the repaired exact candidate tree. A prior review cannot certify a materially changed bank.
+After **any substantive content repair**, restart the complete clean-room audit from scratch and regenerate the blind worksheet/manifest from the repaired exact candidate tree. A prior review cannot certify a materially changed bank.
 
 After meaningful UX repair, use a fresh naive assessor.
 

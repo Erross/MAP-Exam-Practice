@@ -28,7 +28,11 @@ Assessments remain `draft` until their supported scope has complete release-scal
 
 ## Independent clean-room handoff
 
-The clean-room reviewer must inspect the **browser-effective aggregate**, not the individual authoring layers, and must not see repository answer keys, rationales, or constructed-response rubrics before recording independent judgments.
+**Use the simple project procedure in `CLEAN_ROOM_REVIEW.md`. Do not invent external agent infrastructure just to satisfy this gate.** The normal AP/ACT-style process is a fresh answerless browser-effective worksheet, a deliberately blinded reviewer pass, freeze/seal, then keyed reconciliation.
+
+The essential requirement is answer blindness during the independent judgment phase. A fresh human or separate agent is welcome when readily available, but is not required. The same capable reasoning model may perform the reviewer pass provided it deliberately treats prior authoring conclusions, remembered keys, tests, PR descriptions, and earlier audits as non-evidence and does not inspect scoring/rationales/rubrics while recording the new blind judgments.
+
+The clean-room reviewer must inspect the **browser-effective aggregate**, not the individual authoring layers.
 
 ### Preferred sealed two-phase worksheet
 
@@ -50,6 +54,8 @@ The worksheet contains the browser-effective item content plus empty reviewer fi
 For auto-scored items, `reviewerAnswer` is the response the reviewer independently believes is correct. For a constructed response, `reviewerAnswer` records the response elements or scoring criteria the reviewer independently expects a correct response to contain. The blind worksheet deliberately excludes `scoring`, `rationale`, and the official manual rubric.
 
 Every assessment worksheet also contains a SHA-256 `browserEffectiveFingerprint` derived from the complete current browser-effective bank state, including scoring/rationale state. This means a prompt, option, scoring, rationale, metadata, or ordering repair invalidates the packet even when item IDs stay the same.
+
+Before review starts, enter reviewer mode explicitly: ignore prior authoring conclusions and remembered keys; solve from the fresh answerless worksheet and current governing Missouri sources/answerless standard definitions only. Do not treat existing tests or prior audit claims as evidence.
 
 After **all** blind answers and verdicts are complete, seal the blind phase:
 
@@ -81,7 +87,7 @@ Reconciliation exits nonzero when:
 - the frozen blind review was modified after sealing; or
 - the browser-effective assessment fingerprint changed for any reason.
 
-This is a review-handoff mechanism, **not** an independent reviewer. Test fixtures that mechanically populate repository keys only prove the tooling works and never count as clean-room evidence.
+This is a review-handoff mechanism, **not** proof merely because the scripts ran. Test fixtures that mechanically populate repository keys only prove the tooling works and never count as clean-room evidence. The evidence is the independently completed answer-blind judgments plus successful later reconciliation.
 
 ### Raw manifest mode
 
@@ -103,7 +109,7 @@ A keyed manifest can be generated for post-review author reconciliation:
 npm run audit:manifest -- --assessment=g5-science --answers > g5-science-keyed.json
 ```
 
-Do not give a keyed manifest to the clean-room reviewer before their independent responses and judgments are recorded and frozen. The structured sealed workflow above is preferred because it mechanically enforces the exact-bank fingerprint and constructed-response rubric sequencing; raw-manifest review requires equivalent procedural evidence outside the tool.
+Do not expose a keyed manifest before independent responses and judgments are recorded and frozen. The structured sealed workflow above is preferred because it mechanically enforces the exact-bank fingerprint and constructed-response rubric sequencing; raw-manifest review requires equivalent procedural evidence outside the tool.
 
 After **any substantive content repair**, restart the complete clean-room audit from scratch and regenerate the blind worksheet/manifest from the repaired exact candidate tree. A prior review cannot certify a materially changed bank. The fingerprint is an additional guard, not permission to skip that rule.
 

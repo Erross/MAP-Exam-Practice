@@ -17,11 +17,15 @@ for(const assessment of assessments){
 
   const bank=BANKS[assessment.id];
   assert.ok(Array.isArray(bank)&&bank.length>0,`${assessment.id}: production-visible practice release requires a nonempty bank`);
+  const stimuliByKey=new Map();
   for(const item of bank){
     if(item.stimulus){
-      const key=item.stimulusId||item.stimulus?.id;
-      assert.equal(typeof key,"string",`${item.id}: production-visible stimulus-backed item needs a stable stimulusId or stimulus.id`);
-      assert.ok(key.length>0,`${item.id}: production-visible stimulus key cannot be empty`);
+      const key=item.stimulusId||item.stimulus?.id||item.stimulus?.title;
+      assert.equal(typeof key,"string",`${item.id}: production-visible stimulus-backed item needs a stable delivery key`);
+      assert.ok(key.trim().length>0,`${item.id}: production-visible stimulus delivery key cannot be empty`);
+      const signature=JSON.stringify(item.stimulus);
+      if(stimuliByKey.has(key)) assert.equal(stimuliByKey.get(key),signature,`${item.id}: stimulus delivery key ${key} maps to conflicting stimulus content`);
+      else stimuliByKey.set(key,signature);
     }
     if(assessment.subject==="math"&&assessment.grade>=6){
       assert.ok(["none","four-function","scientific"].includes(item.calculatorLevel),`${item.id}: production-visible Grade ${assessment.grade} Math item needs verified calculatorLevel metadata`);
@@ -42,4 +46,4 @@ const about=fs.readFileSync(new URL("../about.html",import.meta.url),"utf8");
 assert.match(about,/not the same as taking a complete operational MAP form/,"About page must preserve the full-form limitation");
 assert.match(about,/Current release limitations/,"About page must describe omissions as release scope, not unfinished development status");
 
-console.log("PASS: all 14 certified short-practice assessments use practice-released production visibility with production item guards and without claiming full MAP-form executability.");
+console.log("PASS: all 14 certified short-practice assessments use practice-released production visibility with stable stimulus delivery keys, calculator metadata, and no full MAP-form claim.");

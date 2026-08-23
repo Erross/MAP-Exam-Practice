@@ -1,9 +1,9 @@
 name: Clean-room agent — Grade 5 Science
 
 on:
-  push:
+  pull_request:
     branches:
-      - core/map-v1-foundation
+      - main
     paths:
       - .github/workflows/clean-room-agent-g5-science.yml
 

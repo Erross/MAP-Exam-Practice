@@ -2,76 +2,81 @@
 
 Verified: **2026-08-23**
 
-Current build basis: **2025-2026 Grade-Level operational guidance**, with mandatory revalidation against 2026-2027 materials before claiming Spring 2027 fidelity. DESE has already posted 2026-2027 calendar entries while the latest complete operational Grade-Level manual available during this verification is the 2025-2026 manual.
+Current V1 basis: **2025-2026 Grade-Level operational guidance**, with mandatory revalidation against 2026-2027 materials before claiming Spring 2027 fidelity. DESE has 2026-2027 calendar entries posted, but the latest complete Grade-Level operational manual available during this release verification is the 2025-2026 manual for Spring 2026.
 
-Primary sources:
+## Primary sources
 
 1. Missouri DESE Grade-Level assessment hub: https://dese.mo.gov/quality-schools/assessment/grade-level
 2. Guide to the Missouri Assessment Program: https://dese.mo.gov/quality-schools/assessment/guide-missouri-assessment-program
 3. 2025-2026 Grade-Level Examiner's Manual: https://dese.mo.gov/sites/g/files/zuston521/files/media/pdf/2026/04/2025-2026%20MAP%20Grade-Level%20EM_v2_AOD.pdf
-4. MAP Grade-Level Assessment Blueprints: https://dese.mo.gov/quality-schools/assessment/media/pdf/map-grade-level-assessment-blueprints
-5. Missouri DESE English Language Arts curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/english-language-arts
-6. Missouri DESE Mathematics curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/mathematics
-7. Missouri DESE Science curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/science
-8. Grade-specific Performance Level Descriptors and current practice forms/scoring guides linked from the Grade-Level hub.
-9. 2025-2026 Missouri Instructional Testlet Administration Guide, used only as corroborating evidence for current expectation-code usage, grade-level testlet mappings, and the distinction between automatically scored interactions and educator-scored Text Input/Constructed Response items; it is not a substitute for the summative blueprint/item specifications.
+4. 2025-2026 Grade-Level Test Coordinator's Manual, linked from the Grade-Level hub.
+5. MAP Grade-Level Assessment Blueprints: https://dese.mo.gov/quality-schools/assessment/media/pdf/map-grade-level-assessment-blueprints
+6. Missouri DESE English Language Arts curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/english-language-arts
+7. Missouri DESE Mathematics curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/mathematics
+8. Missouri DESE Science curriculum/item-specification hub: https://dese.mo.gov/college-career-readiness/curriculum/science
+9. Grade-specific Performance Level Descriptors linked from the Grade-Level hub: ELA Grades 3-8, Math Grades 3-8, Science Grades 5 and 8.
+10. Current practice forms and scoring guides linked from the Grade-Level hub for all 14 assessment configurations; Science includes separate scoring-rubric guides.
+11. 2025-2026 Missouri Instructional Testlet Administration Guide, used only as corroborating evidence for expectation-code usage and educator-scored Text Input/Constructed Response behavior; it is not a substitute for the summative blueprint/item specifications.
 
-The current DESE blueprint resource resolves to the April 2026 file `MAP Grade-Level Assessment Blueprints_AOD.pdf`. On 2026-08-23 the actual 15-page primary PDF was obtained and directly inspected. All Math, ELA, and Science reporting-category point ranges in `BLUEPRINT_TRANSCRIPTION.md` and `js/blueprints.js` were reconciled to that file. The primary-current category-range gate is therefore closed; this does **not** by itself make any assessment release-ready.
+## Final release recheck
 
-Direct inspection also corrected several earlier interpretations that had split combined Math reporting categories too finely: Grade 4 and Grade 5 use a single GM + DS range, Grade 7 uses a single GM + DSP range, and Grade 8 uses combined NS + EEI and GM + DSP ranges. Grade 8 ELA's 4-point "Approaching the task as a reader" row is under Language, not a second writing-task bucket.
+The release source boundary was rechecked on 2026-08-23 after the final content audit. The live DESE Grade-Level hub still identifies ELA and Mathematics in Grades 3-8 and Science in Grades 5 and 8; lists the current 2025-2026 Examiner/Test Coordinator manuals; links the current grade-specific PLDs; and exposes the full practice-form/scoring-guide matrix for all assessment grades/subjects.
+
+The current Examiner's Manual confirms:
+
+- ELA has three sessions in Grades 3, 5, 6, and 7 and four in Grades 4 and 8;
+- Grades 4 and 8 ELA Session 1 contains passage-based items including a writing prompt;
+- Mathematics has three sessions, with Performance Events in Session 3;
+- Science has two sessions and both contain constructed-response, multiple-choice, and technology-enhanced items;
+- DESE timing values are guidelines/estimates and there is **no time limit for any Grade-Level assessment**;
+- calculators are not allowed in Grades 3-5 Mathematics without an accommodation;
+- the current administration policy encoded by this project allows calculator access throughout Grades 6-8 Mathematics sessions;
+- Grade 5 and Grade 8 Science calculator access is represented as four-function and scientific respectively in the project;
+- current technology-enhanced families include dropdown, matching, hot spots, graphing/bar graphing/line graphing, number lines, line plots, clock input, and angle drawing;
+- practice-test open-ended responses are educator-scored rather than automatically awarded points.
+
+The current DESE practice-form description states that the practice form mirrors the operational assessment for item types/test-system familiarity. The project uses that evidence for interaction/style fidelity only; it does not copy official question wording or use a practice form as proof of a hidden operational point allocation.
+
+## Blueprint verification
+
+The April 2026 `MAP Grade-Level Assessment Blueprints_AOD.pdf` was obtained and directly inspected page by page. All official total-point targets and reporting-category ranges in `BLUEPRINT_TRANSCRIPTION.md` and `js/blueprints.js` were reconciled to that primary PDF.
+
+The inspection corrected earlier overly granular Math grouping assumptions:
+
+- Grade 4 and Grade 5: combined GM + DS reporting-category range;
+- Grade 7: combined GM + DSP range;
+- Grade 8: combined NS + EEI and combined GM + DSP ranges.
+
+Grade 8 ELA's 4-point "Approaching the task as a reader" row is Language, not a second writing-task bucket.
+
+`officialPointTargetVerified:true` and `officialRangesVerified:true` mean the governing source totals/ranges are primary-source verified. They do **not** mean a complete operational form can be executed by this static application.
 
 ## Source precedence
 
-When DESE pages from different administration years disagree, the project does not average or silently choose values. For operational session behavior in this build, the current complete **2025-2026 Examiner's Manual** takes precedence over older general-guide timing tables. The current blueprint and grade/subject item specifications control content distribution and assessment boundaries; practice forms control interaction/style only when they do not conflict with the governing operational documents.
+When DESE pages from different administration years disagree, the project does not average values. For V1 operational session behavior, the latest complete **2025-2026 Examiner's Manual** takes precedence over older general-guide timing tables. The current blueprint and grade/subject item specifications control content distribution and assessment boundaries. Practice forms inform interaction/style only when consistent with those governing sources.
 
-Science Grade-Level materials may assess expectations introduced in earlier elementary grades. Therefore an item delivered in a Grade 5 Science practice bank is not required to carry a `5.*` expectation code; its standard tag must identify the actual Missouri expectation being assessed.
+Science Grade-Level materials may assess expectations introduced in earlier elementary grades, so a Grade 5 Science item is not required to carry a `5.*` code; its standard tag must identify the actual Missouri expectation being assessed.
 
-For Mathematics, DESE item specifications include calculator designations that are useful authoring metadata for an expectation. They do **not** override the current administration-level policy encoded by this project. The 2025-2026 Grade-Level Examiner's Manual/timing guidance shows calculators unavailable in Grades 3-5 Mathematics and **allowed in all three Mathematics sessions in Grades 6-8**. Accordingly, the application exposes calculator availability throughout Grades 6-8 Math sessions. Item-level `calculatorLevel` may still be used to describe the most appropriate local practice keypad or whether a particular synthetic item actually benefits from calculator use; it is not used to turn the operational calculator permission on and off item-by-item.
+For Mathematics, expectation-level calculator designation is authoring metadata and does not override administration-level session permission. The application therefore does not turn Grades 6-8 Math calculator availability on/off item-by-item.
 
-## ELA writing interpretation
+## ELA release interpretation
 
-The current Test Coordinator's Manual states that Grades 4 and 8 have four ELA sessions and that their first session includes a passage-based writing prompt. Grades 3, 5, 6, and 7 have three sessions, with the final session serving the Listening strand. The primary blueprint still contains Writing reporting-category points in Grades 6 and 7, but those points are not treated as a deferred human-scored passage-writing prompt merely because the reporting category is named Writing. The development supported-scope harness therefore includes Grade 6/7 auto-scored Writing-category content and excludes the actual Grade 4/8 passage-writing prompt component.
+Grades 4 and 8 have passage-based writing prompts in official Session 1, and the final ELA session is Listening. Those components are represented in session metadata and disclosed to users but are not substituted with unrelated auto-scored items.
 
-## Constructed-response evidence and current limitation
+Grades 6 and 7 also have Writing-category blueprint work. That category is not treated as a deferred passage-writing prompt merely because it is named Writing; supported auto-scored revise/edit work remains in the V1 bank where aligned to current Missouri expectations.
 
-The current Science blueprint confirms only strand ranges: Grade 5 PS 17-26, LS 15-22, ESS 15-22; Grade 8 PS/LS/ESS 15-23 each. The current administration manual separately confirms that **both Science sessions contain constructed-response, multiple-choice, and technology-enhanced items**.
+## Science constructed-response boundary
 
-This evidence is sufficient to justify the application's **manual-response capture boundary**: a constructed response may be entered and persisted, but it must declare manual scoring, include a rubric, contain no automatic answer key, and contribute no points to the automatic percentage until a human score exists.
+The current Science blueprint provides strand ranges and a 60-point total. The administration manual establishes constructed-response presence in both sessions. Public current materials do **not** state a separate fixed summative Science CR point quota.
 
-It is **not** sufficient evidence for a fixed summative Grade 5 or Grade 8 Science constructed-response point allocation. The blueprint has no separate CR point bucket. Therefore the project must not infer a Science auto-scored target such as 54/56 points from development-bank totals, and must not build or label a 60-point all-auto Science form as operationally faithful. Science full-form executability remains blocked until the summative item-type/CR allocation is independently established or an explicitly partial supported-scope form is defined from authoritative evidence.
+Accordingly, V1 may capture and persist a constructed response only when the item declares manual scoring, has a point-matched rubric, has no automatic answer key, and excludes those points from the automatic earned/possible percentage.
 
-## Current operational facts encoded by the project
+The project does **not** infer an operational Grade 5/8 auto/manual split from development-bank totals or practice-form CR counts. Science full-form executability stays blocked unless a governing source establishes that allocation.
 
-- ELA and Mathematics: Grades 3-8; Science: Grades 5 and 8.
-- ELA: 3 sessions in Grades 3, 5, 6, 7; 4 sessions in Grades 4 and 8.
-- Grades 4 and 8 ELA Session 1 includes passage-based items plus a writing prompt.
-- Final ELA session is the listening strand.
-- Mathematics: 3 sessions; Sessions 1-2 selected-response/TE; Session 3 performance event.
-- Science: 2 sessions; both contain multiple-choice, TE, and constructed-response items.
-- DESE timing ranges are guidelines; Grade-Level assessments do not use a student countdown time limit.
-- Students may not return to a session after it is completed/submitted.
-- Mathematics calculators: not allowed in Grades 3-5 without an accommodation; allowed throughout Grades 6-8 Mathematics sessions under the current 2025-2026 administration guidance.
-- Science calculators: four-function in Grade 5 and scientific in Grade 8 under the administration guidance encoded by the project.
-- Current point targets: Math G3-5 48, Math G6-8 54; ELA G3-6 and G8 56, ELA G7 52; Science G5/G8 60.
-- Current reporting-category ranges: directly primary-source verified on 2026-08-23 and recorded in `BLUEPRINT_TRANSCRIPTION.md`.
+## Release status versus full-form executability
 
-## Blueprint verification status
+The final V1 bank has completed clean-room certification and the student-facing short-practice assessments are production-visible with `status:"released"` and `practiceMode:"certified-short-practice"`.
 
-`js/blueprints.js` contains a record for all 14 Grade-Level assessments. `officialPointTargetVerified:true` and `officialRangesVerified:true` now indicate that the current DESE total and reporting-category ranges have been directly checked against the governing primary materials.
+That release state is intentionally separate from the blueprint engine's full-form state. `fullSimulationAvailable:false`, `verified:false`, and `executable:false` remain appropriate where audio, human-scored writing/PE components, or an authoritative Science CR allocation prevent a complete operational MAP form from being represented.
 
-A critical distinction remains between **official-source verification** and **release executability**. Every assessment remains `verified:false` and `executable:false` because other blockers remain: deferred Listening, Grade 4/8 passage-writing human scoring, Science CR allocation/human scoring, exact bank/category alignment, current-head simulation evidence, clean-room audit, naive UX review, and exact-tree validation.
-
-Blueprint records must remain non-releasable until:
-
-- the schema distinguishes official full-test constraints from executable auto-scored/manual-review subset constraints;
-- deferred official components are represented explicitly rather than silently replaced;
-- complete Math PE bundles and written/manual-scored PE behavior are accounted for;
-- Science's operational CR treatment is established without guessing;
-- 5,000 blueprint-constrained full-form or authoritative supported-scope draws pass on the exact candidate tree; and
-- independent clean-room and exact-tree release gates pass.
-
-This prevents a generic random-draw bank from being promoted merely because its total item count and development-session overlap look plausible.
-
-## Scope caveat
-
-Listening/audio and **human scoring** of written responses are intentionally deferred in the current static/free implementation. The application can capture constructed-response text for manual review, but it does not automatically grade prose. The repository must retain those official components in metadata and limitations rather than treating extra auto-scored questions as substitutes. An assessment may provide highly faithful auto-scored practice while still being correctly labeled as **not a complete operational MAP simulation**.
+V1 therefore claims **production-ready original MAP short practice**, not complete secure operational-form equivalence. Any future claim about Spring 2027 fidelity requires fresh source verification against 2026-2027 DESE materials.

@@ -1,1 +1,33 @@
-PLACEHOLDER
+{
+  "schemaVersion": 1,
+  "purpose": "cryptographic receipt for completed answer-blind Grade 5 Science review before keyed reconciliation",
+  "assessmentId": "g5-science",
+  "browserEffectiveFingerprint": "11b732fe462184537b19cb6db013e52edaf6a090268231e2842a4b755ba41b71",
+  "itemCount": 88,
+  "completedBlindReviewSha256": "03c76df500723e6e83fa936e4df1e826d103acbf688952eaf6dd686f6c3a4d7c",
+  "completedBlindReviewBytes": 131464,
+  "verdictSummary": {
+    "correctnessFindings": 0,
+    "ambiguityFindings": 0,
+    "gradeFitFindings": 0,
+    "standardAlignmentFindings": 15
+  },
+  "standardAlignmentFindingIds": [
+    "g5s-002",
+    "g5s-030",
+    "g5s-cap-001",
+    "g5s-cap-002",
+    "g5s-cap-003",
+    "g5s-cap-008",
+    "g5s-div-a001",
+    "g5s-div-a002",
+    "g5s-div-a008",
+    "g5s-div-a014",
+    "g5s-div-a018",
+    "g5s-div-b008",
+    "g5s-div-b013",
+    "g5s-div-b014",
+    "g5s-div-b016"
+  ],
+  "reviewRule": "All 88 reviewer answers and verdicts were completed from the answerless exact-head worksheet before any keyed reconciliation. The SHA-256 above freezes that completed worksheet. Any substantive repair invalidates this round and requires restart from item 1."
+}

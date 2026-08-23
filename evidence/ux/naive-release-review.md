@@ -21,7 +21,7 @@ Findings after repair: **pass — no substantive finding**.
 Evidence/observations:
 
 - The home page says this is unofficial Missouri practice and explicitly says MAP is untimed.
-- Released cards say `Practice ready`; development-only status wording is not shown in ordinary use.
+- Production-visible cards say `Practice ready`; development-only status wording is not shown in ordinary use.
 - Preflight separates the **official point target** from the **up-to-12-item practice-set size** and states that the short set is not a full operational MAP session.
 - Missing/deferred content is disclosed before the student chooses a session. A missing component is not silently replaced with extra multiple-choice questions.
 - Grade 3 Math clearly says the calculator is not allowed/not applicable; no calculator control is shown during the session.
@@ -60,6 +60,6 @@ Evidence/observations:
 
 ## Release interpretation
 
-This naive review approves the **certified short-practice product**, not a complete summative MAP simulator. `status:"released"` means students may use the assessment's reviewed short-practice sessions. It does **not** mean `fullSimulationAvailable:true`, and it does not change blueprint `executable:false` where deferred official components prevent complete operational-form execution.
+This naive review approves the **certified short-practice product**, not a complete summative MAP simulator. `status:"practice-released"` means students may use the assessment's reviewed short-practice sessions. The stronger `status:"released"` state remains reserved for a fully blueprint-verified/executable assessment. Practice release does **not** mean `fullSimulationAvailable:true`, and it does not change blueprint `verified:false` / `executable:false` where deferred official components prevent complete operational-form execution.
 
 No UX repair from this review changed any browser-effective assessment item content, so the final clean-room bank fingerprints remain valid.

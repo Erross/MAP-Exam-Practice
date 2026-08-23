@@ -4,13 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/official-session-contract.mjs && node tests/science-manual-response-contract.mjs && node tests/clean-room-manifest.mjs && node tests/delivery-groups.mjs && node tests/pe-contract.mjs && node tests/blueprint-capacity.mjs && node tests/science-standard-precision.mjs && node tests/science-semantic-review.mjs && node tests/science-semantic-review-g8.mjs",
+    "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/official-session-contract.mjs && node tests/science-manual-response-contract.mjs && node tests/clean-room-manifest.mjs && node tests/clean-room-review-tools.mjs && node tests/delivery-groups.mjs && node tests/pe-contract.mjs && node tests/blueprint-capacity.mjs && node tests/science-standard-precision.mjs && node tests/science-semantic-review.mjs && node tests/science-semantic-review-g8.mjs",
     "diagnose": "node scripts/tell-diagnostics.mjs",
     "diagnose:alignment": "node scripts/bank-alignment.mjs",
     "diagnose:math-forms": "node scripts/math-form-feasibility.mjs",
     "diagnose:ela-forms": "node scripts/ela-form-feasibility.mjs",
     "audit": "node scripts/release-audit.mjs",
     "audit:manifest": "node scripts/clean-room-manifest.mjs",
+    "audit:review-template": "node scripts/clean-room-review-template.mjs",
+    "audit:reconcile": "node scripts/reconcile-clean-room-review.mjs",
     "check": "npm test && npm run diagnose && npm run diagnose:alignment && npm run diagnose:math-forms && npm run diagnose:ela-forms && npm run audit",
     "build": "node scripts/build.mjs"
   }

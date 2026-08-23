@@ -16,8 +16,10 @@ function blueprintCode(item,assessment){
   if(assessment.subject==="math"){
     if(item.strand==="Performance Event"||item.blueprintComponent==="PE")return "PE";
     const domain=standardDomain(item);
-    if(assessment.grade===3&&["GM","DS"].includes(domain))return "GM+DS";
-    if(assessment.grade===6&&["GM","DSP"].includes(domain))return "GM+DSP";
+    if([3,4,5].includes(assessment.grade)&&["GM","DS"].includes(domain))return "GM+DS";
+    if([6,7].includes(assessment.grade)&&["GM","DSP"].includes(domain))return "GM+DSP";
+    if(assessment.grade===8&&["NS","EEI"].includes(domain))return "NS+EEI";
+    if(assessment.grade===8&&["GM","DSP"].includes(domain))return "GM+DSP";
     return domain;
   }
   if(assessment.subject==="science"){

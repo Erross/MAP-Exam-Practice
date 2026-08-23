@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { BANKS } from "../js/banks.js";
+import { drawPracticeSession, seededRandom } from "../js/core/form-builder.js";
 
 for(const assessmentId of ["g5-science","g8-science"]){
   const bank=BANKS[assessmentId]||[];
@@ -9,6 +10,10 @@ for(const assessmentId of ["g5-science","g8-science"]){
   for(const sessionId of [1,2]){
     const sessionManual=manual.filter(item=>item.sessionEligibility.includes(sessionId));
     assert(sessionManual.length>=3,`${assessmentId} session ${sessionId}: keep at least three manual-response practice items`);
+    for(let seed=1;seed<=100;seed++){
+      const draw=drawPracticeSession(bank,sessionId,{maxItems:12,rng:seededRandom(seed)});
+      assert(draw.some(item=>item.itemType==="constructed_response"),`${assessmentId} session ${sessionId}: practice draw seed ${seed} omitted constructed response`);
+    }
   }
 
   const strands=new Map();
@@ -25,4 +30,4 @@ for(const assessmentId of ["g5-science","g8-science"]){
   }
 }
 
-console.log("PASS: Grade 5 and Grade 8 Science retain manual-scored constructed-response practice in both sessions and across all three science strands.");
+console.log("PASS: Grade 5 and Grade 8 Science retain manual-scored constructed-response practice in both sessions/all strands, and every generic Science practice draw surfaces at least one CR.");

@@ -47,7 +47,7 @@ import { BANK_G5_ELA_EXPANSION } from "../data/grade-5/ela-expansion.js";
 import { BANK_G5_ELA_EXPANSION_2 } from "../data/grade-5/ela-expansion-2.js";
 import { BANK_G5_ELA_RESEARCH_EXPANSION } from "../data/grade-5/ela-research-expansion.js";
 import { BANK_G5_ELA_RESEARCH_EXPANSION_2 } from "../data/grade-5/ela-research-expansion-2.js";
-import { BANK_G5_ELA_READING_DIVERSITY } from "../data/grade-5/ela-reading-diversITY.js";
+import { BANK_G5_ELA_READING_DIVERSITY } from "../data/grade-5/ela-reading-diversity.js";
 import { BANK_G5_ELA_FORM_TOPUP } from "../data/grade-5/ela-form-topup.js";
 import { BANK_G5_SCIENCE } from "../data/grade-5/science.js";
 import { BANK_G5_SCIENCE_EXPANSION } from "../data/grade-5/science-expansion.js";

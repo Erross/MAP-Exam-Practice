@@ -1,0 +1,25 @@
+name: Pages configuration probe
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/pages-probe.yml
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe configured GitHub Pages site
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Report Pages metadata
+        run: |
+          echo "base_url=${{ steps.pages.outputs.base_url }}"
+          echo "origin=${{ steps.pages.outputs.origin }}"
+          echo "base_path=${{ steps.pages.outputs.base_path }}"

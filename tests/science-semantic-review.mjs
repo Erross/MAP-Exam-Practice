@@ -5,7 +5,8 @@ import {
   G5_STANDARD_CORRECTIONS,
   G5_SEMANTIC_REVIEW_PENDING
 } from "../js/science-semantic-review.js";
-import { G5_ITEM_REPAIR_IDS } from "../js/science-semantic-item-repairs.js";
+import { G5_ITEM_REPAIRS } from "../js/science-semantic-item-repairs.js";
+import { G5_TELL_REPAIRS } from "../js/science-tell-repairs.js";
 
 const bank=BANKS["g5-science"]||[];
 assert.equal(bank.length,88,"Grade 5 Science browser-effective bank size changed unexpectedly");
@@ -14,9 +15,9 @@ assert.equal(byId.size,bank.length,"Grade 5 Science IDs must remain unique");
 
 for(const [id,expectedStandard] of Object.entries(G5_STANDARD_CORRECTIONS)){
   const item=byId.get(id);
-  assert(item,`${id}: semantic correction points to a missing browser-effective item`);
-  assert.equal(item.standard,expectedStandard,`${id}: semantic correction was not applied`);
-  assert.equal(item.semanticStandardReview,"corrected-from-source-audit",`${id}: correction provenance marker missing`);
+  assert(item,`${id}: semantic correction points to a missing source item`);
+  assert.equal(item.standard,expectedStandard,`${id}: consolidated standard correction is missing from source`);
+  assert.equal(item.semanticStandardReview,undefined,`${id}: standard correction should live directly in source without runtime provenance markers`);
   assert(ELEMENTARY_SCIENCE_EXPECTATIONS[expectedStandard],`${id}: corrected standard lacks a source-controlled expectation definition`);
 }
 
@@ -27,17 +28,18 @@ for(const item of bank){
   );
 }
 
-const pendingIds=new Set(Object.keys(G5_SEMANTIC_REVIEW_PENDING));
-for(const [id,note] of Object.entries(G5_SEMANTIC_REVIEW_PENDING)){
-  assert(byId.has(id),`${id}: pending semantic-review item disappeared without the review ledger being reconciled`);
-  assert.equal(typeof note,"string");
-  assert(note.length>20,`${id}: pending semantic-review reason must remain explicit`);
-}
-for(const id of G5_ITEM_REPAIR_IDS){
+assert.deepEqual(G5_SEMANTIC_REVIEW_PENDING,{},"Grade 5 semantic-review ledger must stay reconciled after source consolidation");
+
+const formerOverlayIds=[...new Set([...Object.keys(G5_ITEM_REPAIRS),...Object.keys(G5_TELL_REPAIRS)])];
+for(const id of formerOverlayIds){
   const item=byId.get(id);
-  assert(item,`${id}: prompt repair points to a missing browser-effective item`);
-  assert.equal(item.semanticPromptReview,"repaired-from-source-audit",`${id}: prompt-repair provenance marker missing`);
-  assert(!pendingIds.has(id),`${id}: repaired item must not remain in the open semantic-review ledger`);
+  assert(item,`${id}: former overlay repair points to a missing source item`);
+  const expected={...(G5_ITEM_REPAIRS[id]||{}),...(G5_TELL_REPAIRS[id]||{})};
+  for(const [key,value] of Object.entries(expected)){
+    assert.deepEqual(item[key],value,`${id}: consolidated source property ${key} no longer matches the final browser-effective overlay value`);
+  }
+  assert.equal(item.semanticPromptReview,undefined,`${id}: prompt repair should now live directly in source, not a runtime overlay`);
+  assert.equal(item.answerTellReview,undefined,`${id}: tell repair should now live directly in source, not a runtime overlay`);
 }
 
 const forceMagnitudeIds=["g5s-010","g5s-div-a006","g5s-div-b005","g5s-cr-002"];
@@ -49,4 +51,4 @@ for(const id of erosionIds)assert.equal(byId.get(id)?.standard,"4.ESS.2.A.1",`${
 const lightHeatingIds=["g5s-009","g5s-cap-001","g5s-cap-002","g5s-cap-003","g5s-div-a001","g5s-div-a002","g5s-div-a003","g5s-div-b006"];
 for(const id of lightHeatingIds)assert.equal(byId.get(id)?.standard,"4.PS.3.B.1",`${id}: energy/temperature item regressed to the Grade 5 vision expectation`);
 
-console.log(`PASS: ${Object.keys(G5_STANDARD_CORRECTIONS).length} high-confidence Grade 5 Science standard corrections and ${G5_ITEM_REPAIR_IDS.length} prompt-level repairs are browser-effective; ${Object.keys(G5_SEMANTIC_REVIEW_PENDING).length} prompt-level review items remain explicitly open.`);
+console.log(`PASS: Grade 5 Science is source-only; ${Object.keys(G5_STANDARD_CORRECTIONS).length} standard corrections and ${formerOverlayIds.length} former prompt/tell overlay repairs exactly match the consolidated source state.`);

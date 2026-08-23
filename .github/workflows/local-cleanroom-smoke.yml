@@ -78,8 +78,7 @@ jobs:
           trap unlock_source EXIT
           lock_source
           curl -LsSf https://llama.app/install.sh | sh
-          export PATH="$HOME/.local/bin:$PATH"
-          llama-cli -hf Qwen/Qwen2.5-7B-Instruct-GGUF:Q4_K_M \
+          llama cli -hf Qwen/Qwen2.5-7B-Instruct-GGUF:Q4_K_M \
             --no-display-prompt --temp 0.1 -c 8192 -n 1200 \
             -jf schema.json -f prompt.txt > output.json
           unlock_source

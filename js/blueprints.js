@@ -9,8 +9,8 @@ const pointTargets={
   "g5-science":60,"g8-science":60
 };
 
-// These ranges are the current transcription target recorded in BLUEPRINT_TRANSCRIPTION.md.
-// They remain non-release evidence until independently confirmed against the current DESE primary PDF.
+// These official category ranges were directly checked against the current April 2026
+// Missouri DESE MAP Grade-Level Assessment Blueprints primary PDF on 2026-08-23.
 const officialConstraints={
   "g3-math":[
     {code:"NBT",label:"Number Sense and Operations in Base Ten",minPoints:8,maxPoints:10},
@@ -23,16 +23,14 @@ const officialConstraints={
     {code:"NBT",label:"Number Sense and Operations in Base Ten",minPoints:9,maxPoints:11},
     {code:"NF",label:"Number Sense and Operations in Fractions",minPoints:8,maxPoints:14},
     {code:"RA",label:"Relationships and Algebraic Thinking",minPoints:5,maxPoints:11},
-    {code:"GM",label:"Geometry and Measurement",minPoints:7,maxPoints:13},
-    {code:"DS",label:"Data and Statistics",minPoints:3,maxPoints:5},
+    {code:"GM+DS",label:"Geometry/Measurement + Data/Statistics",minPoints:10,maxPoints:18},
     {code:"PE",label:"Performance Event",minPoints:6,maxPoints:6,component:"performance-event"}
   ],
   "g5-math":[
     {code:"NBT",label:"Number Sense and Operations in Base Ten",minPoints:7,maxPoints:9},
     {code:"NF",label:"Number Sense and Operations in Fractions",minPoints:11,maxPoints:15},
     {code:"RA",label:"Relationships and Algebraic Thinking",minPoints:5,maxPoints:11},
-    {code:"GM",label:"Geometry and Measurement",minPoints:6,maxPoints:14},
-    {code:"DS",label:"Data and Statistics",minPoints:2,maxPoints:4},
+    {code:"GM+DS",label:"Geometry/Measurement + Data/Statistics",minPoints:8,maxPoints:18},
     {code:"PE",label:"Performance Event",minPoints:6,maxPoints:6,component:"performance-event"}
   ],
   "g6-math":[
@@ -46,15 +44,12 @@ const officialConstraints={
     {code:"RP",label:"Ratios and Proportional Relationships",minPoints:10,maxPoints:12},
     {code:"NS",label:"Number Sense",minPoints:8,maxPoints:10},
     {code:"EEI",label:"Expressions, Equations and Inequalities",minPoints:11,maxPoints:15},
-    {code:"GM",label:"Geometry and Measurement",minPoints:4,maxPoints:8},
-    {code:"DSP",label:"Data/Statistics/Probability",minPoints:5,maxPoints:10},
+    {code:"GM+DSP",label:"Geometry/Measurement + Data/Statistics/Probability",minPoints:9,maxPoints:18},
     {code:"PE",label:"Performance Event",minPoints:8,maxPoints:8,component:"performance-event"}
   ],
   "g8-math":[
-    {code:"NS",label:"Number Sense",minPoints:2,maxPoints:4},
-    {code:"EEI",label:"Expressions, Equations and Inequalities",minPoints:15,maxPoints:21},
-    {code:"GM",label:"Geometry and Measurement",minPoints:9,maxPoints:15},
-    {code:"DSP",label:"Data/Statistics/Probability",minPoints:3,maxPoints:5},
+    {code:"NS+EEI",label:"Number Sense + Expressions, Equations and Inequalities",minPoints:17,maxPoints:25},
+    {code:"GM+DSP",label:"Geometry/Measurement + Data/Statistics/Probability",minPoints:12,maxPoints:20},
     {code:"F",label:"Functions",minPoints:7,maxPoints:11},
     {code:"PE",label:"Performance Event",minPoints:8,maxPoints:8,component:"performance-event"}
   ],
@@ -87,22 +82,22 @@ const officialConstraints={
     {code:"RL",label:"Reading Literary",minPoints:13,maxPoints:15},
     {code:"RI",label:"Reading Informational",minPoints:13,maxPoints:15},
     {code:"RES",label:"Research",minPoints:7,maxPoints:9},
-    {code:"W",label:"Writing",minPoints:8,maxPoints:8,component:"writing-task"},
+    {code:"W",label:"Writing — Approaching the Task as a Reader",minPoints:8,maxPoints:8},
     {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
   ],
   "g7-ela":[
     {code:"RL",label:"Reading Literary",minPoints:13,maxPoints:15},
     {code:"RI",label:"Reading Informational",minPoints:13,maxPoints:15},
     {code:"RES",label:"Research",minPoints:7,maxPoints:9},
-    {code:"W",label:"Writing",minPoints:7,maxPoints:9,component:"writing-task"},
+    {code:"W",label:"Writing — Approaching the Task as a Reader",minPoints:7,maxPoints:9},
     {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
   ],
   "g8-ela":[
     {code:"RL",label:"Reading Literary",minPoints:13,maxPoints:15},
     {code:"RI",label:"Reading Informational",minPoints:13,maxPoints:15},
     {code:"RES",label:"Research",minPoints:7,maxPoints:9},
-    {code:"WW",label:"Writing — Approaching the Task as a Writer",minPoints:8,maxPoints:8,component:"writing-task"},
-    {code:"WR",label:"Writing — Approaching the Task as a Reader",minPoints:4,maxPoints:4,component:"writing-task"},
+    {code:"W",label:"Writing — Approaching the Task as a Writer",minPoints:8,maxPoints:8,component:"writing-task"},
+    {code:"L",label:"Language — Approaching the Task as a Reader",minPoints:4,maxPoints:4},
     {code:"SL",label:"Speaking and Listening",minPoints:7,maxPoints:9,component:"listening"}
   ],
   "g5-science":[
@@ -118,9 +113,10 @@ const officialConstraints={
 };
 
 const blockersFor=assessmentId=>{
-  if(assessmentId.endsWith("-ela")) return ["current-DESE-range-primary-confirmation","writing/listening-auto-score-gap","supported-subset-constraints-not-finalized"];
-  if(assessmentId.endsWith("-science")) return ["current-DESE-range-primary-confirmation","constructed-response-scoring-gap","supported-subset-constraints-not-finalized"];
-  return ["current-DESE-range-primary-confirmation","complete-operational-performance-events-needed","ordinary-category-alignment-not-finalized"];
+  if(assessmentId==="g4-ela"||assessmentId==="g8-ela") return ["writing/listening-auto-score-gap","supported-subset-constraints-not-finalized"];
+  if(assessmentId.endsWith("-ela")) return ["listening-auto-score-gap","supported-subset-constraints-not-finalized"];
+  if(assessmentId.endsWith("-science")) return ["constructed-response-scoring-gap","supported-subset-constraints-not-finalized"];
+  return ["complete-operational-performance-events-needed","ordinary-category-alignment-not-finalized"];
 };
 
 export const BLUEPRINTS=freeze(Object.fromEntries(Object.entries(pointTargets).map(([assessmentId,officialPointTarget])=>[
@@ -131,12 +127,12 @@ export const BLUEPRINTS=freeze(Object.fromEntries(Object.entries(pointTargets).m
     officialPointTarget,
     officialConstraints:frozenRules(officialConstraints[assessmentId]||[]),
     officialPointTargetVerified:true,
-    officialRangesVerified:false,
-    officialRangeEvidence:"corroborating-copy-transcribed-primary-current-file-confirmation-pending",
+    officialRangesVerified:true,
+    officialRangeEvidence:"current-DESE-April-2026-primary-PDF-directly-inspected-2026-08-23",
     verified:false,
     executable:false,
-    verificationStatus:"official-total-verified-ranges-pending-primary-confirmation-execution-blocked",
-    sourceRecord:"BLUEPRINT_TRANSCRIPTION.md",
+    verificationStatus:"official-total-and-ranges-primary-verified-execution-blocked",
+    sourceRecord:"MAP Grade-Level Assessment Blueprints_AOD.pdf (DESE April 2026); BLUEPRINT_TRANSCRIPTION.md",
     executionBlockers:freeze(blockersFor(assessmentId)),
     supportedPointTarget:null,
     constraints:freeze([])

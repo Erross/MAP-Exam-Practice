@@ -5,6 +5,7 @@ import {
   G5_STANDARD_CORRECTIONS,
   G5_SEMANTIC_REVIEW_PENDING
 } from "../js/science-semantic-review.js";
+import { G5_ITEM_REPAIR_IDS } from "../js/science-semantic-item-repairs.js";
 
 const bank=BANKS["g5-science"]||[];
 assert.equal(bank.length,88,"Grade 5 Science browser-effective bank size changed unexpectedly");
@@ -26,10 +27,17 @@ for(const item of bank){
   );
 }
 
+const pendingIds=new Set(Object.keys(G5_SEMANTIC_REVIEW_PENDING));
 for(const [id,note] of Object.entries(G5_SEMANTIC_REVIEW_PENDING)){
   assert(byId.has(id),`${id}: pending semantic-review item disappeared without the review ledger being reconciled`);
   assert.equal(typeof note,"string");
   assert(note.length>20,`${id}: pending semantic-review reason must remain explicit`);
+}
+for(const id of G5_ITEM_REPAIR_IDS){
+  const item=byId.get(id);
+  assert(item,`${id}: prompt repair points to a missing browser-effective item`);
+  assert.equal(item.semanticPromptReview,"repaired-from-source-audit",`${id}: prompt-repair provenance marker missing`);
+  assert(!pendingIds.has(id),`${id}: repaired item must not remain in the open semantic-review ledger`);
 }
 
 const forceMagnitudeIds=["g5s-010","g5s-div-a006","g5s-div-b005","g5s-cr-002"];
@@ -41,4 +49,4 @@ for(const id of erosionIds)assert.equal(byId.get(id)?.standard,"4.ESS.2.A.1",`${
 const lightHeatingIds=["g5s-009","g5s-cap-001","g5s-cap-002","g5s-cap-003","g5s-div-a001","g5s-div-a002","g5s-div-a003","g5s-div-b006"];
 for(const id of lightHeatingIds)assert.equal(byId.get(id)?.standard,"4.PS.3.B.1",`${id}: energy/temperature item regressed to the Grade 5 vision expectation`);
 
-console.log(`PASS: ${Object.keys(G5_STANDARD_CORRECTIONS).length} high-confidence Grade 5 Science semantic corrections are browser-effective and source-defined; ${Object.keys(G5_SEMANTIC_REVIEW_PENDING).length} prompt-level review items remain explicitly open.`);
+console.log(`PASS: ${Object.keys(G5_STANDARD_CORRECTIONS).length} high-confidence Grade 5 Science standard corrections and ${G5_ITEM_REPAIR_IDS.length} prompt-level repairs are browser-effective; ${Object.keys(G5_SEMANTIC_REVIEW_PENDING).length} prompt-level review items remain explicitly open.`);

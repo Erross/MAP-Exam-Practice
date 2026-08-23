@@ -1,5 +1,5 @@
 // Source-controlled semantic review ledger for browser-effective Science banks.
-// The exact expectation text is transcribed from Missouri Learning Standards / DESE item-spec materials.
+// Expectation summaries are transcribed from Missouri Learning Standards / DESE item-spec materials.
 // This layer exists so a syntactically valid but semantically wrong expectation code cannot quietly ship.
 
 export const ELEMENTARY_SCIENCE_EXPECTATIONS=Object.freeze({
@@ -18,6 +18,26 @@ export const ELEMENTARY_SCIENCE_EXPECTATIONS=Object.freeze({
   "5.ESS.1.B.2":"Represent data in graphical displays to reveal patterns of daily changes in shadows, day and night, and seasonal appearance of some stars.",
   "5.ESS.2.A.1":"Develop a model using an example to describe ways the geosphere, biosphere, hydrosphere, and/or atmosphere interact.",
   "5.ESS.3.C.1":"Obtain and combine information about ways individual communities use science ideas to protect Earth's resources and environment."
+});
+
+export const MIDDLE_SCHOOL_SCIENCE_EXPECTATIONS=Object.freeze({
+  "6-8.PS1.A.1":"Develop models to describe the atomic composition of simple molecules and extended structures.",
+  "6-8.PS1.A.2":"Analyze and interpret data on properties of substances before and after they interact to determine whether a chemical reaction occurred.",
+  "6-8.PS1.B.1":"Develop and use a model to describe how the total number of atoms remains the same during a chemical reaction and thus mass is conserved.",
+  "6-8.PS2.A.1":"Apply physics principles to design a solution that minimizes the force of an object during a collision and develop an evaluation of the solution.",
+  "6-8.PS2.A.2":"Plan and conduct an investigation to provide evidence that change in an object's motion depends on the sum of forces on the object and the object's mass.",
+  "6-8.PS2.B.1":"Analyze diagrams and collect data to determine factors that affect the strength of electric and magnetic forces.",
+  "6-8.PS3.A.3":"Apply scientific principles to design, construct, and test a device that either minimizes or maximizes thermal-energy transfer.",
+  "6-8.PS3.A.4":"Plan and conduct an investigation to determine relationships among energy transferred, type of matter, mass, and change in sample temperature.",
+  "6-8.LS1.B.2":"Construct a scientific explanation based on evidence for how environmental and genetic factors influence growth of organisms.",
+  "6-8.LS2.A.1":"Analyze and interpret data to provide evidence for effects of resource availability on individual organisms and populations in an ecosystem.",
+  "6-8.LS2.A.2":"Construct an explanation that predicts patterns of interactions among and between biotic and abiotic factors in a given ecosystem.",
+  "6-8.LS2.B.1":"Develop a model to describe cycling of matter and flow of energy among living and nonliving parts of an ecosystem.",
+  "6-8.LS2.C.1":"Construct an argument supported by empirical evidence explaining how changes to physical or biological ecosystem components affect populations.",
+  "6-8.ESS1.B.1":"Analyze and interpret data to determine scale properties of objects in the solar system.",
+  "6-8.ESS2.A.2":"Construct an explanation based on evidence for how geoscience processes have changed Earth's surface at varying time and spatial scales.",
+  "6-8.ESS3.C.1":"Analyze data to define the relationship for how increases in human population and per-capita consumption of natural resources impact Earth's systems.",
+  "6-8.ESS3.C.2":"Apply scientific principles to design a method for monitoring and minimizing a human impact on the environment."
 });
 
 // High-confidence corrections found by comparing the actual prompt/stimulus semantics
@@ -88,6 +108,23 @@ export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({
   "g5s-cap-010":"5.LS.1.C.1 follow-up-design item does not directly assess plant material sources.",
   "g5s-cr-003":"5.LS.2.B.1 response predicts populations/grass rather than explicitly tracing matter movement.",
   "g5s-cr-004":"5.LS.1.C.1 response analyzes light-duration growth rather than chiefly air/water material sources."
+});
+
+// Grade 8 uses correct expectation families overall. The remaining concern is depth:
+// the ESS2.A.2 bank currently demonstrates erosion/sediment processes but usually does
+// not make the expectation's varying time/spatial-scale element explicit. Keep that debt
+// visible for prompt-level clean-room review rather than relabeling it to an easier standard.
+export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({
+  "g8s-007":"ESS2.A.2 item describes sediment movement but does not explicitly address varying time or spatial scales.",
+  "g8s-008":"ESS2.A.2 calculation supports an erosion model but does not itself address varying time or spatial scales.",
+  "g8s-009":"ESS2.A.2 identifies erosion/transport but does not explicitly address varying time or spatial scales.",
+  "g8s-div-a013":"ESS2.A.2 shoreline result is relevant evidence but omits the varying time/spatial-scale element.",
+  "g8s-div-a014":"ESS2.A.2 sediment calculation omits the varying time/spatial-scale element.",
+  "g8s-div-a015":"ESS2.A.2 explanation addresses surface change but not varying time/spatial scales.",
+  "g8s-div-b013":"ESS2.A.2 riverbank result is relevant evidence but omits the varying time/spatial-scale element.",
+  "g8s-div-b014":"ESS2.A.2 sediment calculation omits the varying time/spatial-scale element.",
+  "g8s-div-b015":"ESS2.A.2 explanation addresses erosion but not varying time/spatial scales.",
+  "g8s-cr-005":"ESS2.A.2 response explains surface change but does not require comparison across time/spatial scales."
 });
 
 export function applyG5ScienceSemanticReview(items){

@@ -55,22 +55,32 @@
 ## Browser/session/UX
 - [ ] Grade and subject easy to select.
 - [ ] Preflight states real MAP session count and that sessions are untimed.
+- [ ] Short 12-item practice-set size is clearly distinguished from an operational/full MAP session and official point target.
 - [ ] Timing ranges labeled guidance, not limits.
 - [ ] Calculator policy correct for grade/subject/session/item.
 - [ ] Supported TE interactions keyboard-accessible where practicable.
+- [ ] Multi-digit and multi-field controls retain focus/input without requiring full-view rerenders.
+- [ ] Question navigator exposes current/answered/flagged state accessibly.
 - [ ] Constructed-response text persists without losing focus and is labeled as requiring human scoring.
+- [ ] Student-entered written responses are safely escaped when shown in results.
 - [ ] Answers and randomized displayed option order persist through navigation/refresh.
+- [ ] Saved in-progress session behavior and exit wording are clear.
 - [ ] Submitted session locks against re-entry.
 - [ ] Results clearly separate auto-scored points from any manual-review points.
 - [ ] Results label themselves unofficial practice performance; no invented MAP scale score/proficiency classification.
 - [ ] Audio/written omissions are clear before starting.
 
 ## Independent review
-- [ ] Clean-room reviewer did not author the bank.
+- [ ] Clean-room reviewer did not author the bank and has not previously seen its keys/rationales.
 - [ ] Reviewer independently reconstructed official requirements before trusting repository claims/tests/evidence.
 - [ ] Entire browser-effective bank reviewed for correctness, ambiguity, grade fit, metadata, duplicates, stimuli/sets, and rendering.
+- [ ] Exact browser-effective assessment fingerprint recorded in the blind review packet before review starts.
+- [ ] Reviewer independently answers every auto-scored item and records expected response/scoring elements for every constructed response before seeing any key or manual rubric.
+- [ ] All blind correctness/ambiguity/grade-fit/alignment judgments completed and sealed before manual rubrics are exposed.
+- [ ] Constructed-response rubrics reviewed only after the blind phase is sealed; auto-scored keys/rationales remain hidden until reconciliation.
 - [ ] Every quantitative item independently recomputed.
-- [ ] After any substantive repair, audit restarted from scratch.
+- [ ] Reconciliation passes on the same browser-effective fingerprint with zero answer mismatches, recorded findings, incomplete judgments, rubric findings, or post-seal tampering.
+- [ ] After any substantive repair, audit restarted from scratch with a newly generated fingerprint/worksheet.
 - [ ] Fresh final clean-room pass has zero substantive findings.
 
 ## Naive assessment

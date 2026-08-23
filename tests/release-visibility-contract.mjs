@@ -27,8 +27,12 @@ for(const assessment of assessments){
       if(stimuliByKey.has(key)) assert.equal(stimuliByKey.get(key),signature,`${item.id}: stimulus delivery key ${key} maps to conflicting stimulus content`);
       else stimuliByKey.set(key,signature);
     }
-    if(assessment.subject==="math"&&assessment.grade>=6){
-      assert.ok(["none","four-function","scientific"].includes(item.calculatorLevel),`${item.id}: production-visible Grade ${assessment.grade} Math item needs verified calculatorLevel metadata`);
+  }
+  if(assessment.subject==="math"&&assessment.grade>=6){
+    assert.ok(assessment.sessions.length===3,`${assessment.id}: expected three Math sessions`);
+    for(const session of assessment.sessions){
+      assert.equal(session.calculatorPolicy,"available",`${assessment.id} session ${session.id}: shipping policy must keep calculators available throughout Grades 6-8 Math`);
+      assert.equal(session.calculatorLevel,"scientific",`${assessment.id} session ${session.id}: shipping practice calculator must be scientific`);
     }
   }
 }
@@ -46,4 +50,4 @@ const about=fs.readFileSync(new URL("../about.html",import.meta.url),"utf8");
 assert.match(about,/not the same as taking a complete operational MAP form/,"About page must preserve the full-form limitation");
 assert.match(about,/Current release limitations/,"About page must describe omissions as release scope, not unfinished development status");
 
-console.log("PASS: all 14 certified short-practice assessments use practice-released production visibility with stable stimulus delivery keys, calculator metadata, and no full MAP-form claim.");
+console.log("PASS: all 14 certified short-practice assessments use practice-released production visibility with stable stimulus delivery keys, correct session-level calculator behavior, and no full MAP-form claim.");

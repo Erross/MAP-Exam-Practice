@@ -27,18 +27,42 @@ for(const a of Object.values(ASSESSMENTS)){
   assert(Array.isArray(blueprint.executionBlockers)&&blueprint.executionBlockers.length>0,`${a.id}: execution blockers must be explicit`);
   assert.deepEqual(validateBlueprintSpec(blueprint),[],`${a.id}: non-executable official blueprint record should still be structurally valid`);
 }
+
+const elaSessionCounts={3:3,4:4,5:3,6:3,7:3,8:4};
+for(const [grade,count] of Object.entries(elaSessionCounts)){
+  const sessions=ASSESSMENTS[`g${grade}-ela`].sessions;
+  assert.equal(sessions.length,count,`g${grade}-ela: current DESE session count changed`);
+  assert(sessions.at(-1).deferred.includes("listening-audio"),`g${grade}-ela: final listening session must remain explicitly deferred`);
+}
+for(const grade of [4,8]) assert(ASSESSMENTS[`g${grade}-ela`].sessions[0].deferred.includes("human-scored-writing"),`g${grade}-ela: passage-based writing prompt must remain explicit in Session 1`);
+
 for(const g of [3,4,5]){
+  assert.equal(ASSESSMENTS[`g${g}-math`].sessions.length,3);
   assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="none"&&!s.calculatorAllowed),true);
 }
 for(const g of [6,7,8]){
-  assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorAllowed),true);
-  assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorLabel==="Calculator available"),true);
+  const assessment=ASSESSMENTS[`g${g}-math`];
+  assert.equal(assessment.sessions.length,3);
+  assert.equal(assessment.sessions.every(s=>s.calculatorPolicy==="item-designated"&&s.calculatorAllowed),true,`g${g}-math: calculator must remain expectation/item-designated`);
+  assert.equal(assessment.sessions.every(s=>s.calculatorLabel==="Calculator availability varies by item"),true);
+  const prematurelyDesignated=BANKS[`g${g}-math`].filter(item=>item.calculatorLevel==="four-function"||item.calculatorLevel==="scientific").map(item=>item.id);
+  assert.deepEqual(prematurelyDesignated,[],`g${g}-math: calculator metadata must stay unset until current item-spec designations are independently verified`);
+}
+for(const g of [3,4,5,6,7,8]){
+  const sessions=ASSESSMENTS[`g${g}-math`].sessions;
+  assert.equal(sessions.filter(s=>s.performanceEvent===true).length,1,`g${g}-math: expected exactly one PE session`);
+  assert.equal(sessions[2].performanceEvent,true,`g${g}-math: Performance Event must remain Session 3`);
+  assert(sessions[2].deferred.includes("human-scored-written-pe-parts"),`g${g}-math: written PE omission must remain explicit`);
 }
 assert.deepEqual(ASSESSMENTS["g8-math"].sessions.map(s=>s.guidelineMinutes),[[30,50],[30,50],[30,40]]);
 assert.deepEqual(ASSESSMENTS["g8-science"].sessions.map(s=>s.guidelineMinutes),[[55,75],[55,75]]);
 assert.equal(ASSESSMENTS["g5-science"].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorLevel==="four-function"),true);
 assert.equal(ASSESSMENTS["g8-science"].sessions.every(s=>s.calculatorPolicy==="available"&&s.calculatorLevel==="scientific"),true);
-assert.equal(ASSESSMENTS["g8-ela"].sessions[3].deferred.includes("listening-audio"),true);
+for(const g of [5,8]){
+  const sessions=ASSESSMENTS[`g${g}-science`].sessions;
+  assert.equal(sessions.length,2,`g${g}-science: current DESE assessment has two sessions`);
+  assert.equal(sessions.every(s=>s.deferred.includes("human-scored-constructed-response")),true,`g${g}-science: both sessions contain constructed-response work and must disclose the omission`);
+}
 
 for(const g of [3,4,5,6,7,8]){
   const assessmentId=`g${g}-math`, assessment=ASSESSMENTS[assessmentId], bank=BANKS[assessmentId];
@@ -71,7 +95,7 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
     for(let seed=1;seed<=100;seed++){ const draw=drawPracticeSession(bank,sessionId,{maxItems:12,rng:seededRandom(seed)}); const variants=draw.map(i=>i.variantFamily||i.id); assert.equal(new Set(variants).size,variants.length); }
   }
 }
-assert(count>=1175,"Expected at least 1175 development items across all 14 Grade-Level banks");
+assert(count>=1736,"Expected at least 1736 development items across all 14 Grade-Level banks");
 
 const fixture=(itemType,scoring,extra={})=>({id:`fixture-${itemType}`,grade:8,subject:"math",standard:"fixture",strand:"fixture",dok:1,itemType,points:1,sessionEligibility:[1],prompt:"fixture",scoring,rationale:"fixture",provenance:"original-synthetic",...extra});
 const scoringCases=[

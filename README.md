@@ -22,7 +22,7 @@ Listening/audio and **automatic human-judgment scoring** of prose are outside th
 
 The V1 bank contains **1,780 original items across all 14 Grade-Level assessments**. Every browser-effective item has completed the project's answer-blind clean-room workflow on its current substantive content, including full item-1 restarts after substantive repairs. Final fingerprints are stored in `evidence/clean-room/final-certification.json` and enforced by `tests/clean-room-final-certification.mjs`; changing certified item content invalidates the matching fingerprint and fails CI until that assessment is re-audited.
 
-All 14 assessment records are `status:"released"` with `practiceMode:"certified-short-practice"`. This means the reviewed short practice is available in the normal production UI. It does **not** mean a complete summative MAP form is executable: every assessment remains `fullSimulationAvailable:false`, and the blueprint records remain `executable:false` where omitted official components prevent a complete operational-form claim.
+All 14 assessment records are `status:"practice-released"` with `practiceMode:"certified-short-practice"`. This is the production-visible state for reviewed short practice that intentionally does not claim a complete operational form. The stronger `status:"released"` state remains reserved by the release audit for a fully blueprint-verified/executable assessment. Every V1 assessment remains `fullSimulationAvailable:false`, and the blueprint records remain `verified:false` / `executable:false` where omitted official components prevent a complete operational-form claim.
 
 A selected session draws a short practice set of **up to 12 supported items** from that session's pool. The preflight screen separately shows the official summative point target and explicitly says the short set is not a complete operational MAP session.
 
@@ -56,7 +56,7 @@ npm run check
 npm run build
 ```
 
-`npm run check` runs structural/unit tests, official-session and Science-manual-response contracts, clean-room tooling and final-fingerprint gates, release-visibility semantics, UI response-persistence guards, exact-standard and bank-capacity guards, Math/ELA form diagnostics, seeded practice-session retake analysis, stimulus-overlap analysis, and answer-tell analysis.
+`npm run check` runs structural/unit tests, official-session and Science-manual-response contracts, clean-room tooling and final-fingerprint gates, practice-release visibility semantics, UI response-persistence guards, exact-standard and bank-capacity guards, Math/ELA form diagnostics, seeded practice-session retake analysis, stimulus-overlap analysis, and answer-tell analysis.
 
 ## Independent clean-room review
 
@@ -76,7 +76,7 @@ A separate paid model service or custom external agent runner is **not** a relea
 
 ## Release interpretation
 
-`status:"released"` means the certified short-practice assessment is available to students. It does not mean `fullSimulationAvailable:true`, and it does not change a blueprint from `executable:false` when authoritative full-form constraints or required human/audio components are not represented.
+`status:"practice-released"` means the certified short-practice assessment is available to students. `status:"released"` remains the stricter full-blueprint release state enforced by `scripts/release-audit.mjs`. V1 therefore does not set `fullSimulationAvailable:true`, `blueprint.verified:true`, or `blueprint.executable:true` merely to make the short-practice catalog production-visible.
 
 This distinction is intentional. V1 is a production-ready **MAP practice application**, not a claim to reproduce complete secure operational MAP forms.
 

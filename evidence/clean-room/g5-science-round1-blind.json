@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "purpose": "failure-round receipt for the completed answer-blind Grade 5 Science review before keyed reconciliation",
+  "assessmentId": "g5-science",
+  "browserEffectiveFingerprint": "11b732fe462184537b19cb6db013e52edaf6a090268231e2842a4b755ba41b71",
+  "itemCount": 88,
+  "completedBlindReviewSha256": "b0831b9601a63595ddce8f00b9959a7a2c22ee2f4b55837ee8124c3db3128489",
+  "completedBlindReviewBytes": 131480,
+  "fullCompletedWorksheetRetained": false,
+  "receiptUse": "This failed round is retained as a finding/repair audit trail only. Because the full completed worksheet was not persisted, this receipt must never be used as final certification evidence.",
+  "verdictSummary": {
+    "correctnessFindings": 0,
+    "ambiguityFindings": 0,
+    "gradeFitFindings": 0,
+    "standardAlignmentFindings": 15
+  },
+  "standardAlignmentFindingIds": [
+    "g5s-002",
+    "g5s-030",
+    "g5s-cap-001",
+    "g5s-cap-002",
+    "g5s-cap-003",
+    "g5s-cap-008",
+    "g5s-div-a001",
+    "g5s-div-a002",
+    "g5s-div-a008",
+    "g5s-div-a014",
+    "g5s-div-a018",
+    "g5s-div-b008",
+    "g5s-div-b013",
+    "g5s-div-b014",
+    "g5s-div-b016"
+  ],
+  "postBlindReconciliation": {
+    "autoScoredItems": 82,
+    "independentAnswerMismatches": 0,
+    "manualConstructedResponses": 6,
+    "manualRubricFindings": 0,
+    "roundPassed": false,
+    "failureReason": "15 blind standard-alignment findings"
+  },
+  "invalidatedBySubstantiveRepairCommit": "30b6d11a835e2bb87c81a90882078d684353c966",
+  "reviewRule": "All 88 reviewer answers and verdicts were completed from the answerless exact-head worksheet before keyed reconciliation. Keyed reconciliation occurred only after the blind phase. The 15 substantive repairs invalidate this round and require a fresh review from item 1."
+}

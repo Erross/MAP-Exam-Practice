@@ -9,8 +9,10 @@ function codeFor(item,assessment){
   if(assessment.subject==="math"){
     if(item.strand==="Performance Event"||item.blueprintComponent==="PE")return "PE";
     const domain=standardDomain(item);
-    if(assessment.grade===3&&["GM","DS"].includes(domain))return "GM+DS";
-    if(assessment.grade===6&&["GM","DSP"].includes(domain))return "GM+DSP";
+    if([3,4,5].includes(assessment.grade)&&["GM","DS"].includes(domain))return "GM+DS";
+    if([6,7].includes(assessment.grade)&&["GM","DSP"].includes(domain))return "GM+DSP";
+    if(assessment.grade===8&&["NS","EEI"].includes(domain))return "NS+EEI";
+    if(assessment.grade===8&&["GM","DSP"].includes(domain))return "GM+DSP";
     return domain;
   }
   if(assessment.subject==="science"){
@@ -33,7 +35,7 @@ for(const [assessmentId,assessment] of Object.entries(ASSESSMENTS)){
   for(const rule of blueprint.officialConstraints){
     if(rule.component==="performance-event")continue;
     const have=capacity.get(rule.code)||0;
-    assert(have>=rule.minPoints,`${assessmentId}: ${rule.code} bank capacity ${have} < transcribed blueprint minimum ${rule.minPoints}`);
+    assert(have>=rule.minPoints,`${assessmentId}: ${rule.code} bank capacity ${have} < primary-verified blueprint minimum ${rule.minPoints}`);
   }
   if(assessment.subject==="math"){
     const peRule=blueprint.officialConstraints.find(rule=>rule.component==="performance-event");
@@ -51,4 +53,4 @@ for(const [assessmentId,assessment] of Object.entries(ASSESSMENTS)){
   }
 }
 
-console.log("PASS: Math ordinary-category/point capacity meets every transcribed minimum; Science meets transcribed strand minimums plus >=90 development bank points and >=30 points per strand. These are capacity/diversity gates, not evidence that current non-executable official blueprints are release-verified.");
+console.log("PASS: Math ordinary-category/point capacity meets every current DESE primary-verified minimum; Science meets primary-verified strand minimums plus >=90 development bank points and >=30 points per strand. These are capacity/diversity gates, not evidence that current non-executable official blueprints are release-ready.");

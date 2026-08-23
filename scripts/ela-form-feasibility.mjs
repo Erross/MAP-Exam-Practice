@@ -5,9 +5,9 @@ const SHAPES={
   "g3-ela":{RL:13,RI:13,RES:8,W:8,L:6},
   "g4-ela":{RL:13,RI:13,RES:8,WP:2,L:4},
   "g5-ela":{RL:13,RI:13,RES:8,W:8,L:6},
-  "g6-ela":{RL:14,RI:14,RES:8},
-  "g7-ela":{RL:14,RI:14,RES:8},
-  "g8-ela":{RL:14,RI:14,RES:8}
+  "g6-ela":{RL:14,RI:14,RES:8,W:8},
+  "g7-ela":{RL:14,RI:14,RES:8,W:8},
+  "g8-ela":{RL:14,RI:14,RES:8,L:4}
 };
 
 const MAX_ITEM_OVERLAP=0.40;
@@ -23,21 +23,24 @@ function categoryFor(item,grade){
   const standard=String(item.standard||"");
   // Missouri's Writing codes change role by grade band. In Grades 3-5,
   // W.3 is research and W.1 is writing process. In Grades 6-8, W.1 is
-  // research and W.3 is writing process. W.2 writing prompts are deferred.
+  // research and W.3 is the auto-scored Writing reporting-category work.
+  // The current administration manual separately identifies passage-based
+  // writing prompts only in Grades 4 and 8; those prompt points stay deferred.
   if(grade<=5&&standard.includes(".W.3."))return "RES";
   if(grade>=6&&standard.includes(".W.1."))return "RES";
-  if(standard.includes(".L."))return grade<=5?"L":null;
+  if(standard.includes(".L."))return "L";
   if(grade===4&&standard.includes(".W.1."))return "WP";
   if([3,5].includes(grade)&&standard.includes(".W.1."))return "W";
   if(standard.includes(".W.2."))return null;
-  if(grade>=6&&standard.includes(".W.3."))return null;
+  if([6,7].includes(grade)&&standard.includes(".W.3."))return "W";
+  if(grade===8&&standard.includes(".W.3."))return null;
 
   if(item.strand==="Reading Literary")return "RL";
   if(item.strand==="Reading Informational")return "RI";
   if(item.strand==="Research")return "RES";
-  if(grade<=5&&item.strand==="Language")return "L";
+  if(item.strand==="Language")return "L";
   if(grade===4&&item.strand==="Writing Process")return "WP";
-  if([3,5].includes(grade)&&["Writing Process","Writing Conventions"].includes(item.strand))return "W";
+  if([3,5,6,7].includes(grade)&&["Writing Process","Writing Conventions","Writing"].includes(item.strand))return "W";
   return null;
 }
 
@@ -122,5 +125,5 @@ if(failures.length){
   for(const failure of failures)console.error(`- ${failure}`);
   process.exitCode=1;
 }else{
-  console.log(`PASS: all six ELA supported-scope development forms hold <=${MAX_ITEM_OVERLAP*100}% mean exact-item overlap and <=${MAX_STIMULUS_OVERLAP*100}% mean stimulus overlap across 5,000 retake pairs. These are development diversity gates, not verified-blueprint release evidence.`);
+  console.log(`PASS: all six ELA supported-scope development forms hold <=${MAX_ITEM_OVERLAP*100}% mean exact-item overlap and <=${MAX_STIMULUS_OVERLAP*100}% mean stimulus overlap across 5,000 retake pairs. Primary blueprint ranges are verified; these remain development diversity gates rather than release approval.`);
 }

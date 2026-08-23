@@ -28,9 +28,9 @@ Assessments remain `draft` until their supported scope has complete release-scal
 
 ## Independent clean-room handoff
 
-The clean-room reviewer must inspect the **browser-effective aggregate**, not the individual authoring layers, and must not see repository answer keys/rationales before recording independent judgments.
+The clean-room reviewer must inspect the **browser-effective aggregate**, not the individual authoring layers, and must not see repository answer keys, rationales, or constructed-response rubrics before recording independent judgments.
 
-### Preferred structured worksheet
+### Preferred sealed two-phase worksheet
 
 Generate a blind worksheet for one assessment from the exact candidate tree:
 
@@ -40,29 +40,46 @@ npm run audit:review-template -- --assessment=g5-science > g5-science-review.jso
 
 The worksheet contains the browser-effective item content plus empty reviewer fields for:
 
-- independent answer (for auto-scored items);
+- an independent answer for every item;
 - correctness;
 - ambiguity;
 - grade fit;
-- standard/expectation alignment;
-- manual-rubric quality for constructed responses; and
+- standard/expectation alignment; and
 - notes.
 
-It deliberately excludes `scoring` and `rationale`. The reviewer completes the entire worksheet **before** any keyed view is opened.
+For auto-scored items, `reviewerAnswer` is the response the reviewer independently believes is correct. For a constructed response, `reviewerAnswer` records the response elements or scoring criteria the reviewer independently expects a correct response to contain. The blind worksheet deliberately excludes `scoring`, `rationale`, and the official manual rubric.
 
-After the blind review is complete, reconcile it against the candidate bank:
+Every assessment worksheet also contains a SHA-256 `browserEffectiveFingerprint` derived from the complete current browser-effective bank state, including scoring/rationale state. This means a prompt, option, scoring, rationale, metadata, or ordering repair invalidates the packet even when item IDs stay the same.
+
+After **all** blind answers and verdicts are complete, seal the blind phase:
 
 ```bash
-npm run audit:reconcile -- g5-science-review.json
+npm run audit:seal -- g5-science-review.json > g5-science-sealed-review.json
+```
+
+Sealing:
+
+- verifies the worksheet still matches the exact browser-effective fingerprint;
+- verifies every independent response and blind verdict is complete;
+- freezes the completed blind review behind its own SHA-256 fingerprint; and
+- only then exposes the current constructed-response rubrics for a second, post-blind rubric-quality review.
+
+The sealed file still does **not** expose auto-scored answer keys or rationales. The reviewer compares each exposed manual rubric with the response/scoring elements they already committed during the blind phase and sets `manualRubricVerdict` to `pass` or `finding`.
+
+After the manual-rubric phase is complete, reconcile the sealed review against the candidate bank:
+
+```bash
+npm run audit:reconcile -- g5-science-sealed-review.json
 ```
 
 Reconciliation exits nonzero when:
 
 - an auto-scored reviewer answer disagrees with the repository key;
 - any required reviewer field is incomplete;
-- the reviewer records any substantive finding;
-- a manual-response rubric is flagged; or
-- browser-effective item order/content identity has changed enough that the worksheet no longer matches the candidate tree.
+- the reviewer records any correctness, ambiguity, grade-fit, or alignment finding;
+- a manual-response rubric is flagged;
+- the frozen blind review was modified after sealing; or
+- the browser-effective assessment fingerprint changed for any reason.
 
 This is a review-handoff mechanism, **not** an independent reviewer. Test fixtures that mechanically populate repository keys only prove the tooling works and never count as clean-room evidence.
 
@@ -80,15 +97,15 @@ To review one assessment only:
 npm run audit:manifest -- --assessment=g5-science > g5-science-blind.json
 ```
 
-Only after independent answers are recorded, a keyed reconciliation view may be generated:
+A keyed manifest can be generated for post-review author reconciliation:
 
 ```bash
 npm run audit:manifest -- --assessment=g5-science --answers > g5-science-keyed.json
 ```
 
-Do not give a keyed manifest to the clean-room reviewer before their independent answers and judgments are recorded. The blind manifest/template retain browser-effective item order, stable IDs, standards, strands, DOK, item type, points, session eligibility, stimulus/set identifiers, and displayed content.
+Do not give a keyed manifest to the clean-room reviewer before their independent responses and judgments are recorded and frozen. The structured sealed workflow above is preferred because it mechanically enforces the exact-bank fingerprint and constructed-response rubric sequencing; raw-manifest review requires equivalent procedural evidence outside the tool.
 
-After **any substantive content repair**, restart the complete clean-room audit from scratch and regenerate the blind worksheet/manifest from the repaired exact candidate tree. A prior review cannot certify a materially changed bank.
+After **any substantive content repair**, restart the complete clean-room audit from scratch and regenerate the blind worksheet/manifest from the repaired exact candidate tree. A prior review cannot certify a materially changed bank. The fingerprint is an additional guard, not permission to skip that rule.
 
 After meaningful UX repair, use a fresh naive assessor.
 

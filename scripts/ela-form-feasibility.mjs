@@ -23,9 +23,11 @@ function categoryFor(item,grade){
   const standard=String(item.standard||"");
   // Missouri's Writing codes change role by grade band. In Grades 3-5,
   // W.3 is research and W.1 is writing process. In Grades 6-8, W.1 is
-  // research and W.3 is the auto-scored Writing reporting-category work.
-  // The current administration manual separately identifies passage-based
-  // writing prompts only in Grades 4 and 8; those prompt points stay deferred.
+  // research and W.3 is revise/edit work. The current primary blueprint
+  // calls the Grade 8 4-point revise/edit row Language while its assessed
+  // Missouri expectation family remains 8.W.3; do not invent an 8.L code.
+  // The administration manual separately identifies passage-based writing
+  // prompts only in Grades 4 and 8; those prompt points stay deferred.
   if(grade<=5&&standard.includes(".W.3."))return "RES";
   if(grade>=6&&standard.includes(".W.1."))return "RES";
   if(standard.includes(".L."))return "L";
@@ -33,7 +35,7 @@ function categoryFor(item,grade){
   if([3,5].includes(grade)&&standard.includes(".W.1."))return "W";
   if(standard.includes(".W.2."))return null;
   if([6,7].includes(grade)&&standard.includes(".W.3."))return "W";
-  if(grade===8&&standard.includes(".W.3."))return null;
+  if(grade===8&&standard.includes(".W.3."))return "L";
 
   if(item.strand==="Reading Literary")return "RL";
   if(item.strand==="Reading Informational")return "RI";

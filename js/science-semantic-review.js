@@ -74,27 +74,10 @@ export const G5_STANDARD_CORRECTIONS=Object.freeze({
   "g5s-cr-005":"4.ESS.2.A.1"
 });
 
-// Items below still need prompt-level repair or deeper item-spec judgment. Items repaired
-// in science-semantic-item-repairs.js are removed from this open ledger immediately.
-export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({
-  "g5s-div-a005":"5.PS.1.B.2 is new-substance investigation; this item instead matches generic properties including magnetism.",
-  "g5s-div-a007":"5.LS.1.C.1 current item is variable identification, not the plant-material-source argument.",
-  "g5s-div-a008":"5.LS.1.C.1 numeric growth difference is not direct evidence of chiefly air/water material sources.",
-  "g5s-div-a009":"5.LS.1.C.1 current conclusion is water-dose performance, not the expectation's material-source argument.",
-  "g5s-div-b004":"5.PS.1.B.2 is new-substance investigation; this item instead identifies magnetic behavior.",
-  "g5s-div-b007":"5.LS.2.B.1 current item is a population count, not movement of matter.",
-  "g5s-div-b008":"5.LS.2.B.1 numeric population difference is not movement of matter.",
-  "g5s-div-b009":"5.LS.1.C.1 replication item does not directly assess plant material sources.",
-  "g5s-div-b010":"5.LS.2.B.1 food-chain roles are related but need explicit matter-flow semantics.",
-  "g5s-div-b011":"5.LS.1.C.1 control-variable item does not directly assess plant material sources.",
-  "g5s-div-b012":"5.LS.2.B.1 current population/food prediction needs explicit matter-flow semantics.",
-  "g5s-cap-007":"5.LS.2.B.1 variable identification is not movement of matter.",
-  "g5s-cap-008":"5.LS.2.B.1 numeric population difference is not movement of matter.",
-  "g5s-cap-009":"5.LS.2.B.1 population conclusion does not directly assess matter movement.",
-  "g5s-cap-010":"5.LS.1.C.1 follow-up-design item does not directly assess plant material sources.",
-  "g5s-cr-003":"5.LS.2.B.1 response predicts populations/grass rather than explicitly tracing matter movement.",
-  "g5s-cr-004":"5.LS.1.C.1 response analyzes light-duration growth rather than chiefly air/water material sources."
-});
+// All prompt-level defects found in the current Grade 5 semantic sweep are repaired
+// browser-effectively. This empty ledger is a regression signal, not a release approval;
+// the repair overlay must still be consolidated into source files before release.
+export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({});
 
 export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({
   "g8s-007":"ESS2.A.2 item describes sediment movement but does not explicitly address varying time or spatial scales.",

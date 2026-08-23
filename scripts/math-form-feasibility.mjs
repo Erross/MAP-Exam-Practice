@@ -10,8 +10,10 @@ const standardDomain=item=>String(item.standard||"").split(".")[1]||null;
 const itemCode=(item,grade)=>{
   if(item.strand==="Performance Event"||item.blueprintComponent==="PE")return "PE";
   const domain=standardDomain(item);
-  if(grade===3&&["GM","DS"].includes(domain))return "GM+DS";
-  if(grade===6&&["GM","DSP"].includes(domain))return "GM+DSP";
+  if([3,4,5].includes(grade)&&["GM","DS"].includes(domain))return "GM+DS";
+  if([6,7].includes(grade)&&["GM","DSP"].includes(domain))return "GM+DSP";
+  if(grade===8&&["NS","EEI"].includes(domain))return "NS+EEI";
+  if(grade===8&&["GM","DSP"].includes(domain))return "GM+DSP";
   return domain;
 };
 const exactOverlap=(a,b)=>{if(!a.length)return 0;const ids=new Set(b.map(i=>i.id));return a.filter(i=>ids.has(i.id)).length/a.length;};
@@ -44,6 +46,7 @@ function addBundle(selected,bundle,usedIds,usedVariants){
 function drawDevelopmentMathForm(assessmentId,{rng,maxAttempts=3000}={}){
   const assessment=ASSESSMENTS[assessmentId],blueprint=BLUEPRINTS[assessmentId],bank=BANKS[assessmentId];
   assert(assessment?.subject==="math",`${assessmentId}: Math assessment required`);
+  assert.equal(blueprint.officialRangesVerified,true,`${assessmentId}: development full-form harness requires current-primary range verification`);
   assert.equal(blueprint.verified,false,`${assessmentId}: this development harness must not be used on a release-verified blueprint`);
   assert.equal(blueprint.executable,false,`${assessmentId}: this development harness must not mutate production executability`);
   const peRule=blueprint.officialConstraints.find(rule=>rule.component==="performance-event");
@@ -83,7 +86,7 @@ function drawDevelopmentMathForm(assessmentId,{rng,maxAttempts=3000}={}){
     if(points(form)!==blueprint.officialPointTarget)continue;
     return form;
   }
-  throw new Error(`${assessmentId}: unable to construct a development full Math form from transcribed ranges after ${maxAttempts} attempts`);
+  throw new Error(`${assessmentId}: unable to construct a development full Math form from current primary-verified ranges after ${maxAttempts} attempts`);
 }
 
 function validateDevelopmentMathForm(assessmentId,form){
@@ -132,7 +135,7 @@ for(const grade of [3,4,5,6,7,8]){
   const meanItems=forms.reduce((sum,form)=>sum+form.length,0)/forms.length;
   const meanItemOverlap=itemTotal/5000,meanPointOverlap=pointTotal/5000;
   const itemPct=round(100*meanItemOverlap),pointPct=round(100*meanPointOverlap),stimulusPct=stimulusTrials?round(100*stimulusTotal/stimulusTrials):null;
-  console.log(`${assessmentId}: 5,000 transcribed-range development full forms constructed; mean ${round(meanItems)} items; full-form retake overlap ${itemPct}% by item / ${pointPct}% by points${stimulusPct===null?"":`; stimulus/set overlap ${stimulusPct}%`}. NOT release verification.`);
+  console.log(`${assessmentId}: 5,000 current-primary-range development full forms constructed; mean ${round(meanItems)} items; full-form retake overlap ${itemPct}% by item / ${pointPct}% by points${stimulusPct===null?"":`; stimulus/set overlap ${stimulusPct}%`}. NOT release verification.`);
   const categorySummary=ordinaryRules.map(rule=>{
     const pool=categoryPoints(ordinary,grade,rule.code);
     const meanDraw=forms.reduce((sum,form)=>sum+categoryPoints(form,grade,rule.code),0)/forms.length;
@@ -144,4 +147,4 @@ for(const grade of [3,4,5,6,7,8]){
   assert(meanItemOverlap<=0.40,`${assessmentId}: full-form item retake overlap ${itemPct}% exceeds 40% development gate`);
   assert(meanPointOverlap<=0.40,`${assessmentId}: full-form point retake overlap ${pointPct}% exceeds 40% development gate`);
 }
-console.log("PASS: all six Math banks can repeatedly construct full-point development forms under the transcribed blueprint ranges, preserve exactly one complete operational PE, and hold <=40% full-form retake overlap by both item and points. These results are diagnostic only until current-primary DESE ranges are independently confirmed.");
+console.log("PASS: all six Math banks can repeatedly construct full-point development forms under the current DESE primary-verified blueprint ranges, preserve exactly one complete operational PE, and hold <=40% full-form retake overlap by both item and points. These results remain development evidence until the non-range release blockers are closed.");

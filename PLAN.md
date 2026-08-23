@@ -20,40 +20,41 @@
 - [x] Add exact Missouri Science expectation-code validation for Grades 5 and 8.
 - [x] Make ELA supported-scope development diversity regression-failing at <=40% mean exact-item overlap and <=50% mean stimulus-family overlap across 5,000 retake pairs.
 - [x] Add a dedicated current-DESE session contract test covering ELA session counts/listening omissions, Math PE placement/calculator policy, and Science two-session CR disclosure.
+- [x] Add real manual-scored Science CR practice: six synthetic 2-point items per Science grade, balanced across PS/LS/ESS and Sessions 1/2, with every generic Science practice draw guaranteed to surface at least one eligible CR.
 
 ## Current cost-constrained scope
 
-Build all machine-scorable practice possible. Defer for now:
+Build all machine-scorable practice possible and capture written responses where useful. Defer for now:
 
 - listening/audio playback content;
-- ELA long-form writing prompts requiring human scoring;
-- Science constructed responses requiring human scoring;
-- written portions of Math performance events.
+- human scoring of ELA long-form writing prompts;
+- human scoring of Science constructed responses;
+- human scoring of written portions of Math performance events.
 
-Do not replace deferred components with MCQ and call the result operationally complete.
+Do not replace deferred components with MCQ and call the result operationally complete. Manual-response capture is allowed, but its points remain excluded from the automatic percentage until a human score exists.
 
 ## Development coverage completed
 
 - [x] Grade 3 Math and ELA.
 - [x] Grade 4 Math and ELA; Grade 4 ELA writing/listening remain explicit gaps.
-- [x] Grade 5 Math, ELA, and Science; listening/Science CR/written PE components remain explicit gaps.
+- [x] Grade 5 Math, ELA, and Science; listening/human-scored Science CR/written PE components remain explicit gaps.
 - [x] Grade 6 Math and ELA.
 - [x] Grade 7 Math and ELA.
-- [x] Grade 8 Math, ELA, and Science; writing/listening/Science CR/written PE components remain explicit gaps.
+- [x] Grade 8 Math, ELA, and Science; writing/listening/human-scored Science CR/written PE components remain explicit gaps.
 
-Current development floor: **1,736 original development items across all 14 Grade-Level banks**. Every bank remains `draft` / `development-needs-clean-room`; this is development evidence, not release approval.
+Current development floor: **1,748 original development items across all 14 Grade-Level banks**. Every bank remains `draft` / `development-needs-clean-room`; this is development evidence, not release approval.
 
-The latest fully completed CI run before the current ELA diversity expansion validated:
+The latest fully completed CI run before the current ELA/Science expansion validated:
 
 - all 14 assessment configurations and browser-effective banks;
 - 1,694 development items at that prior head;
 - 17 response/scoring fixture types plus manual constructed-response capture excluded from automatic scoring;
-- exact Science expectation codes for all 82 Grade 5 and 83 Grade 8 Science items;
+- exact Science expectation codes for all 82 Grade 5 and 83 Grade 8 Science items at that prior head;
 - Math supported-form construction and 5,000 development form/retake pairs per grade, all six grades below 40% mean overall exact-item and point overlap under the currently transcribed ranges;
 - ELA supported-form construction for all six grades;
 - persisted answer-option randomization, delivery-group integrity, session locking, randomized practice-session checks, and static `_site` production build.
 
-Since that run, Grade 3, 6, and 7 ELA received **42 additional original reading items across 14 new literary/informational stimulus families** specifically to reduce exact-item and stimulus-family retake reuse. The catalog regression floor is now 1,736, the ELA diversity diagnostic is now a hard development gate, and the current DESE session contract has its own regression test. The new head still requires execution of the normal validation suite before these additions are treated as validated evidence.
+Since that run, Grade 3, 6, and 7 ELA received **42 additional original reading items across 14 new literary/informational stimulus families** specifically to reduce exact-item and stimulus-family retake reuse. Grade 5 and Grade 8 Science then received **12 synthetic manual constructed-response items** total, six per grade, two per science strand and three per session. The catalog regression floor is now 1,748, the ELA diversity diagnostic is a hard development gate, Science practice draws surface at least one eligible CR, and the current DESE session/Science-manual-response contracts have dedicated regression tests. The new head still requires execution of the normal validation suite before these additions are treated as validated evidence.
 
 ## Current measured blockers
 
@@ -70,17 +71,19 @@ Before the latest expansion, development supported-scope full-form diagnostics s
 - Grade 7: 44.3% exact-item; 55.6% stimulus.
 - Grade 8: 39.4% exact-item; 40.1% stimulus.
 
-The Grade 3/6/7 expansion targets those specific misses. `scripts/ela-form-feasibility.mjs` now fails validation if any grade exceeds 40% mean exact-item overlap or 50% mean stimulus overlap. Do not claim the expanded grades pass until the 1,736-item head is actually re-simulated.
+The Grade 3/6/7 expansion targets those specific misses. `scripts/ela-form-feasibility.mjs` now fails validation if any grade exceeds 40% mean exact-item overlap or 50% mean stimulus overlap. Do not claim the expanded grades pass until the 1,748-item head is actually re-simulated.
 
 ### Math
 
 Development supported-scope diagnostics are already below the project target at all six grades under the transcribed ranges. This is not release verification because the current-primary blueprint ranges still require independent confirmation.
 
-The current 2025-2026 administration policy is now treated separately from expectation-level item-spec metadata: Grades 3-5 Math do not permit calculators; Grades 6-8 Math permit calculators in all three sessions. Item-spec Calculator Designation can be checked and recorded for fidelity, but it is not an unresolved permission gate for the current session behavior.
+The current 2025-2026 administration policy is treated separately from expectation-level item-spec metadata: Grades 3-5 Math do not permit calculators; Grades 6-8 Math permit calculators in all three sessions. Item-spec Calculator Designation can be checked and recorded for fidelity, but it is not an unresolved permission gate for the current session behavior.
 
 ### Science
 
-Exact Missouri expectation-code validation currently passes all Grade 5 and Grade 8 Science items, and both banks exceed 90 development points with at least 30 points in each PS/LS/ESS strand. Current DESE administration material confirms both Science sessions contain constructed-response work. Full-form release execution remains blocked until the authoritative constructed-response share/treatment is established; deferred CR must not be silently replaced with MCQ.
+The latest completed validation passed exact Missouri expectation-code checks on the prior 82 Grade 5 and 83 Grade 8 Science items, and both banks exceeded 90 development points with at least 30 points in each PS/LS/ESS strand. The current head adds six Grade 5 and six Grade 8 CR items using exact expectation codes already represented by the banks. Each grade now has manual-response practice in both sessions and across all three strands, and every generic Science practice draw surfaces at least one CR. Those current-head assertions still require execution of the validation suite.
+
+Current DESE administration material confirms both Science sessions contain constructed-response work, but it does not by itself establish a fixed summative CR point allocation. Full-form release execution therefore remains blocked until the authoritative constructed-response share/treatment is established; the existence of manual CR practice must not be used to guess a complete operational form.
 
 ### Primary-source verification
 
@@ -98,7 +101,7 @@ No bank authored or repaired in this build may self-certify its clean-room audit
 
 ## Next build order
 
-1. Execute and inspect the full validation suite on the 1,736-item head; capture the new Grade 3/6/7 ELA exact-item and stimulus-overlap metrics from the now-regression-failing diagnostic.
+1. Execute and inspect the full validation suite on the 1,748-item head; capture the new Grade 3/6/7 ELA exact-item/stimulus metrics and validate the new Science CR contracts/standard tags.
 2. If the ELA diversity gate fails, add only the passage/category capacity responsible for the remaining miss and re-run; if it passes, freeze those metrics as current development evidence.
 3. Independently inspect the current April 2026 DESE blueprint PDF and confirm every reporting-category point range before reconciling `js/blueprints.js` or changing `officialRangesVerified`.
 4. Establish the authoritative Science constructed-response share/treatment before enabling any Science full-form release claim; use current practice/scoring material for interaction and rubric fidelity, not as a substitute for an operational blueprint.

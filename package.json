@@ -8,8 +8,9 @@
     "diagnose": "node scripts/tell-diagnostics.mjs",
     "diagnose:alignment": "node scripts/bank-alignment.mjs",
     "diagnose:math-forms": "node scripts/math-form-feasibility.mjs",
+    "diagnose:ela-forms": "node scripts/ela-form-feasibility.mjs",
     "audit": "node scripts/release-audit.mjs",
-    "check": "npm test && npm run diagnose && npm run diagnose:alignment && npm run diagnose:math-forms && npm run audit",
+    "check": "npm test && npm run diagnose && npm run diagnose:alignment && npm run diagnose:math-forms && npm run diagnose:ela-forms && npm run audit",
     "build": "node scripts/build.mjs"
   }
 }

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/official-session-contract.mjs && node tests/science-manual-response-contract.mjs && node tests/clean-room-manifest.mjs && node tests/clean-room-review-tools.mjs && node tests/clean-room-final-certification.mjs && node tests/ui-response-contract.mjs && node tests/delivery-groups.mjs && node tests/pe-contract.mjs && node tests/blueprint-capacity.mjs && node tests/science-standard-precision.mjs && node tests/science-semantic-review.mjs && node tests/science-semantic-review-g8.mjs && node tests/g5-cleanroom-alignment-regressions.mjs",
+    "test": "node tests/run.mjs && node tests/catalog-floor.mjs && node tests/official-session-contract.mjs && node tests/science-manual-response-contract.mjs && node tests/clean-room-manifest.mjs && node tests/clean-room-review-tools.mjs && node tests/clean-room-final-certification.mjs && node tests/release-visibility-contract.mjs && node tests/ui-response-contract.mjs && node tests/delivery-groups.mjs && node tests/pe-contract.mjs && node tests/blueprint-capacity.mjs && node tests/science-standard-precision.mjs && node tests/science-semantic-review.mjs && node tests/science-semantic-review-g8.mjs && node tests/g5-cleanroom-alignment-regressions.mjs",
     "diagnose": "node scripts/tell-diagnostics.mjs",
     "diagnose:alignment": "node scripts/bank-alignment.mjs",
     "diagnose:math-forms": "node scripts/math-form-feasibility.mjs",

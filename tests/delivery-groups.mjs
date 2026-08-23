@@ -27,6 +27,21 @@ for(let seed=1;seed<=100;seed++){
   }
 }
 
+const scienceAuto=(id,group)=>({id,grade:8,subject:"science",standard:"6-8.LS2.A.1",strand:"Life Science",dok:2,itemType:"multiple_choice",points:1,sessionEligibility:[1],prompt:id,options:["A","B","C","D"],scoring:{answer:"A"},rationale:"fixture",provenance:"original-synthetic",stimulus:group?{id:group,title:group,text:group}:undefined});
+const scienceCr=(id,group)=>({id,grade:8,subject:"science",standard:"6-8.LS2.A.1",strand:"Life Science",dok:3,itemType:"constructed_response",points:2,sessionEligibility:[1],prompt:id,scoring:{mode:"manual",rubric:{maxPoints:2,criteria:["fixture"]}},rationale:"fixture",provenance:"original-synthetic",stimulus:{id:group,title:group,text:group}});
+const scienceBank=[
+  scienceAuto("s-a1","science-set-a"),scienceCr("s-a2","science-set-a"),
+  scienceAuto("s-b1","science-set-b"),scienceAuto("s-b2","science-set-b"),
+  scienceAuto("s-c1",null),scienceAuto("s-c2",null),scienceAuto("s-c3",null)
+];
+for(let seed=1;seed<=100;seed++){
+  const form=drawPracticeSession(scienceBank,1,{maxItems:4,rng:seededRandom(seed)});
+  const ids=new Set(form.map(i=>i.id));
+  assert(ids.has("s-a2"),"manual-response preselection must surface an eligible CR");
+  assert(ids.has("s-a1"),"manual-response preselection must preserve the CR's complete stimulus bundle");
+  assert(form.length<=4,"manual-response bundle preselection must respect maxItems");
+}
+
 const pe=(id,group)=>({id,grade:5,subject:"math",standard:"fixture",strand:"Performance Event",dok:2,itemType:"numeric_input",points:1,sessionEligibility:[3],prompt:id,scoring:{answer:1},rationale:"fixture",provenance:"original-synthetic",stimulus:{id:group,title:group,text:group}});
 const peBank=[pe("pe-a1","pe-a"),pe("pe-a2","pe-a"),pe("pe-b1","pe-b"),pe("pe-b2","pe-b"),pe("pe-c1","pe-c"),pe("pe-c2","pe-c")];
 for(let seed=1;seed<=100;seed++){
@@ -49,4 +64,4 @@ for(let seed=1;seed<=100;seed++){
   assert.deepEqual(validateBlueprintForm(form,blueprint),[]);
   assert.deepEqual(new Set(form.map(i=>i.id)),new Set(["a1","a2","a3","b1","b2","b3"]));
 }
-console.log("PASS: practice and executable-blueprint drawers preserve stimulus groups; MAP math Session 3 delivers one complete performance event.");
+console.log("PASS: practice and executable-blueprint drawers preserve stimulus groups; CR preselection preserves complete stimulus bundles; MAP math Session 3 delivers one complete performance event.");

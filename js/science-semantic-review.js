@@ -1,5 +1,6 @@
 import { applyG5ScienceItemRepairs } from "./science-semantic-item-repairs.js";
 import { applyG5ScienceTellRepairs } from "./science-tell-repairs.js";
+import { applyG8ScienceItemRepairs } from "./science-semantic-item-repairs-g8.js";
 
 // Source-controlled semantic review ledger for browser-effective Science banks.
 // Expectation summaries are transcribed from Missouri Learning Standards / DESE item-spec materials.
@@ -76,22 +77,10 @@ export const G5_STANDARD_CORRECTIONS=Object.freeze({
 });
 
 // All prompt-level defects found in the current Grade 5 semantic sweep are repaired
-// browser-effectively. This empty ledger is a regression signal, not a release approval;
-// the repair overlay must still be consolidated into source files before release.
+// browser-effectively. Empty ledgers are regression signals, not release approvals;
+// repair overlays must still be consolidated into source files before release.
 export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({});
-
-export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({
-  "g8s-007":"ESS2.A.2 item describes sediment movement but does not explicitly address varying time or spatial scales.",
-  "g8s-008":"ESS2.A.2 calculation supports an erosion model but does not itself address varying time or spatial scales.",
-  "g8s-009":"ESS2.A.2 identifies erosion/transport but does not explicitly address varying time or spatial scales.",
-  "g8s-div-a013":"ESS2.A.2 shoreline result is relevant evidence but omits the varying time/spatial-scale element.",
-  "g8s-div-a014":"ESS2.A.2 sediment calculation omits the varying time/spatial-scale element.",
-  "g8s-div-a015":"ESS2.A.2 explanation addresses surface change but not varying time/spatial scales.",
-  "g8s-div-b013":"ESS2.A.2 riverbank result is relevant evidence but omits the varying time/spatial-scale element.",
-  "g8s-div-b014":"ESS2.A.2 sediment calculation omits the varying time/spatial-scale element.",
-  "g8s-div-b015":"ESS2.A.2 explanation addresses erosion but not varying time/spatial scales.",
-  "g8s-cr-005":"ESS2.A.2 response explains surface change but does not require comparison across time/spatial scales."
-});
+export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({});
 
 export function applyG5ScienceSemanticReview(items){
   const corrected=items.map(item=>{
@@ -100,4 +89,8 @@ export function applyG5ScienceSemanticReview(items){
     return {...item,standard,semanticStandardReview:"corrected-from-source-audit"};
   });
   return applyG5ScienceTellRepairs(applyG5ScienceItemRepairs(corrected));
+}
+
+export function applyG8ScienceSemanticReview(items){
+  return applyG8ScienceItemRepairs(items);
 }

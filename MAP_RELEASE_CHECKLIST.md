@@ -1,16 +1,17 @@
 # MAP Grade-Level Release Checklist
 
 ## Official specification
-- [ ] Current DESE blueprint independently checked and transcribed into `js/blueprints.js`.
-- [ ] Blueprint record has `verified: true` only after an independent second check of the current DESE ranges.
+- [x] Current April 2026 DESE blueprint directly inspected and reconciled into `js/blueprints.js` / `BLUEPRINT_TRANSCRIPTION.md`.
+- [x] Official total-point targets and reporting-category ranges recorded with `officialPointTargetVerified:true` and `officialRangesVerified:true`.
+- [ ] Blueprint record has `verified: true` only after all non-source release blockers are closed and a fresh independent final check passes on the exact candidate tree.
 - [ ] Current Examiner's Manual independently checked.
 - [ ] Missouri Learning Standards and item specifications independently checked.
 - [ ] Performance Level Descriptors checked.
 - [ ] Current practice form/scoring guide inspected for structure and interaction style only.
-- [ ] Verification date and administration basis recorded.
-- [ ] Session count/order, official point target, timing guidance, calculator policy, and item types verified.
-- [ ] Grades 6-8 Math calculator access remains available throughout all three sessions under the current 2025-2026 administration policy; any expectation-level Calculator Designation metadata used by the bank is independently checked for fidelity and is not used to revoke session-level access.
-- [ ] Deferred listening/writing/CR components accurately recorded.
+- [x] Verification date and administration basis recorded.
+- [ ] Session count/order, official point target, timing guidance, calculator policy, and item types independently rechecked as part of final release review.
+- [x] Grades 6-8 Math calculator access remains available throughout all three sessions under the current 2025-2026 administration policy; any expectation-level Calculator Designation metadata used by the bank is independently checked for fidelity and is not used to revoke session-level access.
+- [ ] Deferred listening/writing/CR components accurately recorded for the exact release candidate.
 
 ## Effective bank
 - [ ] Browser-effective aggregate audited, not only source files.
@@ -34,8 +35,9 @@
 - [ ] Uniquely-longest-correct <=25% where the metric is meaningful.
 
 ## Production-form evidence
-- [ ] At least 5,000 independently seeded **verified-blueprint full-form** draws pass all supported-scope constraints.
-- [ ] Every full form hits the configured supported-scope point target and every current reporting-category range.
+- [ ] Corrected current-primary reporting-category groupings are used by all form/capacity diagnostics (including combined G4/G5 GM+DS, G7 GM+DSP, and G8 NS+EEI / GM+DSP).
+- [ ] At least 5,000 independently seeded **current-primary blueprint** development/full or authoritative supported-scope draws pass all applicable constraints on the exact candidate SHA.
+- [ ] Every supported form hits the configured supported-scope point target and every applicable current reporting-category range.
 - [ ] Session order and calculator rules always valid.
 - [ ] Stimulus families stay intact where required.
 - [ ] Variant siblings never collide.
@@ -44,7 +46,7 @@
 - [ ] Generic 12-item development-session draws are not presented as release evidence.
 
 ## Retake diversity
-- [ ] 5,000 independent verified-blueprint attempt pairs measured.
+- [ ] 5,000 independent current-primary constrained attempt pairs measured.
 - [ ] Mean exact-item overlap <=40% for release-scale banks.
 - [ ] Mean point-weighted overlap <=40% for release-scale Math banks.
 - [ ] Mean stimulus/set overlap <=50% where stimulus-backed content exists.

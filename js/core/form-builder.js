@@ -27,17 +27,32 @@ function isPerformanceEventSession(eligible){
 }
 
 export function drawPracticeSession(bank,sessionId,{maxItems=12,maxBundles=null,rng=Math.random}={}){
-  const eligible=eligibleForSession(bank,sessionId), bundles=shuffled(deliveryBundles(eligible),rng), usedVariants=new Set(), out=[];
+  const eligible=eligibleForSession(bank,sessionId), bundles=shuffled(deliveryBundles(eligible),rng), usedVariants=new Set(), out=[], usedBundles=new Set();
   const bundleLimit=Number.isInteger(maxBundles)&&maxBundles>0?maxBundles:(isPerformanceEventSession(eligible)?1:Infinity);
   let bundlesUsed=0;
-  for(const rawBundle of bundles){
-    if(bundlesUsed>=bundleLimit) break;
+
+  const addBundle=rawBundle=>{
+    if(usedBundles.has(rawBundle)||bundlesUsed>=bundleLimit)return false;
     const bundle=shuffled(rawBundle,rng);
-    if(out.length+bundle.length>maxItems) continue;
-    if(!bundleFitsVariants(bundle,usedVariants)) continue;
-    out.push(...bundle);bundlesUsed++;
-    for(const family of bundleVariants(bundle)) usedVariants.add(family);
-    if(out.length===maxItems) break;
+    if(out.length+bundle.length>maxItems)return false;
+    if(!bundleFitsVariants(bundle,usedVariants))return false;
+    out.push(...bundle);bundlesUsed++;usedBundles.add(rawBundle);
+    for(const family of bundleVariants(bundle))usedVariants.add(family);
+    return true;
+  };
+
+  // When a session has an eligible manual-scored response, surface at least one
+  // in the generic practice draw. This preserves the known Science contract
+  // that both sessions contain CR without inventing an operational CR count.
+  if(eligible.some(item=>item.itemType==="constructed_response")){
+    const manualBundles=shuffled(bundles.filter(bundle=>bundle.some(item=>item.itemType==="constructed_response")),rng);
+    const added=manualBundles.some(addBundle);
+    if(!added)throw new Error(`Session ${sessionId}: unable to include an eligible constructed-response bundle within the practice draw limits`);
+  }
+
+  for(const rawBundle of bundles){
+    if(bundlesUsed>=bundleLimit||out.length===maxItems)break;
+    addBundle(rawBundle);
   }
   return out;
 }

@@ -67,8 +67,11 @@ jobs:
           Do not change item content, metadata, order, IDs, or any top-level fields. When done, write valid JSON back to the same chunk file and verify every review field is complete.
           EOF
           cd "$CLEAN"
-          # Make the authoring checkout unreadable before any independent model session starts.
-          chmod -R 000 "$SOURCE"
+          lock_source(){ find "$SOURCE" -type f -exec chmod a-r {} +; }
+          unlock_source(){ find "$SOURCE" -type f -exec chmod u+r {} + || true; }
+          trap unlock_source EXIT
+          # Keep directory traversal available to the runner but make every authoring file unreadable to the reviewer.
+          lock_source
           for chunk in chunk-*.json; do
             echo "Reviewing $chunk"
             copilot -s --model=gpt-5.2 --no-ask-user \
@@ -98,6 +101,8 @@ jobs:
               print('Incomplete reviewer output:',missing,file=sys.stderr); sys.exit(2)
           (root/'completed-blind.json').write_text(json.dumps(full,indent=2,ensure_ascii=False)+'\n')
           PY
+          unlock_source
+          trap - EXIT
       - name: Upload completed blind review
         uses: actions/upload-artifact@v4
         with:
@@ -141,7 +146,10 @@ jobs:
           Do not modify blindReview, blindReviewFingerprint, any rubric text, IDs, points, or other fields. Do not access GitHub or any parent/source repository files. Write valid JSON back to sealed.json and complete all manual rubric reviews.
           EOF
           cd "$CLEAN"
-          chmod -R 000 "$SOURCE"
+          lock_source(){ find "$SOURCE" -type f -exec chmod a-r {} +; }
+          unlock_source(){ find "$SOURCE" -type f -exec chmod u+r {} + || true; }
+          trap unlock_source EXIT
+          lock_source
           copilot -s --model=gpt-5.2 --no-ask-user \
             --allow-tool='read,write' \
             --deny-url=github.com --deny-url=api.github.com \
@@ -154,6 +162,8 @@ jobs:
           if bad:
               print('Incomplete manual rubric reviews:',bad,file=sys.stderr); sys.exit(2)
           PY
+          unlock_source
+          trap - EXIT
       - name: Upload sealed reviewed packet
         uses: actions/upload-artifact@v4
         with:

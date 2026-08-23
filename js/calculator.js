@@ -9,7 +9,7 @@ function applyBinary(a,op,b){
 export function createCalculator(level="four-function"){
   const wrap=document.createElement("section"); wrap.className="calculator"; wrap.setAttribute("role","dialog"); wrap.setAttribute("aria-label","Practice calculator");
   let display="0", stored=null, op=null, fresh=true;
-  const screen=document.createElement("output"); screen.className="calculator-screen"; screen.textContent=display;
+  const screen=document.createElement("output"); screen.className="calculator-screen"; screen.textContent=display; screen.setAttribute("aria-label","Calculator display"); screen.setAttribute("aria-live","polite");
   const grid=document.createElement("div"); grid.className="calculator-grid";
   const update=()=>{screen.textContent=display;};
   const number=n=>{display=fresh?String(n):(display==="0"?String(n):display+String(n)); fresh=false; update();};

@@ -20,13 +20,27 @@ for(const a of Object.values(ASSESSMENTS)){
   assert.equal(blueprint.assessmentId,a.id);
   assert.equal(blueprint.officialPointTarget,a.points);
   assert.equal(blueprint.officialPointTargetVerified,true,`${a.id}: official total should be current-DESE verified`);
-  assert(Array.isArray(blueprint.officialConstraints)&&blueprint.officialConstraints.length>0,`${a.id}: official constraint transcription missing`);
-  assert.equal(blueprint.officialRangesVerified,false,`${a.id}: category ranges must remain pending primary-current confirmation`);
+  assert(Array.isArray(blueprint.officialConstraints)&&blueprint.officialConstraints.length>0,`${a.id}: official constraint record missing`);
+  assert.equal(blueprint.officialRangesVerified,true,`${a.id}: current April 2026 primary blueprint ranges should be directly verified`);
+  assert.match(blueprint.officialRangeEvidence,/primary-PDF-directly-inspected/,`${a.id}: primary-range evidence marker missing`);
   assert.equal(blueprint.verified,false,`${a.id}: no current assessment should be release-verified yet`);
   assert.equal(blueprint.executable,false,`${a.id}: full operational blueprint must remain non-executable while blockers remain`);
   assert(Array.isArray(blueprint.executionBlockers)&&blueprint.executionBlockers.length>0,`${a.id}: execution blockers must be explicit`);
   assert.deepEqual(validateBlueprintSpec(blueprint),[],`${a.id}: non-executable official blueprint record should still be structurally valid`);
 }
+
+const officialRule=(assessmentId,code)=>BLUEPRINTS[assessmentId].officialConstraints.find(rule=>rule.code===code);
+assert.deepEqual(officialRule("g4-math","GM+DS"),{code:"GM+DS",label:"Geometry/Measurement + Data/Statistics",minPoints:10,maxPoints:18});
+assert.equal(officialRule("g4-math","GM"),undefined,"g4-math: primary blueprint must not regress to a split GM range");
+assert.equal(officialRule("g4-math","DS"),undefined,"g4-math: primary blueprint must not regress to a split DS range");
+assert.deepEqual(officialRule("g5-math","GM+DS"),{code:"GM+DS",label:"Geometry/Measurement + Data/Statistics",minPoints:8,maxPoints:18});
+assert.deepEqual(officialRule("g7-math","GM+DSP"),{code:"GM+DSP",label:"Geometry/Measurement + Data/Statistics/Probability",minPoints:9,maxPoints:18});
+assert.deepEqual(officialRule("g8-math","NS+EEI"),{code:"NS+EEI",label:"Number Sense + Expressions, Equations and Inequalities",minPoints:17,maxPoints:25});
+assert.deepEqual(officialRule("g8-math","GM+DSP"),{code:"GM+DSP",label:"Geometry/Measurement + Data/Statistics/Probability",minPoints:12,maxPoints:20});
+const g8Writing=officialRule("g8-ela","W"),g8Language=officialRule("g8-ela","L");
+assert.equal(g8Writing.minPoints,8); assert.equal(g8Writing.maxPoints,8); assert.equal(g8Writing.component,"writing-task");
+assert.equal(g8Language.minPoints,4); assert.equal(g8Language.maxPoints,4); assert.equal(g8Language.component,undefined,"g8-ela: 4-point reader row is Language, not a second writing task");
+
 for(const g of [3,4,5]){
   assert.equal(ASSESSMENTS[`g${g}-math`].sessions.every(s=>s.calculatorPolicy==="none"&&!s.calculatorAllowed),true);
 }
@@ -143,4 +157,4 @@ assert.throws(()=>drawBlueprintForm(blueprintBank,{...blueprintFixture,verified:
 assert.throws(()=>drawBlueprintForm(BANKS["g8-math"],BLUEPRINTS["g8-math"]),/not independently verified and executable/);
 
 const sanity=BANKS["g8-math"].find(i=>i.id==="g8m-005"); assert.equal(scoreResponse(sanity,7).earned,1); assert.equal(scoreResponse(sanity,6).earned,0);
-console.log(`PASS: ${count} development items across ${Object.keys(BANKS).length} banks; 14 assessment configs/official blueprint records; ${scoringCases.length} auto-scored response fixtures plus manual constructed response; persisted option randomization; executable-blueprint guards; core invariants green.`);
+console.log(`PASS: ${count} development items across ${Object.keys(BANKS).length} banks; 14 assessment configs/primary-verified official blueprint records; ${scoringCases.length} auto-scored response fixtures plus manual constructed response; persisted option randomization; executable-blueprint guards; core invariants green.`);

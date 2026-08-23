@@ -1,6 +1,5 @@
 import { applyG5ScienceItemRepairs } from "./science-semantic-item-repairs.js";
 import { applyG5ScienceTellRepairs } from "./science-tell-repairs.js";
-import { applyG8ScienceItemRepairs } from "./science-semantic-item-repairs-g8.js";
 
 // Source-controlled semantic review ledger for browser-effective Science banks.
 // Expectation summaries are transcribed from Missouri Learning Standards / DESE item-spec materials.
@@ -76,9 +75,8 @@ export const G5_STANDARD_CORRECTIONS=Object.freeze({
   "g5s-cr-005":"4.ESS.2.A.1"
 });
 
-// All prompt-level defects found in the current Grade 5 semantic sweep are repaired
-// browser-effectively. Empty ledgers are regression signals, not release approvals;
-// repair overlays must still be consolidated into source files before release.
+// Grade 8 semantic repairs have been consolidated directly into data/grade-8 source banks.
+// Grade 5 still uses development repair layers pending equivalent source consolidation.
 export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({});
 export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({});
 
@@ -89,8 +87,4 @@ export function applyG5ScienceSemanticReview(items){
     return {...item,standard,semanticStandardReview:"corrected-from-source-audit"};
   });
   return applyG5ScienceTellRepairs(applyG5ScienceItemRepairs(corrected));
-}
-
-export function applyG8ScienceSemanticReview(items){
-  return applyG8ScienceItemRepairs(items);
 }

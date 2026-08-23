@@ -1,6 +1,3 @@
-import { applyG5ScienceItemRepairs } from "./science-semantic-item-repairs.js";
-import { applyG5ScienceTellRepairs } from "./science-tell-repairs.js";
-
 // Source-controlled semantic review ledger for browser-effective Science banks.
 // Expectation summaries are transcribed from Missouri Learning Standards / DESE item-spec materials.
 // This layer exists so a syntactically valid but semantically wrong expectation code cannot quietly ship.
@@ -43,6 +40,9 @@ export const MIDDLE_SCHOOL_SCIENCE_EXPECTATIONS=Object.freeze({
   "6-8.ESS3.C.2":"Apply scientific principles to design a method for monitoring and minimizing a human impact on the environment."
 });
 
+// Historical audit ledger of high-confidence Grade 5 metadata corrections. The corrected
+// values now live directly in data/grade-5 source banks; this mapping remains as a regression
+// record and is no longer applied at runtime.
 export const G5_STANDARD_CORRECTIONS=Object.freeze({
   "g5s-005":"4.ESS.2.A.1",
   "g5s-009":"4.PS.3.B.1",
@@ -75,16 +75,7 @@ export const G5_STANDARD_CORRECTIONS=Object.freeze({
   "g5s-cr-005":"4.ESS.2.A.1"
 });
 
-// Grade 8 semantic repairs have been consolidated directly into data/grade-8 source banks.
-// Grade 5 still uses development repair layers pending equivalent source consolidation.
+// Empty ledgers are regression signals, not release approvals. Both Science grades still
+// require genuinely independent clean-room review of the consolidated browser-effective banks.
 export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({});
 export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({});
-
-export function applyG5ScienceSemanticReview(items){
-  const corrected=items.map(item=>{
-    const standard=G5_STANDARD_CORRECTIONS[item.id];
-    if(!standard)return item;
-    return {...item,standard,semanticStandardReview:"corrected-from-source-audit"};
-  });
-  return applyG5ScienceTellRepairs(applyG5ScienceItemRepairs(corrected));
-}

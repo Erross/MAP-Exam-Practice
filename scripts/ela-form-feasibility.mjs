@@ -10,6 +10,10 @@ const SHAPES={
   "g8-ela":{RL:14,RI:14,RES:8}
 };
 
+const MAX_ITEM_OVERLAP=0.40;
+const MAX_STIMULUS_OVERLAP=0.50;
+const failures=[];
+
 const points=items=>items.reduce((sum,item)=>sum+Number(item.points||0),0);
 const shuffle=(values,rng)=>{const out=[...values];for(let i=out.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;};
 const setOverlap=(a,b)=>{const right=new Set(b);return a.length?a.filter(x=>right.has(x)).length/a.length:0;};
@@ -81,7 +85,9 @@ for(const [assessmentId,shape] of Object.entries(SHAPES)){
   }));
   const missing=Object.entries(capacity).filter(([,v])=>v.poolPoints<v.target);
   if(missing.length){
-    console.log(`${assessmentId}: GAP capacity ${JSON.stringify(capacity)}; supported-scope full-form simulation deferred.`);
+    const message=`${assessmentId}: GAP capacity ${JSON.stringify(capacity)}; supported-scope full-form simulation deferred.`;
+    console.log(message);
+    failures.push(message);
     continue;
   }
   let failed=false;const overlaps=[],stimulusOverlaps=[];const categoryOverlaps=Object.fromEntries(Object.keys(shape).map(k=>[k,[]]));
@@ -97,11 +103,24 @@ for(const [assessmentId,shape] of Object.entries(SHAPES)){
     }
   }
   if(failed){
-    console.log(`${assessmentId}: GAP exact supported-shape construction failed; capacity ${JSON.stringify(capacity)}.`);
+    const message=`${assessmentId}: GAP exact supported-shape construction failed; capacity ${JSON.stringify(capacity)}.`;
+    console.log(message);
+    failures.push(message);
     continue;
   }
   const mean=xs=>xs.reduce((a,b)=>a+b,0)/xs.length;
+  const itemOverlap=mean(overlaps),stimulusOverlap=mean(stimulusOverlaps);
   const categoryText=Object.entries(categoryOverlaps).map(([k,v])=>`${k} ${(mean(v)*100).toFixed(1)}%`).join(" | ");
   const targetPoints=Object.values(shape).reduce((sum,value)=>sum+value,0);
-  console.log(`${assessmentId}: 5,000 development supported-scope form retake pairs; target ${targetPoints}p; mean exact-item overlap ${(mean(overlaps)*100).toFixed(1)}%; stimulus overlap ${(mean(stimulusOverlaps)*100).toFixed(1)}%; ${categoryText}. NOT release verification.`);
+  console.log(`${assessmentId}: 5,000 development supported-scope form retake pairs; target ${targetPoints}p; mean exact-item overlap ${(itemOverlap*100).toFixed(1)}%; stimulus overlap ${(stimulusOverlap*100).toFixed(1)}%; ${categoryText}. NOT release verification.`);
+  if(itemOverlap>MAX_ITEM_OVERLAP)failures.push(`${assessmentId}: mean exact-item overlap ${(itemOverlap*100).toFixed(1)}% exceeds ${(MAX_ITEM_OVERLAP*100).toFixed(0)}% gate.`);
+  if(stimulusOverlap>MAX_STIMULUS_OVERLAP)failures.push(`${assessmentId}: mean stimulus overlap ${(stimulusOverlap*100).toFixed(1)}% exceeds ${(MAX_STIMULUS_OVERLAP*100).toFixed(0)}% gate.`);
+}
+
+if(failures.length){
+  console.error(`FAIL: ELA supported-form diversity gate found ${failures.length} issue(s):`);
+  for(const failure of failures)console.error(`- ${failure}`);
+  process.exitCode=1;
+}else{
+  console.log(`PASS: all six ELA supported-scope development forms hold <=${MAX_ITEM_OVERLAP*100}% mean exact-item overlap and <=${MAX_STIMULUS_OVERLAP*100}% mean stimulus overlap across 5,000 retake pairs. These are development diversity gates, not verified-blueprint release evidence.`);
 }

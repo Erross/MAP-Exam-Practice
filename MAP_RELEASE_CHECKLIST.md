@@ -9,7 +9,7 @@
 - [ ] Current practice form/scoring guide inspected for structure and interaction style only.
 - [ ] Verification date and administration basis recorded.
 - [ ] Session count/order, official point target, timing guidance, calculator policy, and item types verified.
-- [ ] Grades 6-8 Math calculator designation verified expectation/item-by-expectation/item; no blanket calculator assumption.
+- [ ] Grades 6-8 Math calculator access remains available throughout all three sessions under the current 2025-2026 administration policy; any expectation-level Calculator Designation metadata used by the bank is independently checked for fidelity and is not used to revoke session-level access.
 - [ ] Deferred listening/writing/CR components accurately recorded.
 
 ## Effective bank

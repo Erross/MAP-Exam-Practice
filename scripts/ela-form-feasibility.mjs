@@ -16,17 +16,24 @@ const setOverlap=(a,b)=>{const right=new Set(b);return a.length?a.filter(x=>righ
 const groupKey=item=>item.deliveryGroup||item.stimulusId||item.stimulus?.id||null;
 
 function categoryFor(item,grade){
+  const standard=String(item.standard||"");
+  // Missouri's Writing codes change role by grade band. In Grades 3-5,
+  // W.3 is research and W.1 is writing process. In Grades 6-8, W.1 is
+  // research and W.3 is writing process. W.2 writing prompts are deferred.
+  if(grade<=5&&standard.includes(".W.3."))return "RES";
+  if(grade>=6&&standard.includes(".W.1."))return "RES";
+  if(standard.includes(".L."))return grade<=5?"L":null;
+  if(grade===4&&standard.includes(".W.1."))return "WP";
+  if([3,5].includes(grade)&&standard.includes(".W.1."))return "W";
+  if(standard.includes(".W.2."))return null;
+  if(grade>=6&&standard.includes(".W.3."))return null;
+
   if(item.strand==="Reading Literary")return "RL";
   if(item.strand==="Reading Informational")return "RI";
   if(item.strand==="Research")return "RES";
-  if(item.strand==="Language")return "L";
+  if(grade<=5&&item.strand==="Language")return "L";
   if(grade===4&&item.strand==="Writing Process")return "WP";
   if([3,5].includes(grade)&&["Writing Process","Writing Conventions"].includes(item.strand))return "W";
-  const standard=String(item.standard||"");
-  if(standard.includes(".W.3."))return "RES";
-  if(standard.includes(".L."))return "L";
-  if(grade===4&&standard.includes(".W."))return "WP";
-  if([3,5].includes(grade)&&standard.includes(".W."))return "W";
   return null;
 }
 
@@ -95,5 +102,6 @@ for(const [assessmentId,shape] of Object.entries(SHAPES)){
   }
   const mean=xs=>xs.reduce((a,b)=>a+b,0)/xs.length;
   const categoryText=Object.entries(categoryOverlaps).map(([k,v])=>`${k} ${(mean(v)*100).toFixed(1)}%`).join(" | ");
-  console.log(`${assessmentId}: 5,000 development supported-scope form retake pairs; target ${points(Object.entries(shape).flatMap(([category,target])=>Array(target).fill({points:1}))) }p; mean exact-item overlap ${(mean(overlaps)*100).toFixed(1)}%; stimulus overlap ${(mean(stimulusOverlaps)*100).toFixed(1)}%; ${categoryText}. NOT release verification.`);
+  const targetPoints=Object.values(shape).reduce((sum,value)=>sum+value,0);
+  console.log(`${assessmentId}: 5,000 development supported-scope form retake pairs; target ${targetPoints}p; mean exact-item overlap ${(mean(overlaps)*100).toFixed(1)}%; stimulus overlap ${(mean(stimulusOverlaps)*100).toFixed(1)}%; ${categoryText}. NOT release verification.`);
 }

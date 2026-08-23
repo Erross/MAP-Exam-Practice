@@ -40,5 +40,11 @@ const magneticForceIds=["g8s-033","g8s-034","g8s-035","g8s-036"];
 for(const id of magneticForceIds)assert.equal(byId.get(id)?.standard,"6-8.PS2.B.1",`${id}: magnetic-force factor item regressed to another expectation`);
 const resourceImpactIds=["g8s-022","g8s-023","g8s-024","g8s-cap-008","g8s-cap-009","g8s-cap-010","g8s-div-a018","g8s-div-b018"];
 for(const id of resourceImpactIds)assert.equal(byId.get(id)?.standard,"6-8.ESS3.C.1",`${id}: population/per-capita resource-impact item regressed to another expectation`);
+const capResourceCalculation=byId.get("g8s-cap-008");
+assert.equal(capResourceCalculation?.scoring?.answer,1020000,"g8s-cap-008 must calculate the change in total demand using population and per-capita use");
+const capResourceEvidence=`${capResourceCalculation?.stimulus?.text||""} ${capResourceCalculation?.prompt||""} ${capResourceCalculation?.rationale||""}`;
+assert.match(capResourceEvidence,/population/i,"g8s-cap-008 lost the population dimension of ESS3.C.1");
+assert.match(capResourceEvidence,/(per person|per-person)/i,"g8s-cap-008 lost the per-capita consumption dimension of ESS3.C.1");
+assert.match(capResourceEvidence,/(water demand|total water|total demand)/i,"g8s-cap-008 must connect the two variables to resource demand");
 
-console.log(`PASS: all ${bank.length} Grade 8 Science items use source-defined middle-school expectations; all ${consolidatedEss2Ids.length} ESS2.A.2 time/spatial-scale repairs now live directly in source banks.`);
+console.log(`PASS: all ${bank.length} Grade 8 Science items use source-defined middle-school expectations; all ${consolidatedEss2Ids.length} ESS2.A.2 time/spatial-scale repairs and the ESS3.C.1 population/per-capita calculation live directly in source banks.`);

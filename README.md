@@ -2,39 +2,51 @@
 
 Unofficial Missouri Assessment Program (MAP) Grade-Level practice application for Grades 3–8.
 
-The repository deliberately uses an exam-family-neutral assessment/session boundary so its registry and reusable engine can later be mounted alongside the related AP and ACT practice projects instead of merging three divergent applications.
+The repository uses an exam-family-neutral assessment/session boundary so its registry and reusable engine can later be mounted alongside the related AP and ACT practice projects instead of merging three divergent applications.
 
-## V1 scope
+## V1 release scope
 
-Configured Grade-Level assessments:
+Released short-practice assessments:
 
 - English Language Arts: Grades 3–8
 - Mathematics: Grades 3–8
 - Science: Grades 5 and 8
 
-The application models MAP as **untimed**, using DESE session times only as planning guidelines. It records official session boundaries, calculator policy, point targets, and deferred components in configuration.
+The application models MAP as **untimed**, using DESE session times only as planning guidelines. It records official session boundaries, calculator policy, point targets, and omitted/deferred components in configuration.
 
-Current zero-cost scope supports machine-scorable response semantics including multiple choice, multi-select, EBSR, dropdown, matching/matching tables, ordering/drag-drop semantics, hot text/hotspot, numeric/keypad input, number line, coordinate point/line, line plot, bar graph, clock input, and angle input. Manual constructed responses can also be captured, persisted, and reviewed by a human; they are never automatically awarded points or included in the auto-scored percentage.
+The zero-cost release supports machine-scorable response semantics including multiple choice, multi-select, EBSR, dropdown, matching/matching tables, ordering/drag-drop semantics, hot text/hotspot, numeric/keypad input, number line, coordinate point/line, line plot, bar graph, clock input, and angle input. Manual constructed responses can also be captured, persisted, and reviewed by a human; they are never automatically awarded points or included in the auto-scored percentage.
 
-Listening/audio and **human scoring** of prose remain deferred. The app does not replace required listening, writing, constructed-response, or written performance-event components with extra multiple-choice questions and pretend the resulting practice is operationally complete.
+Listening/audio and **automatic human-judgment scoring** of prose are outside the V1 release. The app does not replace required listening, writing, constructed-response, or written performance-event components with extra multiple-choice questions and pretend the resulting practice is operationally complete.
 
-## Development status
+## Release status
 
-The current foundation branch contains **1,780 original development items across all 14 Grade-Level banks**. All remain marked for clean-room review, and normal production UI does not launch draft banks. Append `?dev=1` locally/on a branch build to exercise development banks. A selected session currently draws a short practice set of up to 12 supported items from that session's pool; it is not presented as a complete operational MAP form.
+The V1 bank contains **1,780 original items across all 14 Grade-Level assessments**. Every browser-effective item has completed the project's answer-blind clean-room workflow on its current substantive content, including full item-1 restarts after substantive repairs. Final fingerprints are stored in `evidence/clean-room/final-certification.json` and enforced by `tests/clean-room-final-certification.mjs`; changing certified item content invalidates the matching fingerprint and fails CI until that assessment is re-audited.
 
-The current April 2026 Missouri DESE `MAP Grade-Level Assessment Blueprints_AOD.pdf` has been directly inspected page by page. Official total points and all reporting-category ranges are primary-source verified in `js/blueprints.js`. That inspection corrected several earlier Math interpretations: Grade 4/5 use combined GM + DS categories, Grade 7 uses combined GM + DSP, and Grade 8 uses combined NS + EEI and GM + DSP. Grade 8 ELA's 4-point "Approaching the task as a reader" row is Language, not a second writing-prompt bucket.
+All 14 assessment records are `status:"released"` with `practiceMode:"certified-short-practice"`. This means the reviewed short practice is available in the normal production UI. It does **not** mean a complete summative MAP form is executable: every assessment remains `fullSimulationAvailable:false`, and the blueprint records remain `executable:false` where omitted official components prevent a complete operational-form claim.
 
-Math Grades 3–8 have a development-only full-form harness that constructs 5,000 complete constrained forms plus 5,000 retake pairs per grade. The corrected primary-range model is green in CI. Current full-form retake overlap by item / points is G3 34.9% / 33.7%, G4 37.6% / 36.8%, G5 37.1% / 36.3%, G6 35.7% / 35.4%, G7 37.9% / 37.4%, and G8 38.1% / 37.7%. All are below the 40% development gate. `officialRangesVerified:true` means the source ranges are verified; it does **not** mean the bank or executable form is release-approved.
+A selected session draws a short practice set of **up to 12 supported items** from that session's pool. The preflight screen separately shows the official summative point target and explicitly says the short set is not a complete operational MAP session.
 
-Science Grades 5 and 8 each have more than 90 development bank points and at least 30 points of capacity in Physical, Life, and Earth/Space Science. Exact Missouri expectation-code syntax and source-controlled expectation-dictionary coverage are green for all **88 Grade 5** and **89 Grade 8** items. Grade 5's semantic authoring sweep includes 29 high-confidence standard-code corrections, 29 consolidated prompt repairs, 15 answer-tell balances, plus additional post-consolidation matter-flow and force/mass repairs; Grade 8 includes 10 direct `6-8.ESS2.A.2` time/spatial-scale repairs plus a corrected `6-8.ESS3.C.1` population/per-capita resource-demand item. These repairs now live directly in the normal source-bank files; the temporary runtime repair overlays have been removed. Current selected-response uniquely-longest-correct rates are 14.5% for Grade 5 Science and 21.2% for Grade 8 Science, below the unchanged 25% gate.
+The current April 2026 Missouri DESE `MAP Grade-Level Assessment Blueprints_AOD.pdf` was directly inspected page by page. Official total points and all reporting-category ranges are primary-source verified in `js/blueprints.js`. That inspection corrected several earlier Math interpretations: Grade 4/5 use combined GM + DS categories, Grade 7 uses combined GM + DSP, and Grade 8 uses combined NS + EEI and GM + DSP. Grade 8 ELA's 4-point "Approaching the task as a reader" row is Language, not a second writing-prompt bucket.
 
-Each Science grade includes six synthetic 2-point manual constructed-response items balanced across all three science strands and both sessions. Generic Science practice draws surface at least one eligible written response; its points are held for human review rather than automatically scored. This improves interaction fidelity without inventing an operational CR quota. Public current DESE evidence establishes CR/MC/TE in both Science sessions and a 60-point total, but does not provide a separate fixed summative CR point allocation; complete Science-form execution therefore remains intentionally blocked rather than guessing an auto/manual split.
+The final source-boundary review also rechecked the current 2025–2026 Grade-Level Examiner's Manual, DESE's current Grade-Level assessment hub, grade-specific PLDs, curriculum/expanded-expectation/item-specification resources, and the current practice-form/scoring-guide listings. The latest complete current manual confirms the session structure, item-type families, untimed timing policy, and calculator rules encoded by the application. See `OFFICIAL_MAP_SOURCES.md`.
 
-ELA Grades 3–8 can build a supported auto-scored development scope around genuinely non-deferred blueprint components. Direct primary-source reconciliation restored Grade 6/7 Writing reporting-category work and Grade 8's 4-point revise/edit Language bucket while continuing to defer the actual Grade 4/8 passage-based writing prompts and all Listening audio. Thirty-two additional upper-grade revise/edit items were added after the primary PDF exposed real G6/G7/G8 capacity gaps. Current 5,000-pair supported-form retake metrics are: G3 35.4% exact / 34.9% stimulus, G4 34.9% / 35.3%, G5 38.6% / 40.2%, G6 33.5% / 37.2%, G7 34.6% / 39.7%, and G8 38.5% / 40.1%. All six grades pass the hard <=40% exact-item and <=50% stimulus-family development gates.
+## Form and retake evidence
 
-Current DESE administration behavior is locked by a dedicated contract test: ELA session counts/listening omissions, Math Performance Event placement, calculator access, and the presence of constructed-response work in both Science sessions. Under the current 2025–2026 administration guidance, calculators are unavailable in Grades 3–5 Math and available throughout all three Grades 6–8 Math sessions; Grade 5 Science uses four-function and Grade 8 Science uses scientific calculator access.
+Math Grades 3–8 have a development/full-form diagnostic harness that constructs 5,000 complete constrained forms plus 5,000 retake pairs per grade. The corrected primary-range model passes the repository's unchanged form and overlap gates. This evidence validates bank capacity and diversity; it does not override omitted written/manual-scored PE fidelity in the student-facing release.
 
-The student-facing practice flow now has regression coverage for stable multi-digit/multi-field input persistence without full-view rerenders, short-practice-set disclosure, saved-session exit wording, question-navigator accessibility state, and safe display of student-entered written responses. This is preparatory UX hardening, not the required fresh naive-user release signoff.
+ELA Grades 3–8 have a supported-scope form harness around non-deferred blueprint components. The current 5,000-pair gates require <=40% mean exact-item overlap and <=50% mean stimulus-family overlap. Grade 4/8 passage-writing prompts and all Listening audio remain outside the automatically scored V1 scope rather than being substituted with unrelated items.
+
+Science Grades 5 and 8 contain 88 and 89 items respectively, including six synthetic 2-point manual constructed-response items per grade balanced across all three science strands and both sessions. Exact expectation syntax, source-controlled expectation-dictionary coverage, semantic regressions, manual-response contracts, and the unchanged <=25% uniquely-longest-correct selected-response tell gate are enforced by CI.
+
+Public current DESE evidence establishes CR/MC/TE in both Science sessions and a 60-point total, but does not provide a separate fixed summative CR point allocation. Complete Science-form execution therefore remains intentionally blocked rather than guessing an auto/manual split.
+
+## Student-facing behavior
+
+The release flow has regression coverage for stable multi-digit/multi-field input persistence without full-view rerenders, saved-session behavior, short-practice disclosure, calculator messaging, question-navigator accessibility state, manual-response scoring boundaries, and safe display of student-entered written responses.
+
+A final naive/student-facing review was conducted from both a younger Grade 3 and older Grade 8 perspective after the release wording was finalized. The evidence is recorded in `evidence/ux/naive-release-review.md`. The review approved the **short-practice product**, not full operational-form equivalence.
+
+Results are deliberately described as unofficial raw practice performance. The app does not invent MAP scale scores or proficiency classifications.
 
 ## Development
 
@@ -44,28 +56,30 @@ npm run check
 npm run build
 ```
 
-`npm run check` runs structural/unit tests, current-session and Science-manual-response contracts, clean-room tooling contracts, UI response-persistence guards, exact-standard and bank-capacity guards, Math/ELA form diagnostics, seeded practice-session retake analysis, stimulus-overlap analysis, and answer-tell analysis.
+`npm run check` runs structural/unit tests, official-session and Science-manual-response contracts, clean-room tooling and final-fingerprint gates, release-visibility semantics, UI response-persistence guards, exact-standard and bank-capacity guards, Math/ELA form diagnostics, seeded practice-session retake analysis, stimulus-overlap analysis, and answer-tell analysis.
 
 ## Independent clean-room review
 
-The preferred review flow is deliberately two-phase so no key or manual rubric is visible before the reviewer commits an independent response:
+Use `CLEAN_ROOM_REVIEW.md`. The normal project workflow is deliberately simple and answer-blind:
 
 ```bash
 npm run audit:review-template -- --assessment=g5-science > g5-science-review.json
-# independent reviewer completes every response + blind verdict
+# reviewer independently completes every response + blind verdict
 npm run audit:seal -- g5-science-review.json > g5-science-sealed-review.json
-# reviewer now sees only manual CR rubrics and records rubric verdicts
+# manual CR rubrics are reviewed only after the blind phase is sealed
 npm run audit:reconcile -- g5-science-sealed-review.json
 ```
 
-Every packet carries a SHA-256 fingerprint of the complete browser-effective assessment state. Any prompt, option, metadata, scoring, rationale, or ordering repair invalidates the packet and forces a fresh audit from item 1. The tooling enforces process integrity; it does not manufacture an independent reviewer.
+Every packet carries a SHA-256 fingerprint of the complete browser-effective assessment state. Any substantive prompt, option, metadata, scoring, rationale, or ordering repair invalidates that assessment's review and requires a restart from item 1.
 
-## Release standard
+A separate paid model service or custom external agent runner is **not** a release prerequisite. The essential gate is answer blindness during the independent judgment phase, followed by freeze/seal and keyed reconciliation.
 
-A bank is released only after current authoritative DESE verification, release-scale blueprint-constrained content, 5,000-form evidence where applicable, 5,000 retake-pair evidence, an independent clean-room review of the browser-effective bank, repair followed by a fresh audit from scratch when needed, a fresh naive-user review, exact prospective-production-tree validation, and public GitHub Pages smoke testing.
+## Release interpretation
 
-The primary blueprint range gate, corrected-range development-form gates, Science source consolidation, and Science authoring semantic sweep are closed. Every assessment still remains `verified:false` and `executable:false` until genuinely independent clean-room certification, final naive UX review, exact-tree validation, and all assessment-specific deferred-component boundaries are satisfied. Science full-form execution additionally remains blocked by the unresolved authoritative CR-allocation question described above.
+`status:"released"` means the certified short-practice assessment is available to students. It does not mean `fullSimulationAvailable:true`, and it does not change a blueprint from `executable:false` when authoritative full-form constraints or required human/audio components are not represented.
 
-See `CONTENT_STANDARDS.md`, `MAP_RELEASE_CHECKLIST.md`, `DEVELOPMENT_WORKFLOW.md`, `OFFICIAL_MAP_SOURCES.md`, `BLUEPRINT_TRANSCRIPTION.md`, and `PLAN.md`.
+This distinction is intentional. V1 is a production-ready **MAP practice application**, not a claim to reproduce complete secure operational MAP forms.
 
-`main` is reserved for reviewed, deployable work.
+See `CONTENT_STANDARDS.md`, `CLEAN_ROOM_REVIEW.md`, `MAP_RELEASE_CHECKLIST.md`, `DEVELOPMENT_WORKFLOW.md`, `OFFICIAL_MAP_SOURCES.md`, `BLUEPRINT_TRANSCRIPTION.md`, and `PLAN.md`.
+
+`main` is production and deploys to GitHub Pages only after exact-tree validation and release gates pass.

@@ -73,10 +73,10 @@ Accordingly, V1 may capture and persist a constructed response only when the ite
 
 The project does **not** infer an operational Grade 5/8 auto/manual split from development-bank totals or practice-form CR counts. Science full-form executability stays blocked unless a governing source establishes that allocation.
 
-## Release status versus full-form executability
+## Practice release versus full-form release
 
-The final V1 bank has completed clean-room certification and the student-facing short-practice assessments are production-visible with `status:"released"` and `practiceMode:"certified-short-practice"`.
+The final V1 bank has completed clean-room certification and the student-facing short-practice assessments are production-visible with `status:"practice-released"` and `practiceMode:"certified-short-practice"`.
 
-That release state is intentionally separate from the blueprint engine's full-form state. `fullSimulationAvailable:false`, `verified:false`, and `executable:false` remain appropriate where audio, human-scored writing/PE components, or an authoritative Science CR allocation prevent a complete operational MAP form from being represented.
+The stronger `status:"released"` state remains reserved for an independently verified and executable full blueprint. That existing release gate is intentionally not weakened. V1 keeps `fullSimulationAvailable:false`, `verified:false`, and `executable:false` where audio, human-scored writing/PE components, or an authoritative Science CR allocation prevent a complete operational MAP form from being represented.
 
 V1 therefore claims **production-ready original MAP short practice**, not complete secure operational-form equivalence. Any future claim about Spring 2027 fidelity requires fresh source verification against 2026-2027 DESE materials.

@@ -35,6 +35,31 @@ function resolveAnswer(item,decision){
   throw new Error(`${item.id}: unsupported answerSpec`);
 }
 
+function decisionsFor(compact,template){
+  if(Array.isArray(compact.items))return compact.items;
+  if(compact.answersById&&typeof compact.answersById==="object"){
+    const expectedIds=template.items.map(item=>item.id);
+    const suppliedIds=Object.keys(compact.answersById);
+    if(expectedIds.length!==suppliedIds.length||expectedIds.some(id=>!Object.prototype.hasOwnProperty.call(compact.answersById,id))){
+      throw new Error(`${compact.assessmentId}: answersById must cover every browser-effective item exactly once`);
+    }
+    const findings=compact.findingsById||{};
+    for(const id of Object.keys(findings))if(!expectedIds.includes(id))throw new Error(`${compact.assessmentId}: finding references unknown item ${id}`);
+    return expectedIds.map(id=>{
+      const raw=compact.answersById[id];
+      const decision={id};
+      if(raw&&typeof raw==="object"&&(Object.prototype.hasOwnProperty.call(raw,"option")||Object.prototype.hasOwnProperty.call(raw,"options")||Object.prototype.hasOwnProperty.call(raw,"value")||Object.prototype.hasOwnProperty.call(raw,"matches"))){
+        decision.answerSpec=raw;
+      }else{
+        decision.reviewerAnswer=raw;
+      }
+      Object.assign(decision,findings[id]||{});
+      return decision;
+    });
+  }
+  throw new Error(`${compact.assessmentId}: provide items[] or answersById{}`);
+}
+
 export function materializeCleanRoomReview(compact){
   if(!compact||compact.includesAnswerKeys!==false)throw new Error("Compact review must declare includesAnswerKeys:false");
   const assessmentId=compact.assessmentId;
@@ -42,16 +67,13 @@ export function materializeCleanRoomReview(compact){
   if(compact.browserEffectiveFingerprint!==template.browserEffectiveFingerprint){
     throw new Error(`${assessmentId}: compact review fingerprint is stale; regenerate and restart from item 1`);
   }
-  if(!Array.isArray(compact.items)||compact.items.length!==template.items.length){
-    throw new Error(`${assessmentId}: compact review must contain exactly ${template.items.length} item decisions`);
-  }
+  const decisions=decisionsFor(compact,template);
+  if(decisions.length!==template.items.length)throw new Error(`${assessmentId}: compact review decision count is wrong`);
   const defaultVerdicts=compact.defaultVerdicts==="pass"?"pass":null;
   for(let index=0;index<template.items.length;index++){
     const expected=template.items[index];
-    const decision=compact.items[index];
-    if(!decision||decision.id!==expected.id){
-      throw new Error(`${assessmentId}: compact review order/id mismatch at ordinal ${index+1}`);
-    }
+    const decision=decisions[index];
+    if(!decision||decision.id!==expected.id)throw new Error(`${assessmentId}: compact review order/id mismatch at ordinal ${index+1}`);
     const reviewerAnswer=resolveAnswer(expected,decision);
     if(!hasResponse(reviewerAnswer))throw new Error(`${decision.id}: reviewerAnswer/answerSpec is required`);
     const review={reviewerAnswer,notes:decision.notes||""};
@@ -68,7 +90,7 @@ export function materializeCleanRoomReview(compact){
 
 function parseArgs(argv){
   if(argv.includes("--help")||argv.length!==1){
-    console.log("Usage: node scripts/materialize-clean-room-review.mjs path/to/compact-blind-review.json\n\nReconstructs the exact full answerless clean-room worksheet from compact item decisions tied to a browser-effective fingerprint. Compact reviews may set defaultVerdicts:'pass' and use answerSpec forms: {option:1}, {options:[1,2]}, {value:...}, or {matches:{A:1,B:2}}. Pipe the output into seal-clean-room-review.mjs.");
+    console.log("Usage: node scripts/materialize-clean-room-review.mjs path/to/compact-blind-review.json\n\nReconstructs the exact full answerless clean-room worksheet from compact item decisions tied to a browser-effective fingerprint. Compact reviews may set defaultVerdicts:'pass' and either items[] or answersById{}. Answer specs support {option:1}, {options:[1,2]}, {value:...}, or {matches:{A:1,B:2}}. findingsById can override verdicts/notes when answersById is used.");
     process.exit(argv.includes("--help")?0:2);
   }
   return argv[0];

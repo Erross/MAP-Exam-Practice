@@ -1,4 +1,5 @@
 import { applyG5ScienceItemRepairs } from "./science-semantic-item-repairs.js";
+import { applyG5ScienceTellRepairs } from "./science-tell-repairs.js";
 
 // Source-controlled semantic review ledger for browser-effective Science banks.
 // Expectation summaries are transcribed from Missouri Learning Standards / DESE item-spec materials.
@@ -98,5 +99,5 @@ export function applyG5ScienceSemanticReview(items){
     if(!standard)return item;
     return {...item,standard,semanticStandardReview:"corrected-from-source-audit"};
   });
-  return applyG5ScienceItemRepairs(corrected);
+  return applyG5ScienceTellRepairs(applyG5ScienceItemRepairs(corrected));
 }

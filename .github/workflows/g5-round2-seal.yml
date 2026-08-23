@@ -1,0 +1,35 @@
+name: Seal G5 Science round 2
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/g5-round2-seal.yml
+      - evidence/clean-room/g5-science-round2-blind-decisions.json
+      - scripts/materialize-clean-room-review.mjs
+      - scripts/seal-clean-room-review.mjs
+      - data/grade-5/**
+      - js/banks.js
+
+permissions:
+  contents: read
+
+jobs:
+  seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Materialize and seal blind review
+        run: |
+          node scripts/materialize-clean-room-review.mjs evidence/clean-room/g5-science-round2-blind-decisions.json > /tmp/g5-full.json
+          node scripts/seal-clean-room-review.mjs /tmp/g5-full.json > /tmp/g5-sealed.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: g5-science-round2-sealed
+          path: /tmp/g5-sealed.json
+          if-no-files-found: error
+          retention-days: 30

@@ -8,7 +8,7 @@ export function buildCleanRoomReviewTemplate(assessmentId){
   const manifest=buildCleanRoomManifest({assessmentId});
   const assessment=manifest.assessments[0];
   return {
-    schemaVersion:1,
+    schemaVersion:2,
     purpose:"independent blind clean-room review worksheet",
     includesAnswerKeys:false,
     assessmentId,
@@ -17,11 +17,13 @@ export function buildCleanRoomReviewTemplate(assessmentId){
     label:assessment.label,
     officialPointTarget:assessment.officialPointTarget,
     itemCount:assessment.itemCount,
+    browserEffectiveFingerprint:assessment.browserEffectiveFingerprint,
     instructions:{
-      blindPhase:"Complete reviewerAnswer and all verdict fields before opening any keyed manifest or repository scoring/rationale fields.",
+      blindPhase:"Without opening any repository scoring/rationale fields or keyed manifest, complete reviewerAnswer and all four verdict fields for every item. For auto-scored items, reviewerAnswer is the response you independently believe is correct. For constructed responses, reviewerAnswer should state the response elements or scoring criteria you independently expect a correct response to contain.",
       verdicts:"Use pass when independently satisfied. Use finding when there is any correctness, ambiguity, grade-fit, or standard-alignment concern; explain every finding in notes.",
-      manualResponses:"For constructed_response items, reviewerAnswer may remain null; independently assess the prompt and rubric and complete manualRubricVerdict.",
-      restartRule:"Any substantive repair invalidates this worksheet. Regenerate from the repaired browser-effective bank and restart the assessment from item 1."
+      manualResponses:"Constructed-response rubrics are intentionally withheld during this blind phase. After every blind response and verdict is complete, seal this worksheet with scripts/seal-clean-room-review.mjs; only the sealed post-blind worksheet exposes the current manual rubrics for rubric-quality review.",
+      sealPhase:"Run node scripts/seal-clean-room-review.mjs path/to/completed-blind-review.json > path/to/sealed-review.json before viewing any scoring/rationale. The seal validates completeness and the exact browser-effective fingerprint, freezes the blind review, and exposes only manual constructed-response rubrics for the second phase.",
+      restartRule:"Any substantive browser-effective repair, including prompt/options/scoring/rationale changes that keep the same item IDs, changes the assessment fingerprint. Regenerate from the repaired bank and restart the assessment from item 1."
     },
     items:assessment.items.map(item=>({
       ...item,
@@ -31,7 +33,6 @@ export function buildCleanRoomReviewTemplate(assessmentId){
         ambiguityVerdict:null,
         gradeFitVerdict:null,
         standardAlignmentVerdict:null,
-        manualRubricVerdict:item.itemType==="constructed_response"?null:"not-applicable",
         notes:""
       }
     }))
@@ -43,7 +44,7 @@ function parseArgs(argv){
   for(const arg of argv){
     if(arg.startsWith("--assessment="))assessmentId=arg.slice("--assessment=".length);
     else if(arg==="--help"){
-      console.log("Usage: node scripts/clean-room-review-template.mjs --assessment=g5-science\n\nEmits a blind, editable JSON worksheet. Complete it before using any keyed reconciliation command.");
+      console.log("Usage: node scripts/clean-room-review-template.mjs --assessment=g5-science\n\nEmits a blind, editable JSON worksheet with no scoring/rationales. Complete every independent response and verdict, then seal it with scripts/seal-clean-room-review.mjs before any rubric/key reconciliation.");
       process.exit(0);
     }else throw new Error(`Unknown argument: ${arg}`);
   }

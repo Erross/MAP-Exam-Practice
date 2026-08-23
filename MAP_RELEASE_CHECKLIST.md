@@ -71,17 +71,20 @@
 - [ ] Audio/written omissions are clear before starting.
 
 ## Independent review
-- [ ] Clean-room reviewer did not author the bank and has not previously seen its keys/rationales.
-- [ ] Reviewer independently reconstructed official requirements before trusting repository claims/tests/evidence.
+- [ ] Follow `CLEAN_ROOM_REVIEW.md`; do not create external agent infrastructure merely to satisfy this gate.
+- [ ] Fresh browser-effective answerless worksheet/manifest generated for the assessment and exact fingerprint recorded before review starts.
+- [ ] Reviewer explicitly treats prior authoring conclusions, remembered keys, tests, PR descriptions, prior audits, and repository claims as non-evidence during the blind pass.
+- [ ] Reviewer does not inspect scoring objects, answer keys, rationales, or CR rubrics while recording the blind judgments.
 - [ ] Entire browser-effective bank reviewed for correctness, ambiguity, grade fit, metadata, duplicates, stimuli/sets, and rendering.
-- [ ] Exact browser-effective assessment fingerprint recorded in the blind review packet before review starts.
 - [ ] Reviewer independently answers every auto-scored item and records expected response/scoring elements for every constructed response before seeing any key or manual rubric.
-- [ ] All blind correctness/ambiguity/grade-fit/alignment judgments completed and sealed before manual rubrics are exposed.
-- [ ] Constructed-response rubrics reviewed only after the blind phase is sealed; auto-scored keys/rationales remain hidden until reconciliation.
+- [ ] All blind correctness/ambiguity/grade-fit/alignment judgments completed and frozen/sealed before manual rubrics are exposed.
+- [ ] Constructed-response rubrics reviewed only after the blind phase is frozen/sealed; auto-scored keys/rationales remain hidden until reconciliation.
 - [ ] Every quantitative item independently recomputed.
 - [ ] Reconciliation passes on the same browser-effective fingerprint with zero answer mismatches, recorded findings, incomplete judgments, rubric findings, or post-seal tampering.
 - [ ] After any substantive repair, audit restarted from scratch with a newly generated fingerprint/worksheet.
 - [ ] Fresh final clean-room pass has zero substantive findings.
+
+**Reviewer execution note:** a fresh human or separate agent is useful when readily available but is not required. The same capable reasoning model may perform the reviewer pass under this project standard if it uses a fresh answerless worksheet, deliberately ignores prior authoring knowledge as evidence, does not consult keys during the blind phase, freezes its independent judgments before reconciliation, and restarts after substantive repair.
 
 ## Naive assessment
 - [ ] Fresh younger-grade assessor flow reviewed.

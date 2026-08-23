@@ -74,7 +74,7 @@ jobs:
           lock_source
           for chunk in chunk-*.json; do
             echo "Reviewing $chunk"
-            copilot -s --model=gpt-5.2 --no-ask-user \
+            copilot -s --no-ask-user \
               --allow-tool='read,write,web_fetch' \
               --allow-url=https://dese.mo.gov \
               --deny-url=github.com --deny-url=api.github.com \
@@ -150,7 +150,7 @@ jobs:
           unlock_source(){ find "$SOURCE" -type f -exec chmod u+r {} + || true; }
           trap unlock_source EXIT
           lock_source
-          copilot -s --model=gpt-5.2 --no-ask-user \
+          copilot -s --no-ask-user \
             --allow-tool='read,write' \
             --deny-url=github.com --deny-url=api.github.com \
             -p "Read RUBRIC_REVIEWER.md and sealed.json. Complete every manual rubric review exactly as instructed, writing the results back to sealed.json."

@@ -45,7 +45,7 @@ const scienceSessions = grade => [
 ];
 
 const releaseMeta = Object.freeze({
-  status:"released",
+  status:"practice-released",
   practiceMode:"certified-short-practice",
   fullSimulationAvailable:false
 });

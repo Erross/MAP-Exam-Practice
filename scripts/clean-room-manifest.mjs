@@ -1,9 +1,17 @@
+import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { BANKS } from "../js/banks.js";
 import { ASSESSMENTS } from "../js/config.js";
 
 const clone=value=>value===undefined?undefined:JSON.parse(JSON.stringify(value));
 const stimulusKey=item=>item.stimulusId||item.stimulus?.id||null;
+
+export function browserEffectiveFingerprint(assessmentId){
+  const bank=BANKS[assessmentId];
+  if(!bank)throw new Error(`Unknown assessment: ${assessmentId}`);
+  const payload=JSON.stringify({assessmentId,items:bank});
+  return createHash("sha256").update(payload).digest("hex");
+}
 
 function blindItem(assessmentId,item,index){
   const out={
@@ -60,11 +68,12 @@ export function buildCleanRoomManifest({includeAnswers=false,assessmentId=null}=
       officialPointTarget:assessment.points,
       sessionCount:assessment.sessions.length,
       itemCount:items.length,
+      browserEffectiveFingerprint:browserEffectiveFingerprint(id),
       items
     });
   }
   return {
-    schemaVersion:1,
+    schemaVersion:2,
     purpose:includeAnswers?"post-review answer-key reconciliation":"independent blind clean-room review",
     includesAnswerKeys:includeAnswers,
     totalItems,
@@ -78,7 +87,7 @@ function parseArgs(argv){
     if(arg==="--answers")includeAnswers=true;
     else if(arg.startsWith("--assessment="))assessmentId=arg.slice("--assessment=".length);
     else if(arg==="--help"){
-      console.log("Usage: node scripts/clean-room-manifest.mjs [--assessment=g5-science] [--answers]\n\nDefault output is blind JSON with scoring/rationales removed. Use --answers only after independent review for reconciliation. Redirect stdout to a file if desired.");
+      console.log("Usage: node scripts/clean-room-manifest.mjs [--assessment=g5-science] [--answers]\n\nDefault output is blind JSON with scoring/rationales removed. Each assessment carries a SHA-256 fingerprint of the complete browser-effective bank so any later content/scoring change invalidates the review packet. Use --answers only after independent review for reconciliation. Redirect stdout to a file if desired.");
       process.exit(0);
     }else throw new Error(`Unknown argument: ${arg}`);
   }

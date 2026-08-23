@@ -5,7 +5,7 @@ export const PROGRAM = Object.freeze({
   jurisdiction: "Missouri",
   name: "Missouri MAP Grade-Level Practice",
   administrationBasis: "2025-2026",
-  officialSourcesVerified: "2026-08-22",
+  officialSourcesVerified: "2026-08-23",
   timingPolicy: "guideline",
   unofficial: true,
   deferredCapabilities: ["listening-audio", "human-scored-writing", "human-scored-constructed-response"]
@@ -44,11 +44,17 @@ const scienceSessions = grade => [
   S(2,"Session 2",grade===5?[60,80]:[55,75],"available",{deferred:["human-scored-constructed-response"],calculatorLevel:grade===5?"four-function":"scientific"})
 ];
 
+const releaseMeta = Object.freeze({
+  status:"released",
+  practiceMode:"certified-short-practice",
+  fullSimulationAvailable:false
+});
+
 const assessments = {};
 for (let grade=3; grade<=8; grade++) {
-  assessments[`g${grade}-ela`] = Object.freeze({id:`g${grade}-ela`,blueprintId:`g${grade}-ela`,grade,subject:"ela",label:`Grade ${grade} ELA`,points:grade===7?52:56,status:"draft",sessions:elaSessions[grade],fullSimulationAvailable:false});
-  assessments[`g${grade}-math`] = Object.freeze({id:`g${grade}-math`,blueprintId:`g${grade}-math`,grade,subject:"math",label:`Grade ${grade} Mathematics`,points:grade<=5?48:54,status:"draft",sessions:mathSessions(grade),fullSimulationAvailable:false});
-  if (grade===5 || grade===8) assessments[`g${grade}-science`] = Object.freeze({id:`g${grade}-science`,blueprintId:`g${grade}-science`,grade,subject:"science",label:`Grade ${grade} Science`,points:60,status:"draft",sessions:scienceSessions(grade),fullSimulationAvailable:false});
+  assessments[`g${grade}-ela`] = Object.freeze({id:`g${grade}-ela`,blueprintId:`g${grade}-ela`,grade,subject:"ela",label:`Grade ${grade} ELA`,points:grade===7?52:56,...releaseMeta,sessions:elaSessions[grade]});
+  assessments[`g${grade}-math`] = Object.freeze({id:`g${grade}-math`,blueprintId:`g${grade}-math`,grade,subject:"math",label:`Grade ${grade} Mathematics`,points:grade<=5?48:54,...releaseMeta,sessions:mathSessions(grade)});
+  if (grade===5 || grade===8) assessments[`g${grade}-science`] = Object.freeze({id:`g${grade}-science`,blueprintId:`g${grade}-science`,grade,subject:"science",label:`Grade ${grade} Science`,points:60,...releaseMeta,sessions:scienceSessions(grade)});
 }
 
 export const ASSESSMENTS = Object.freeze(assessments);

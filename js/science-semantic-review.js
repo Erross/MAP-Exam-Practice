@@ -1,3 +1,5 @@
+import { applyG5ScienceItemRepairs } from "./science-semantic-item-repairs.js";
+
 // Source-controlled semantic review ledger for browser-effective Science banks.
 // Expectation summaries are transcribed from Missouri Learning Standards / DESE item-spec materials.
 // This layer exists so a syntactically valid but semantically wrong expectation code cannot quietly ship.
@@ -40,9 +42,6 @@ export const MIDDLE_SCHOOL_SCIENCE_EXPECTATIONS=Object.freeze({
   "6-8.ESS3.C.2":"Apply scientific principles to design a method for monitoring and minimizing a human impact on the environment."
 });
 
-// High-confidence corrections found by comparing the actual prompt/stimulus semantics
-// against the expectation text above. These do not make the bank release-ready; they
-// only correct browser-effective metadata while the full clean-room review remains open.
 export const G5_STANDARD_CORRECTIONS=Object.freeze({
   "g5s-005":"4.ESS.2.A.1",
   "g5s-009":"4.PS.3.B.1",
@@ -75,22 +74,9 @@ export const G5_STANDARD_CORRECTIONS=Object.freeze({
   "g5s-cr-005":"4.ESS.2.A.1"
 });
 
-// These are intentionally NOT auto-corrected yet. They need prompt-level revision or
-// a more specific item-spec judgment; keeping them listed makes the remaining semantic
-// debt explicit and testable rather than hiding it behind a valid-looking code.
+// Items below still need prompt-level repair or deeper item-spec judgment. Items repaired
+// in science-semantic-item-repairs.js are removed from this open ledger immediately.
 export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({
-  "g5s-003":"5.LS.1.C.1 item focuses on light-duration experimental design rather than the expectation's air/water-material argument.",
-  "g5s-004":"5.LS.1.C.1 conclusion is a light-dose growth pattern, not chiefly an air/water-material argument.",
-  "g5s-008":"5.PS.1.B.2 is about whether combining substances forms new substances; this item instead matches generic physical properties.",
-  "g5s-011":"5.LS.2.B.1 should foreground movement of matter through an ecosystem; current item is a population/food-availability inference.",
-  "g5s-015":"5.LS.2.B.1 current item asks food availability rather than movement of matter among plants/animals/decomposers/environment.",
-  "g5s-016":"5.LS.2.B.1 current item asks a population prediction rather than constructing/interpreting a matter-flow model.",
-  "g5s-027":"4.PS.2.A.1 requires a repeatable motion pattern usable to predict future motion; ramp starting-height relationship needs prompt-level review.",
-  "g5s-028":"4.PS.2.A.1 numeric difference does not itself establish or use a repeatable motion pattern for prediction.",
-  "g5s-033":"5.LS.1.C.1 water-growth investigation does not yet ask the air/water-material argument required by the expectation.",
-  "g5s-034":"5.LS.1.C.1 current conclusion is dose-response rather than the expectation's material-source argument.",
-  "g5s-035":"5.LS.1.C.1 graph entry captures growth data but not the expectation's air/water-material claim.",
-  "g5s-036":"5.LS.1.C.1 experimental-design item does not directly assess the expectation's material-source argument.",
   "g5s-div-a005":"5.PS.1.B.2 is new-substance investigation; this item instead matches generic properties including magnetism.",
   "g5s-div-a007":"5.LS.1.C.1 current item is variable identification, not the plant-material-source argument.",
   "g5s-div-a008":"5.LS.1.C.1 numeric growth difference is not direct evidence of chiefly air/water material sources.",
@@ -110,10 +96,6 @@ export const G5_SEMANTIC_REVIEW_PENDING=Object.freeze({
   "g5s-cr-004":"5.LS.1.C.1 response analyzes light-duration growth rather than chiefly air/water material sources."
 });
 
-// Grade 8 uses correct expectation families overall. The remaining concern is depth:
-// the ESS2.A.2 bank currently demonstrates erosion/sediment processes but usually does
-// not make the expectation's varying time/spatial-scale element explicit. Keep that debt
-// visible for prompt-level clean-room review rather than relabeling it to an easier standard.
 export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({
   "g8s-007":"ESS2.A.2 item describes sediment movement but does not explicitly address varying time or spatial scales.",
   "g8s-008":"ESS2.A.2 calculation supports an erosion model but does not itself address varying time or spatial scales.",
@@ -128,9 +110,10 @@ export const G8_SEMANTIC_REVIEW_PENDING=Object.freeze({
 });
 
 export function applyG5ScienceSemanticReview(items){
-  return items.map(item=>{
-    const corrected=G5_STANDARD_CORRECTIONS[item.id];
-    if(!corrected)return item;
-    return {...item,standard:corrected,semanticStandardReview:"corrected-from-source-audit"};
+  const corrected=items.map(item=>{
+    const standard=G5_STANDARD_CORRECTIONS[item.id];
+    if(!standard)return item;
+    return {...item,standard,semanticStandardReview:"corrected-from-source-audit"};
   });
+  return applyG5ScienceItemRepairs(corrected);
 }

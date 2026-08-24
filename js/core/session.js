@@ -1,5 +1,5 @@
 const KEY="map-practice-attempt-v2";
-export const ATTEMPT_VERSION=2;
+export const ATTEMPT_VERSION=3;
 
 function shuffledIndices(length,rng=Math.random){
   const a=Array.from({length},(_,i)=>i);
@@ -9,16 +9,18 @@ function shuffledIndices(length,rng=Math.random){
 function reordered(values,order){return Array.isArray(order)&&order.length===values.length?order.map(i=>values[i]):[...values];}
 
 export function newAttempt(assessmentId,sessionId,items,rng=Math.random){
-  const optionOrders={},partOptionOrders={};
+  const optionOrders={},partOptionOrders={},tokenOrders={};
   for(const item of items){
     if(Array.isArray(item.options)&&item.options.length>1) optionOrders[item.id]=shuffledIndices(item.options.length,rng);
+    if(Array.isArray(item.tokens)&&item.tokens.length>1) tokenOrders[item.id]=shuffledIndices(item.tokens.length,rng);
     if(Array.isArray(item.parts)) partOptionOrders[item.id]=item.parts.map(part=>Array.isArray(part.options)&&part.options.length>1?shuffledIndices(part.options.length,rng):null);
   }
-  return {version:ATTEMPT_VERSION,assessmentId,sessionId,itemIds:items.map(i=>i.id),optionOrders,partOptionOrders,responses:{},flags:{},index:0,submitted:false,startedAt:Date.now(),submittedAt:null};
+  return {version:ATTEMPT_VERSION,assessmentId,sessionId,itemIds:items.map(i=>i.id),optionOrders,partOptionOrders,tokenOrders,responses:{},flags:{},index:0,submitted:false,startedAt:Date.now(),submittedAt:null};
 }
 export function materializeItem(item,attempt){
   const out={...item};
   if(Array.isArray(item.options)) out.options=reordered(item.options,attempt?.optionOrders?.[item.id]);
+  if(Array.isArray(item.tokens)) out.tokens=reordered(item.tokens,attempt?.tokenOrders?.[item.id]);
   if(Array.isArray(item.parts)) out.parts=item.parts.map((part,i)=>({...part,options:Array.isArray(part.options)?reordered(part.options,attempt?.partOptionOrders?.[item.id]?.[i]):part.options}));
   return out;
 }

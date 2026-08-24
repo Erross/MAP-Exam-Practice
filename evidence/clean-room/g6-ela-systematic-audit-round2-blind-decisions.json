@@ -1,0 +1,21 @@
+{
+  "schemaVersion":2,
+  "purpose":"completed answer-blind clean-room reviewer decisions for Grade 6 ELA systematic MAP fidelity audit round 2",
+  "includesAnswerKeys":false,
+  "assessmentId":"g6-ela",
+  "browserEffectiveFingerprint":"4043c161e17dbd65fa7bb1a969a418c5f609e7262aede217362db9a91bccfdc1",
+  "itemCount":124,
+  "reviewedThroughOrdinal":124,
+  "defaultVerdicts":"pass",
+  "reviewMethod":"Fresh item-1 restart after the round-one g6e-res2-002 ambiguity repair. The round-one decisions, scoring, rationales, keyed manifests, prior certificates, tests, and source key encountered during repair were treated as non-evidence. Every browser-effective item was re-read and independently answered from the new answerless worksheet before keyed reconciliation.",
+  "answerEncoding":"option/options are 1-based positions in the blind worksheet; ebsrParts is one 1-based option position per part; matches maps row keys to 1-based choice positions.",
+  "answersById":{
+    "g6e-001":{"option":1},"g6e-002":{"ebsrParts":[1,1]},"g6e-003":{"option":1},"g6e-004":{"option":1},"g6e-005":{"option":1},"g6e-006":{"options":[1,2]},"g6e-007":{"option":1},"g6e-008":{"matches":{"A":1,"B":2}},"g6e-009":{"option":1},"g6e-010":{"option":1},"g6e-011":{"option":1},"g6e-012":{"option":1},"g6e-013":{"option":1},"g6e-014":{"options":[1,2]},"g6e-015":{"option":1},"g6e-016":{"option":1},"g6e-017":{"option":1},"g6e-018":{"option":1},"g6e-019":{"option":1},"g6e-020":{"option":1},"g6e-021":{"option":1},"g6e-022":{"option":1},"g6e-023":{"option":1},"g6e-024":{"option":1},"g6e-025":{"option":1},"g6e-026":{"option":1},"g6e-027":{"option":1},"g6e-028":{"option":1},"g6e-029":{"option":1},"g6e-030":{"option":1},"g6e-031":{"option":1},"g6e-032":{"option":1},"g6e-033":{"option":1},"g6e-034":{"option":1},"g6e-035":{"option":1},"g6e-036":{"option":1},"g6e-037":{"option":1},"g6e-038":{"option":1},"g6e-039":{"option":1},"g6e-040":{"options":[1,2]},
+    "g6e-res-001":{"option":1},"g6e-res-002":{"option":1},"g6e-res-003":{"options":[1,2]},"g6e-res-004":{"option":1},"g6e-res-005":{"option":1},"g6e-res-006":{"option":1},"g6e-res-007":{"matches":{"A":1,"B":2,"C":3}},"g6e-res-008":{"option":1},"g6e-res-009":{"option":1},"g6e-res-010":{"options":[1,2]},"g6e-res-011":{"option":1},"g6e-res-012":{"option":1},
+    "g6e-res2-001":{"option":1},"g6e-res2-002":{"option":1},"g6e-res2-003":{"option":1},"g6e-res2-004":{"option":1},"g6e-res2-005":{"option":1},"g6e-res2-006":{"option":1},"g6e-res2-007":{"option":1},"g6e-res2-008":{"option":1},
+    "g6e-rd-001":{"option":1},"g6e-rd-002":{"option":1},"g6e-rd-003":{"option":1},"g6e-rd-004":{"option":1},"g6e-rd-005":{"option":1},"g6e-rd-006":{"option":1},"g6e-rd-007":{"option":1},"g6e-rd-008":{"option":1},"g6e-rd-009":{"option":1},"g6e-rd-010":{"option":1},"g6e-rd-011":{"option":1},"g6e-rd-012":{"option":1},"g6e-rd-013":{"option":1},"g6e-rd-014":{"option":1},"g6e-rd-015":{"option":1},"g6e-rd-016":{"option":1},"g6e-rd-017":{"option":1},"g6e-rd-018":{"option":1},"g6e-rd-019":{"option":1},"g6e-rd-020":{"option":1},"g6e-rd-021":{"option":1},"g6e-rd-022":{"option":1},"g6e-rd-023":{"option":1},"g6e-rd-024":{"option":1},"g6e-rd-025":{"option":1},"g6e-rd-026":{"option":1},"g6e-rd-027":{"option":1},"g6e-rd-028":{"option":1},"g6e-rd-029":{"option":1},"g6e-rd-030":{"option":1},"g6e-rd-031":{"option":1},"g6e-rd-032":{"option":1},"g6e-rd-033":{"option":1},"g6e-rd-034":{"option":1},"g6e-rd-035":{"option":1},"g6e-rd-036":{"option":1},
+    "g6e-top-001":{"option":1},"g6e-top-002":{"option":1},"g6e-top-003":{"option":1},"g6e-top-004":{"option":1},"g6e-top-005":{"option":1},"g6e-top-006":{"option":1},"g6e-top-007":{"option":1},"g6e-top-008":{"option":1},"g6e-top-009":{"option":1},"g6e-top-010":{"option":1},"g6e-top-011":{"option":1},"g6e-top-012":{"option":1},"g6e-top-013":{"option":1},"g6e-top-014":{"option":1},"g6e-top-015":{"option":1},"g6e-top-016":{"option":1},
+    "g6e-wtop-001":{"options":[1,2]},"g6e-wtop-002":{"options":[1,2]},"g6e-wtop-003":{"options":[1,2]},"g6e-wtop-004":{"options":[1,2]},"g6e-wtop-005":{"options":[1,2]},"g6e-wtop-006":{"options":[1,2]},"g6e-wtop-007":{"options":[1,2]},"g6e-wtop-008":{"options":[1,2]},"g6e-wtop-009":{"options":[1,2]},"g6e-wtop-010":{"options":[1,2]},"g6e-wtop-011":{"matches":{"A":1,"B":2,"C":3}},"g6e-wtop-012":{"options":[1,2]}
+  },
+  "findingsById":{}
+}

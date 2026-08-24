@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "purpose": "final browser-effective clean-room certification receipt for MAP Grade-Level practice v1 candidate",
-  "reviewDate": "2026-08-23",
+  "purpose": "final browser-effective clean-room certification receipt for the current MAP Grade-Level practice candidate",
+  "reviewDate": "2026-08-24",
   "reviewMethod": "Fresh answerless browser-effective worksheet per assessment; reviewer deliberately treated prior authoring conclusions, remembered keys, tests, PR claims, and earlier audits as non-evidence; independently solved and judged every item; blind judgments were frozen/sealed before keyed reconciliation; manual Science rubrics were exposed only after blind CR response elements were committed; substantive repairs triggered full item-1 restarts.",
   "totalItems": 1780,
   "findingCount": 0,
   "assessments": [
-    {"assessmentId":"g3-ela","itemCount":158,"browserEffectiveFingerprint":"ac72311d699d6329907f327df5c9d015e4516ebfc5f96f26bfdc5dc4d0032991","completedBlindReviewSha256":"ecce8f2ab5f62842ef76cc6523ed1ba04f4d1563c357d51455d776be8412cd9a","completedBlindReviewBytes":238439,"manualResponseCount":0,"passed":true,"findingCount":0,"notes":"Final pass completed after discarding an earlier reviewer-error pass and restarting from item 1."},
+    {"assessmentId":"g3-ela","itemCount":158,"browserEffectiveFingerprint":"c32a4b4b1ff04baf6f59461605ffeba8738f6988b57864faa53c033581c66768","completedBlindReviewSha256":"0220162c2746839941ca964d4ca11f75759476b699d5a36d6c6f6d22b7d360d6","completedBlindReviewBytes":238152,"manualResponseCount":0,"passed":true,"findingCount":0,"notes":"Systematic fidelity audit round 1 found the under-specified g3e-wl-004 turtle-detail item. After clarifying the paragraph focus in source, the assessment was restarted from item 1. Fresh round 2 reviewed and independently answered all 158 items with zero substantive findings; sealed hidden-key reconciliation passed 158/158 with zero mismatches."},
     {"assessmentId":"g4-ela","itemCount":116,"browserEffectiveFingerprint":"11dc5bf5d30bbba1c1fafe48bba9f61115dea7604bab84f75625e8dbb30898bc","completedBlindReviewSha256":"f7c911e6689dceff85c3c37cdda5a888056f2380cc17a66495f33a964a67854f","completedBlindReviewBytes":190780,"manualResponseCount":0,"passed":true,"findingCount":0},
     {"assessmentId":"g5-ela","itemCount":138,"browserEffectiveFingerprint":"d0f03069da6d5ee512a957880145499f8d10b60dbfcb5c4f77b268a1631473fa","completedBlindReviewSha256":"ae7d7fa8ad88315b1f83b2af0077a8b7d7d3a8172b9784fac5a914c50ee7fac7","completedBlindReviewBytes":233020,"manualResponseCount":0,"passed":true,"findingCount":0},
     {"assessmentId":"g6-ela","itemCount":124,"browserEffectiveFingerprint":"18e9ef205d7c7cdb542501cd7058eabfffada4f36c04d689d5d2f02a27634414","completedBlindReviewSha256":"92f498b556327a5ac8e2d889e1a062f7af77c99d23d455ed488a09a6f482b034","completedBlindReviewBytes":224701,"manualResponseCount":0,"passed":true,"findingCount":0},

@@ -1,0 +1,19 @@
+{
+  "schemaVersion":1,
+  "purpose":"answer-blind first-pass findings from the systematic MAP fidelity audit",
+  "includesAnswerKeys":false,
+  "assessmentId":"g6-ela",
+  "browserEffectiveFingerprint":"2baedbbf317f35a8986453f6c7ff760d3669364f34d7adb16219ceab3eaa5cdf",
+  "itemCount":124,
+  "reviewedThroughOrdinal":124,
+  "findingCount":1,
+  "findings":[
+    {
+      "id":"g6e-res2-002",
+      "ordinal":54,
+      "type":"ambiguity",
+      "detail":"The stem asks which detail should be compared first when two daily bus-ridership estimates differ, but both route coverage plus counting method and date coverage plus counting method are independently material and defensible comparisons. The stem provides no criterion that makes either mixed-factor option uniquely first.",
+      "plannedRepair":"State that the reports already use the same dates and counting method, making route coverage the unique remaining material comparison without changing the research-source evaluation skill being assessed. Browser-effective content must then be reviewed again from item 1."
+    }
+  ]
+}

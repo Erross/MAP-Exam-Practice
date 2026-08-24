@@ -22,8 +22,9 @@ function reviewerAnswer(item,decision){
     return decision.ebsrParts.map((position,index)=>optionAt(item.parts[index].options,position,`${item.id}/part-${index+1}`));
   }
   if(decision.matches&&typeof decision.matches==="object"){
+    const choices=Array.isArray(item.choices)?item.choices:item.columns;
     const result={};
-    for(const [key,position] of Object.entries(decision.matches))result[key]=optionAt(item.choices,position,`${item.id}/${key}`);
+    for(const [key,position] of Object.entries(decision.matches))result[key]=optionAt(choices,position,`${item.id}/${key}`);
     return result;
   }
   if(Object.hasOwn(decision,"value"))return clone(decision.value);

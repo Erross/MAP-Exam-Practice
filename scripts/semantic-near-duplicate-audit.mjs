@@ -1,6 +1,7 @@
 import { BANKS } from "../js/banks.js";
+import { effectiveVariantFamily } from "../js/core/semantic-variants.js";
 
-function normalizePrompt(text=""){
+function normalizeText(text=""){
   return String(text)
     .normalize("NFKD")
     .toLowerCase()
@@ -9,6 +10,15 @@ function normalizePrompt(text=""){
     .trim()
     .split(/\s+/)
     .filter(Boolean);
+}
+
+function auditSurface(item){
+  // A generic ELA stem is not a duplicate when it asks students to reason from a
+  // genuinely different passage. Include the passage in the comparison surface.
+  if(item.subject==="ela"&&item.stimulus){
+    return `${item.stimulus.title||""} ${item.stimulus.text||""} ${item.prompt||""}`;
+  }
+  return item.prompt||"";
 }
 
 function tokenJaccard(a,b){
@@ -48,20 +58,20 @@ function sameStimulus(a,b){
 }
 
 function sameVariantFamily(a,b){
-  return Boolean(a.variantFamily&&b.variantFamily&&a.variantFamily===b.variantFamily);
+  return effectiveVariantFamily(a)===effectiveVariantFamily(b);
 }
 
 const findings=[];
 for(const [assessmentId,bank] of Object.entries(BANKS)){
   for(let i=0;i<bank.length;i++){
     const a=bank[i];
-    const aTokens=normalizePrompt(a.prompt);
+    const aTokens=normalizeText(auditSurface(a));
     if(aTokens.length<8)continue;
     for(let j=i+1;j<bank.length;j++){
       const b=bank[j];
       if(a.itemType!==b.itemType||a.standard!==b.standard||a.dok!==b.dok)continue;
       if(!sharesSession(a,b)||sameStimulus(a,b)||sameVariantFamily(a,b))continue;
-      const bTokens=normalizePrompt(b.prompt);
+      const bTokens=normalizeText(auditSurface(b));
       if(bTokens.length<8)continue;
       const lengthRatio=Math.min(aTokens.length,bTokens.length)/Math.max(aTokens.length,bTokens.length);
       if(lengthRatio<0.70)continue;
@@ -75,7 +85,7 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
 }
 
 if(findings.length){
-  console.error(`FAIL: ${findings.length} co-eligible near-duplicate prompt pair(s) lack a shared variantFamily.`);
+  console.error(`FAIL: ${findings.length} co-eligible near-duplicate pair(s) still lack an effective shared variant family.`);
   for(const finding of findings){
     console.error(`${finding.assessmentId}: ${finding.a} <> ${finding.b} (LCS ${finding.lcs}, Jaccard ${finding.jaccard})`);
     console.error(`  A: ${finding.promptA}`);
@@ -83,5 +93,5 @@ if(findings.length){
   }
   process.exitCode=1;
 }else{
-  console.log("PASS: no high-confidence co-eligible near-duplicate prompt pairs lack a shared variantFamily.");
+  console.log("PASS: no high-confidence co-eligible near-duplicate pairs lack an effective shared variant family.");
 }

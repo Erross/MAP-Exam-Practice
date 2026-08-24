@@ -1,0 +1,16 @@
+{
+  "schemaVersion":2,
+  "purpose":"in-progress answer-blind clean-room reviewer decisions for the systematic MAP fidelity audit",
+  "includesAnswerKeys":false,
+  "assessmentId":"g5-science",
+  "browserEffectiveFingerprint":"2c46cfed474cc6be9d4c4d8e73a691f6106d43bea1b38a079b36f4e2ed0bb731",
+  "itemCount":88,
+  "reviewedThroughOrdinal":30,
+  "defaultVerdicts":"pass",
+  "reviewMethod":"Fresh answerless browser-effective worksheet; scoring, rationales, keyed manifests, prior answers, tests, prior audits, and prior rubric reviews were treated as non-evidence. Auto-scored responses and constructed-response expectations are committed before any keyed reconciliation or manual rubric exposure.",
+  "answerEncoding":"option/options are 1-based positions in the blind worksheet; matches maps row keys to 1-based choice positions; value stores the independently determined raw response for graph, numeric, and constructed-response items.",
+  "answersById":{
+    "g5s-001":{"option":1},"g5s-002":{"value":[7.2,2.1,6.5]},"g5s-003":{"option":1},"g5s-004":{"option":1},"g5s-005":{"option":1},"g5s-006":{"options":[1,2]},"g5s-007":{"option":1},"g5s-008":{"matches":{"A":1,"B":2,"C":3}},"g5s-009":{"option":1},"g5s-010":{"option":1},"g5s-011":{"option":1},"g5s-012":{"option":1},"g5s-013":{"option":1},"g5s-014":{"option":1},"g5s-015":{"option":1},"g5s-016":{"option":1},"g5s-017":{"option":1},"g5s-018":{"option":1},"g5s-019":{"option":1},"g5s-020":{"option":1},"g5s-021":{"option":1},"g5s-022":{"option":1},"g5s-023":{"option":1},"g5s-024":{"option":1},"g5s-025":{"option":1},"g5s-026":{"options":[1,2]},"g5s-027":{"option":1},"g5s-028":{"value":100},"g5s-029":{"option":1},"g5s-030":{"value":[82,31,74]}
+  },
+  "findingsById":{}
+}

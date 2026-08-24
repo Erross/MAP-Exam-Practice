@@ -1,3 +1,5 @@
+import { effectiveVariantFamily } from "./semantic-variants.js";
+
 function shuffled(values,rng=Math.random){ const a=[...values]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
 export function eligibleForSession(bank,sessionId){ return bank.filter(item=>item.sessionEligibility.includes(Number(sessionId))); }
@@ -17,7 +19,7 @@ export function deliveryBundles(items){
   return bundles;
 }
 
-function bundleVariants(bundle){return bundle.map(item=>item.variantFamily||item.id);}
+function bundleVariants(bundle){return bundle.map(effectiveVariantFamily);}
 function bundleFitsVariants(bundle,usedVariants){
   const families=bundleVariants(bundle);
   return new Set(families).size===families.length && families.every(family=>!usedVariants.has(family));

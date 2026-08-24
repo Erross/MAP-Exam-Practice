@@ -29,7 +29,7 @@ function reviewerAnswer(item,decision){
   throw new Error(`${item.id}: unsupported compact reviewer answer encoding`);
 }
 
-function completeBlindReview(compact){
+export function completeBlindReview(compact){
   const template=buildCleanRoomReviewTemplate(compact.assessmentId);
   if(compact.includesAnswerKeys!==false)throw new Error("Compact decisions must remain answer-blind");
   if(compact.browserEffectiveFingerprint!==template.browserEffectiveFingerprint)throw new Error(`${compact.assessmentId}: compact review fingerprint is stale`);

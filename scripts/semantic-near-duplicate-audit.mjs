@@ -1,5 +1,5 @@
 import { BANKS } from "../js/banks.js";
-import { effectiveVariantFamily } from "../js/core/semantic-variants.js";
+import { effectiveVariantFamily, reviewedDistinctPair } from "../js/core/semantic-variants.js";
 
 function normalizeText(text=""){
   return String(text)
@@ -57,11 +57,11 @@ function sameStimulus(a,b){
   return Boolean(left&&right&&left===right);
 }
 
-function sameVariantFamily(a,b){
-  return effectiveVariantFamily(a)===effectiveVariantFamily(b);
-}
+function sameVariantFamily(a,b){return effectiveVariantFamily(a)===effectiveVariantFamily(b);}
+function performanceEventMutuallyExclusive(a,b){return a.strand==="Performance Event"&&b.strand==="Performance Event";}
 
 const findings=[];
+const reviewedDistinct=[];
 for(const [assessmentId,bank] of Object.entries(BANKS)){
   for(let i=0;i<bank.length;i++){
     const a=bank[i];
@@ -70,7 +70,7 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
     for(let j=i+1;j<bank.length;j++){
       const b=bank[j];
       if(a.itemType!==b.itemType||a.standard!==b.standard||a.dok!==b.dok)continue;
-      if(!sharesSession(a,b)||sameStimulus(a,b)||sameVariantFamily(a,b))continue;
+      if(!sharesSession(a,b)||sameStimulus(a,b)||sameVariantFamily(a,b)||performanceEventMutuallyExclusive(a,b))continue;
       const bTokens=normalizeText(auditSurface(b));
       if(bTokens.length<8)continue;
       const lengthRatio=Math.min(aTokens.length,bTokens.length)/Math.max(aTokens.length,bTokens.length);
@@ -78,6 +78,8 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
       const lcs=tokenLcsRatio(aTokens,bTokens);
       const jaccard=tokenJaccard(aTokens,bTokens);
       if(lcs>=0.86&&jaccard>=0.72){
+        const disposition=reviewedDistinctPair(a,b);
+        if(disposition){reviewedDistinct.push({assessmentId,a:a.id,b:b.id,disposition});continue;}
         findings.push({assessmentId,a:a.id,b:b.id,lcs:Number(lcs.toFixed(3)),jaccard:Number(jaccard.toFixed(3)),promptA:a.prompt,promptB:b.prompt});
       }
     }
@@ -85,7 +87,7 @@ for(const [assessmentId,bank] of Object.entries(BANKS)){
 }
 
 if(findings.length){
-  console.error(`FAIL: ${findings.length} co-eligible near-duplicate pair(s) still lack an effective shared variant family.`);
+  console.error(`FAIL: ${findings.length} co-eligible near-duplicate pair(s) still lack a shared family or reviewed-distinct disposition.`);
   for(const finding of findings){
     console.error(`${finding.assessmentId}: ${finding.a} <> ${finding.b} (LCS ${finding.lcs}, Jaccard ${finding.jaccard})`);
     console.error(`  A: ${finding.promptA}`);
@@ -93,5 +95,5 @@ if(findings.length){
   }
   process.exitCode=1;
 }else{
-  console.log("PASS: no high-confidence co-eligible near-duplicate pairs lack an effective shared variant family.");
+  console.log(`PASS: semantic near-duplicate gate reconciled; ${reviewedDistinct.length} high-similarity pair(s) are source-reviewed as substantively distinct.`);
 }

@@ -1,0 +1,18 @@
+{
+  "schemaVersion":1,
+  "purpose":"post-blind manual-rubric judgments for Grade 8 Science systematic audit round 2, pending machine fingerprint materialization",
+  "assessmentId":"g8-science",
+  "sourceHeadShaReviewed":"023744b4f85c3c631961234b168390bf0f63ed84",
+  "blindDecisionsCommitSha":"9ce46dc1a67d78232aa61203feb7c11903c12d1b",
+  "browserEffectiveFingerprint":null,
+  "manualResponseCount":6,
+  "processNote":"All 89 blind responses were committed before rubric exposure. While locating the CR-bearing source after that freeze, one non-CR source file containing auto-scored keys was opened before the six rubric judgments were recorded. This does not alter the already-frozen blind answers; the deviation is recorded explicitly rather than represented as a stricter sequence than actually occurred.",
+  "manualRubricDecisions":{
+    "g8s-cr-001":{"manualRubricVerdict":"pass","notes":"Frozen response identifies foam/Container C, cites 63°C versus 54°C and 44°C, calculates the smaller 17°C drop, and connects greater retained temperature to less thermal-energy transfer."},
+    "g8s-cr-002":{"manualRubricVerdict":"pass","notes":"Frozen response uses the unchanged 36.0 g total mass and explains that the same atoms are rearranged into gas and solid products without entering, leaving, being created, or being destroyed."},
+    "g8s-cr-003":{"manualRubricVerdict":"pass","notes":"Frozen response uses all four food/population values, identifies the overall increase with food, and explicitly uses the 46-to-48 plateau from 20 to 30 g/day to explain nonconstant response and possible additional limiting factors."},
+    "g8s-cr-004":{"manualRubricVerdict":"pass","notes":"Frozen response cites native cover falling 72% to 31% and insect species 18 to 11, avoids claiming proof of causation, and proposes repeated/comparison-site and environmental measurements as strengthening evidence."},
+    "g8s-cr-005":{"manualRubricVerdict":"pass","notes":"Frozen response uses the 210/122/55 kg seasonal evidence, relates vegetation to lower local sediment loss, and connects repeated erosion/transport/deposition over 25 years and several kilometers to a channel shift of tens of meters."},
+    "g8s-cr-006":{"manualRubricVerdict":"pass","notes":"Frozen response calculates Design A's 6,500 L/day reduction versus Design B's 1,900 L/day reduction and proposes relevant continued monitoring such as weather, soil moisture, field use, or maintenance."}
+  }
+}

@@ -101,7 +101,7 @@ import { BANK_G8_ELA_EXPANSION_2 } from "../data/grade-8/ela-expansion-2.js";
 import { BANK_G8_ELA_RESEARCH_EXPANSION } from "../data/grade-8/ela-research-expansion.js";
 import { BANK_G8_ELA_RESEARCH_EXPANSION_2 } from "../data/grade-8/ela-research-expansion-2.js";
 import { BANK_G8_ELA_FORM_TOPUP } from "../data/grade-8/ela-form-topup.js";
-import { BANK_G8_SCIENCE } from "../data/grade-8/science.js";
+import { BANK_G8_SCIENCE } from "../data/grade-8/science-certified.js";
 import { BANK_G8_SCIENCE_EXPANSION } from "../data/grade-8/science-expansion.js";
 import { BANK_G8_SCIENCE_EXPANSION_2 } from "../data/grade-8/science-expansion-2.js";
 import { BANK_G8_SCIENCE_BLUEPRINT_EXPANSION } from "../data/grade-8/science-blueprint-expansion.js";

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "purpose": "answer-blind first-pass findings from the systematic MAP fidelity audit",
+  "includesAnswerKeys": false,
+  "assessmentId": "g8-science",
+  "browserEffectiveFingerprint": "78bab17f5279fda9ac870fca64422edadf7ae8e92dd67cd994fe4f3a7485dc73",
+  "itemCount": 89,
+  "reviewedThroughOrdinal": 89,
+  "findingCount": 1,
+  "findings": [
+    {
+      "id": "g8s-003",
+      "ordinal": 3,
+      "type": "ambiguity",
+      "detail": "The stem asks for two changes that would improve the insulation-design evidence, but the stimulus already states that all containers started at 70°C. Therefore 'Use equal starting water temperatures' is not a change to the stated investigation, leaving only one offered option that actually improves the existing design.",
+      "plannedRepair": "Keep replication as one improvement and replace the already-satisfied equal-starting-temperature option with a genuine evidence-strengthening change that holds the insulation variable intact: measure each container at several equal time intervals during the test. Then restart the browser-effective Grade 8 Science review from item 1 on the new fingerprint."
+    }
+  ]
+}

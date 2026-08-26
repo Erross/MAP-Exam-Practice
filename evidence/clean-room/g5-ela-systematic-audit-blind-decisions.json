@@ -1,0 +1,22 @@
+{
+  "schemaVersion":2,
+  "purpose":"completed answer-blind clean-room reviewer decisions for the systematic MAP fidelity audit",
+  "includesAnswerKeys":false,
+  "assessmentId":"g5-ela",
+  "browserEffectiveFingerprint":"8da34d1b13e99780cbf36083c496d7db005e91502acd084ee2b48e4dfa99ebbd",
+  "itemCount":138,
+  "reviewedThroughOrdinal":138,
+  "defaultVerdicts":"pass",
+  "reviewMethod":"Fresh answerless browser-effective worksheet; scoring, rationales, keyed manifests, prior answers, tests, and old certification were treated as non-evidence. Each response and review dimension was judged before keyed reconciliation.",
+  "answerEncoding":"option/options are 1-based positions in the blind worksheet; ebsrParts is one 1-based option position per part; matches maps row keys to 1-based choice positions.",
+  "answersById":{
+    "g5e-001":{"option":1},"g5e-002":{"options":[1,3]},"g5e-003":{"option":1},"g5e-004":{"option":1},"g5e-005":{"option":1},"g5e-006":{"ebsrParts":[1,1]},"g5e-007":{"option":1},"g5e-008":{"option":1},"g5e-009":{"option":1},"g5e-010":{"option":1},"g5e-011":{"option":1},"g5e-012":{"option":1},"g5e-013":{"option":1},"g5e-014":{"option":1},"g5e-015":{"option":1},"g5e-016":{"option":1},"g5e-017":{"option":1},"g5e-018":{"option":1},"g5e-019":{"option":1},"g5e-020":{"option":1},
+    "g5e-021":{"option":1},"g5e-022":{"option":1},"g5e-023":{"option":1},"g5e-024":{"option":1},"g5e-025":{"option":1},"g5e-026":{"ebsrParts":[1,1]},"g5e-027":{"option":1},"g5e-028":{"options":[1,2]},"g5e-029":{"option":1},"g5e-030":{"option":1},"g5e-031":{"option":1},"g5e-032":{"option":2},"g5e-033":{"option":1},"g5e-034":{"options":[1,2]},"g5e-035":{"option":1},"g5e-036":{"option":1},"g5e-037":{"option":1},"g5e-038":{"option":1},"g5e-039":{"option":1},"g5e-040":{"options":[1,2]},
+    "g5e-res-001":{"option":1},"g5e-res-002":{"option":1},"g5e-res-003":{"options":[1,2]},"g5e-res-004":{"option":1},"g5e-res-005":{"option":1},"g5e-res-006":{"option":1},"g5e-res-007":{"option":1},"g5e-res-008":{"matches":{"A":1,"B":2,"C":3}},"g5e-res-009":{"option":1},"g5e-res-010":{"options":[1,2]},"g5e-res-011":{"option":1},"g5e-res-012":{"option":1},
+    "g5e-wl-001":{"option":1},"g5e-wl-002":{"option":1},"g5e-wl-003":{"option":1},"g5e-wl-004":{"option":1},"g5e-wl-005":{"option":1},"g5e-wl-006":{"option":1},"g5e-wl-007":{"option":1},"g5e-wl-008":{"option":4},"g5e-wl-009":{"option":1},"g5e-wl-010":{"option":1},"g5e-wl-011":{"option":1},"g5e-wl-012":{"option":1},"g5e-wl-013":{"option":1},"g5e-wl-014":{"option":1},"g5e-wl-015":{"option":1},"g5e-wl-016":{"option":1},"g5e-wl-017":{"option":1},"g5e-wl-018":{"option":1},"g5e-wl-019":{"option":1},"g5e-wl-020":{"option":1},"g5e-wl-021":{"option":1},"g5e-wl-022":{"option":1},"g5e-wl-023":{"option":1},"g5e-wl-024":{"option":1},"g5e-wl-025":{"option":1},"g5e-wl-026":{"option":1},"g5e-wl-027":{"option":1},"g5e-wl-028":{"option":1},"g5e-wl-029":{"option":1},"g5e-wl-030":{"option":1},"g5e-wl-031":{"option":1},"g5e-wl-032":{"option":1},
+    "g5e-res2-001":{"option":2},"g5e-res2-002":{"option":1},"g5e-res2-003":{"option":2},"g5e-res2-004":{"option":2},"g5e-res2-005":{"option":1},"g5e-res2-006":{"option":1},"g5e-res2-007":{"option":1},"g5e-res2-008":{"option":2},
+    "g5e-rd-001":{"option":1},"g5e-rd-002":{"option":1},"g5e-rd-003":{"option":1},"g5e-rd-004":{"option":1},"g5e-rd-005":{"option":1},"g5e-rd-006":{"option":1},"g5e-rd-007":{"option":1},"g5e-rd-008":{"option":1},"g5e-rd-009":{"option":1},"g5e-rd-010":{"option":1},"g5e-rd-011":{"option":1},"g5e-rd-012":{"option":1},"g5e-rd-013":{"option":1},"g5e-rd-014":{"option":1},"g5e-rd-015":{"option":1},"g5e-rd-016":{"option":1},"g5e-rd-017":{"option":1},"g5e-rd-018":{"option":1},"g5e-rd-019":{"option":1},"g5e-rd-020":{"option":1},"g5e-rd-021":{"option":1},"g5e-rd-022":{"option":1},"g5e-rd-023":{"option":1},"g5e-rd-024":{"option":1},"g5e-rd-025":{"option":1},"g5e-rd-026":{"option":1},"g5e-rd-027":{"option":1},"g5e-rd-028":{"option":1},"g5e-rd-029":{"option":1},"g5e-rd-030":{"option":1},"g5e-rd-031":{"option":1},"g5e-rd-032":{"option":1},"g5e-rd-033":{"option":1},"g5e-rd-034":{"option":1},"g5e-rd-035":{"option":1},"g5e-rd-036":{"option":1},
+    "g5e-top-001":{"option":1},"g5e-top-002":{"option":1},"g5e-top-003":{"option":1},"g5e-top-004":{"option":1},"g5e-top-005":{"option":1},"g5e-top-006":{"option":1},"g5e-top-007":{"option":1},"g5e-top-008":{"option":1},"g5e-top-009":{"option":1},"g5e-top-010":{"option":1}
+  },
+  "findingsById":{}
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion":2,
+  "purpose":"completed answer-blind clean-room reviewer decisions for the systematic MAP fidelity audit",
+  "includesAnswerKeys":false,
+  "assessmentId":"g7-ela",
+  "browserEffectiveFingerprint":"828882b278961110125ac03423f9913396cfb56cedfabe6bc9cd06eaabe00b95",
+  "itemCount":120,
+  "reviewedThroughOrdinal":120,
+  "defaultVerdicts":"pass",
+  "reviewMethod":"Fresh answerless browser-effective worksheet; scoring, rationales, keyed manifests, prior answers, tests, option-quality dispositions, and old certification were treated as non-evidence. Every response and review dimension was judged before hidden-key reconciliation.",
+  "answerEncoding":"option/options are 1-based positions in the blind worksheet; ebsrParts is one 1-based option position per part; matches maps row keys to 1-based choice positions.",
+  "answersById":{
+    "g7e-001":{"option":1},"g7e-002":{"ebsrParts":[1,1]},"g7e-003":{"option":1},"g7e-004":{"option":1},"g7e-005":{"option":1},"g7e-006":{"options":[1,2]},"g7e-007":{"option":1},"g7e-008":{"options":[1,2]},"g7e-009":{"option":1},"g7e-010":{"option":1},"g7e-011":{"matches":{"A":1,"B":2}},"g7e-012":{"option":1},"g7e-013":{"option":1},"g7e-014":{"options":[1,2]},"g7e-015":{"option":1},"g7e-016":{"option":1},"g7e-017":{"option":1},"g7e-018":{"option":1},"g7e-019":{"option":1},"g7e-020":{"option":1},"g7e-021":{"option":1},"g7e-022":{"option":1},"g7e-023":{"option":1},"g7e-024":{"option":1},"g7e-025":{"option":1},"g7e-026":{"option":1},"g7e-027":{"option":1},"g7e-028":{"option":1},"g7e-029":{"option":1},"g7e-030":{"option":1},"g7e-031":{"option":1},"g7e-032":{"option":1},"g7e-033":{"option":1},"g7e-034":{"option":1},"g7e-035":{"option":1},"g7e-036":{"option":1},"g7e-037":{"option":1},"g7e-038":{"option":1},"g7e-039":{"option":1},"g7e-040":{"options":[1,2]},
+    "g7e-res-001":{"option":1},"g7e-res-002":{"option":1},"g7e-res-003":{"options":[1,2]},"g7e-res-004":{"option":1},"g7e-res-005":{"option":1},"g7e-res-006":{"option":1},"g7e-res-007":{"matches":{"A":1,"B":2,"C":3}},"g7e-res-008":{"option":1},"g7e-res-009":{"option":1},"g7e-res-010":{"options":[1,2]},"g7e-res-011":{"option":1},"g7e-res-012":{"option":1},
+    "g7e-res2-001":{"option":1},"g7e-res2-002":{"option":1},"g7e-res2-003":{"option":1},"g7e-res2-004":{"option":1},"g7e-res2-005":{"option":1},"g7e-res2-006":{"option":1},"g7e-res2-007":{"option":1},"g7e-res2-008":{"option":1},
+    "g7e-rd-001":{"option":1},"g7e-rd-002":{"option":1},"g7e-rd-003":{"option":1},"g7e-rd-004":{"option":1},"g7e-rd-005":{"option":1},"g7e-rd-006":{"option":1},"g7e-rd-007":{"option":1},"g7e-rd-008":{"option":1},"g7e-rd-009":{"option":1},"g7e-rd-010":{"option":1},"g7e-rd-011":{"option":1},"g7e-rd-012":{"option":1},"g7e-rd-013":{"option":1},"g7e-rd-014":{"option":1},"g7e-rd-015":{"option":1},"g7e-rd-016":{"option":1},"g7e-rd-017":{"option":1},"g7e-rd-018":{"option":1},"g7e-rd-019":{"option":1},"g7e-rd-020":{"option":1},"g7e-rd-021":{"option":1},"g7e-rd-022":{"option":1},"g7e-rd-023":{"option":1},"g7e-rd-024":{"option":1},"g7e-rd-025":{"option":1},"g7e-rd-026":{"option":1},"g7e-rd-027":{"option":1},"g7e-rd-028":{"option":1},"g7e-rd-029":{"option":1},"g7e-rd-030":{"option":1},"g7e-rd-031":{"option":1},"g7e-rd-032":{"option":1},
+    "g7e-top-001":{"option":1},"g7e-top-002":{"option":1},"g7e-top-003":{"option":1},"g7e-top-004":{"option":1},"g7e-top-005":{"option":1},"g7e-top-006":{"option":1},"g7e-top-007":{"option":1},"g7e-top-008":{"option":1},"g7e-top-009":{"option":1},"g7e-top-010":{"option":1},"g7e-top-011":{"option":1},"g7e-top-012":{"option":1},"g7e-top-013":{"option":1},"g7e-top-014":{"option":1},"g7e-top-015":{"option":1},"g7e-top-016":{"option":1},
+    "g7e-wtop-001":{"options":[1,2]},"g7e-wtop-002":{"options":[1,2]},"g7e-wtop-003":{"options":[1,2]},"g7e-wtop-004":{"options":[1,2]},"g7e-wtop-005":{"options":[1,2]},"g7e-wtop-006":{"options":[1,2]},"g7e-wtop-007":{"options":[1,2]},"g7e-wtop-008":{"options":[1,2]},"g7e-wtop-009":{"options":[1,2]},"g7e-wtop-010":{"options":[1,2]},"g7e-wtop-011":{"matches":{"A":1,"B":2,"C":3}},"g7e-wtop-012":{"options":[1,2]}
+  },
+  "findingsById":{}
+}

@@ -38,9 +38,29 @@ function matching(item,current,onChange){
 }
 
 function ordering(item,current,onChange){
-  const d=document.createElement("div"); d.className="order-grid"; const tokens=item.tokens||item.options||[]; let vals=Array.isArray(current)&&current.length?[...current]:[...tokens];
-  vals.forEach((v,idx)=>{ const row=document.createElement("div"); row.className="order-row"; const select=document.createElement("select"); select.setAttribute("aria-label",`Position ${idx+1}`); select.innerHTML=tokens.map(o=>`<option>${esc(o)}</option>`).join(""); select.value=v; select.onchange=()=>{const n=[...vals];n[idx]=select.value;vals=n;onChange(vals);}; row.append(document.createTextNode(`${idx+1}. `),select); d.append(row); });
-  const help=document.createElement("small"); help.textContent="Choose one item for each position. This keyboard-accessible control preserves drag-and-drop ordering semantics."; d.append(help); return d;
+  const d=document.createElement("div"); d.className="order-grid"; const tokens=[...(item.tokens||item.options||[])];
+  const validCurrent=Array.isArray(current)&&current.length===tokens.length&&current.every(v=>tokens.includes(v))&&new Set(current).size===tokens.length;
+  let vals=validCurrent?[...current]:[...tokens];
+  const list=document.createElement("div"); list.className="order-list";
+  const send=()=>onChange([...vals]);
+  const redraw=()=>{
+    list.replaceChildren();
+    vals.forEach((value,index)=>{
+      const row=document.createElement("div"); row.className="order-row"; row.setAttribute("data-position",String(index+1));
+      const position=document.createElement("span"); position.className="order-position"; position.textContent=`${index+1}`;
+      const token=document.createElement("strong"); token.className="order-token"; token.textContent=String(value);
+      const controls=document.createElement("span"); controls.className="order-controls";
+      const up=document.createElement("button"); up.type="button"; up.className="secondary order-move"; up.textContent="↑"; up.title=`Move ${value} earlier`; up.setAttribute("aria-label",`Move ${value} earlier`); up.disabled=index===0;
+      const down=document.createElement("button"); down.type="button"; down.className="secondary order-move"; down.textContent="↓"; down.title=`Move ${value} later`; down.setAttribute("aria-label",`Move ${value} later`); down.disabled=index===vals.length-1;
+      up.onclick=()=>{if(index===0)return; [vals[index-1],vals[index]]=[vals[index],vals[index-1]]; send(); redraw();};
+      down.onclick=()=>{if(index===vals.length-1)return; [vals[index+1],vals[index]]=[vals[index],vals[index+1]]; send(); redraw();};
+      controls.append(up,down); row.append(position,token,controls); list.append(row);
+    });
+  };
+  redraw();
+  const confirm=document.createElement("button"); confirm.type="button"; confirm.className="secondary order-confirm"; confirm.textContent="Use this order"; confirm.onclick=send;
+  const help=document.createElement("small"); help.textContent="Reorder the tokens with the arrow controls, then use this order. Each token can appear exactly once.";
+  d.append(list,confirm,help); return d;
 }
 
 function dataEntry(item,current,onChange){

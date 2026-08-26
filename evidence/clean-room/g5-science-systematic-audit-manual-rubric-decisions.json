@@ -1,0 +1,15 @@
+{
+  "schemaVersion":1,
+  "purpose":"post-blind manual-rubric judgments for the systematic MAP fidelity audit",
+  "assessmentId":"g5-science",
+  "browserEffectiveFingerprint":"2c46cfed474cc6be9d4c4d8e73a691f6106d43bea1b38a079b36f4e2ed0bb731",
+  "blindReviewFingerprint":"7fd94dbadfee70b66b59f2c5dc38b692b0c24365b76ad50e5f10e0eef56f4b49",
+  "manualRubricDecisions":{
+    "g5s-cr-001":{"manualRubricVerdict":"pass","notes":"Frozen response uses unchanged 100 g total mass and explicitly explains that dissolved tablet matter remains in the sealed system."},
+    "g5s-cr-002":{"manualRubricVerdict":"pass","notes":"Frozen response uses both 1 N/45 cm and 3 N/118 cm results and connects the stronger push to the greater motion change."},
+    "g5s-cr-003":{"manualRubricVerdict":"pass","notes":"Frozen response traces environment to grass to consumers and correctly explains decomposers returning matter to soil and air."},
+    "g5s-cr-004":{"manualRubricVerdict":"pass","notes":"Frozen response compares 18 g plant gain with 4 g soil loss and connects the remaining material source to air and water."},
+    "g5s-cr-005":{"manualRubricVerdict":"pass","notes":"Frozen response states the slope/soil-loss pattern and supports it with all three measurements: 11 g, 25 g, and 44 g."},
+    "g5s-cr-006":{"manualRubricVerdict":"pass","notes":"Frozen response uses the 920 to 610 L/day decrease and proposes relevant comparison controls such as weather or irrigation duration."}
+  }
+}

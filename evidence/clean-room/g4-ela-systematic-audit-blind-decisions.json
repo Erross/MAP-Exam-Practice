@@ -1,0 +1,22 @@
+{
+  "schemaVersion":2,
+  "purpose":"completed answer-blind clean-room reviewer decisions for the systematic MAP fidelity audit",
+  "includesAnswerKeys":false,
+  "assessmentId":"g4-ela",
+  "browserEffectiveFingerprint":"e09dc02bb444f52937cfc289372982059f69bf9ee9f93f6f2ec6384757dbc09a",
+  "itemCount":116,
+  "reviewedThroughOrdinal":116,
+  "defaultVerdicts":"pass",
+  "reviewMethod":"Fresh answerless browser-effective worksheet; scoring, rationales, keyed manifests, prior answers, tests, and old certification were treated as non-evidence. Each response and review dimension was judged before keyed reconciliation.",
+  "answerEncoding":"option/options are 1-based positions in the blind worksheet; ebsrParts is one 1-based option position per part; matches maps row keys to 1-based choice positions.",
+  "answersById":{
+    "g4e-001":{"option":1},"g4e-002":{"option":1},"g4e-003":{"option":1},"g4e-004":{"options":[1,2]},"g4e-005":{"option":1},"g4e-006":{"ebsrParts":[1,1]},"g4e-007":{"option":1},"g4e-008":{"option":1},"g4e-009":{"matches":{"A":1,"B":2,"C":3}},"g4e-010":{"option":1},"g4e-011":{"option":1},"g4e-012":{"option":1},"g4e-013":{"option":1},"g4e-014":{"option":1},"g4e-015":{"option":1},"g4e-016":{"option":1},"g4e-017":{"option":1},"g4e-018":{"option":1},"g4e-019":{"option":1},"g4e-020":{"option":1},
+    "g4e-021":{"option":1},"g4e-022":{"option":1},"g4e-023":{"option":1},"g4e-024":{"option":1},"g4e-025":{"option":1},"g4e-026":{"option":1},"g4e-027":{"option":1},"g4e-028":{"option":1},"g4e-029":{"option":1},"g4e-030":{"option":1},"g4e-031":{"option":1},"g4e-032":{"option":1},"g4e-033":{"option":1},"g4e-034":{"option":1},"g4e-035":{"option":1},"g4e-036":{"options":[1,2]},"g4e-037":{"option":1},"g4e-038":{"option":1},"g4e-039":{"option":1},"g4e-040":{"options":[1,2]},
+    "g4e-res-001":{"option":1},"g4e-res-002":{"option":1},"g4e-res-003":{"options":[1,2]},"g4e-res-004":{"option":1},"g4e-res-005":{"option":1},"g4e-res-006":{"option":1},"g4e-res-007":{"option":1},"g4e-res-008":{"matches":{"A":1,"B":2,"C":3}},"g4e-res-009":{"option":1},"g4e-res-010":{"options":[1,2]},"g4e-res-011":{"option":1},"g4e-res-012":{"option":1},
+    "g4e-wl-001":{"option":1},"g4e-wl-002":{"option":1},"g4e-wl-003":{"option":1},"g4e-wl-004":{"option":1},"g4e-wl-005":{"option":1},"g4e-wl-006":{"option":1},"g4e-wl-007":{"option":1},"g4e-wl-008":{"option":1},"g4e-wl-009":{"option":1},"g4e-wl-010":{"option":1},"g4e-wl-011":{"option":1},"g4e-wl-012":{"option":1},
+    "g4e-res2-001":{"option":2},"g4e-res2-002":{"option":1},"g4e-res2-003":{"option":1},"g4e-res2-004":{"option":2},"g4e-res2-005":{"option":2},"g4e-res2-006":{"option":3},"g4e-res2-007":{"option":1},"g4e-res2-008":{"option":1},
+    "g4e-rd-001":{"option":1},"g4e-rd-002":{"option":1},"g4e-rd-003":{"option":1},"g4e-rd-004":{"option":1},"g4e-rd-005":{"option":1},"g4e-rd-006":{"option":1},"g4e-rd-007":{"option":1},"g4e-rd-008":{"options":[1,2]},"g4e-rd-009":{"option":1},"g4e-rd-010":{"option":1},"g4e-rd-011":{"option":1},"g4e-rd-012":{"option":1},"g4e-rd-013":{"option":1},"g4e-rd-014":{"option":1},"g4e-rd-015":{"option":1},"g4e-rd-016":{"options":[1,2]},"g4e-rd-017":{"option":1},"g4e-rd-018":{"option":1},"g4e-rd-019":{"option":1},"g4e-rd-020":{"option":1},"g4e-rd-021":{"option":1},"g4e-rd-022":{"option":1},"g4e-rd-023":{"option":1},"g4e-rd-024":{"options":[1,2]},"g4e-rd-025":{"option":1},"g4e-rd-026":{"option":1},"g4e-rd-027":{"option":1},"g4e-rd-028":{"option":1},"g4e-rd-029":{"option":1},"g4e-rd-030":{"option":1},"g4e-rd-031":{"option":1},"g4e-rd-032":{"options":[1,2]},
+    "g4e-top-001":{"option":1},"g4e-top-002":{"option":1},"g4e-top-003":{"option":1},"g4e-top-004":{"option":1},"g4e-top-005":{"option":1},"g4e-top-006":{"option":1},"g4e-top-007":{"option":1},"g4e-top-008":{"option":1},"g4e-top-009":{"option":1},"g4e-top-010":{"option":1},"g4e-top-011":{"option":1},"g4e-top-012":{"option":1}
+  },
+  "findingsById":{}
+}

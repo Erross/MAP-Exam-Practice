@@ -34,6 +34,23 @@ assert.equal(byId.get("g8s-cr-005")?.scoring?.rubric?.maxPoints,2,"g8s-cr-005 ma
 assert.match(byId.get("g8s-cr-005")?.prompt||"",/25-year/i,"g8s-cr-005 must retain long-term evidence");
 assert.match(byId.get("g8s-cr-005")?.prompt||"",/kilometer/i,"g8s-cr-005 must retain spatial-scale evidence");
 
+const insulationEvidenceItem=byId.get("g8s-003");
+assert(insulationEvidenceItem,"g8s-003 insulation-evidence item is missing");
+assert.deepEqual(
+  insulationEvidenceItem.scoring?.answers,
+  ["Repeat each condition several times","Measure each container's temperature at several equal time intervals during the 20 minutes"],
+  "g8s-003 must retain two genuine evidence-strengthening changes"
+);
+assert(!insulationEvidenceItem.options.includes("Use equal starting water temperatures"),"g8s-003 must not present an already-satisfied setup condition as a requested change");
+assert.match(insulationEvidenceItem.options[1]||"",/equal time intervals/i,"g8s-003 must retain repeated equal-interval measurement as the second improvement");
+
+const matterModelItem=byId.get("g8s-013");
+assert(matterModelItem,"g8s-013 matter-model item is missing");
+assert.equal(matterModelItem.standard,"6-8.PS1.A.1","g8s-013 matter-model alignment regressed");
+assert.doesNotMatch(matterModelItem.prompt||"",/extended structure/i,"g8s-013 must not cue the correct option by repeating the target label in the stem");
+assert.doesNotMatch(String(matterModelItem.scoring?.answer||""),/extended structure/i,"g8s-013 correct option must require interpreting the particle model rather than matching the stem label");
+assert.match(matterModelItem.prompt||"",/not made of separate molecules/i,"g8s-013 must still distinguish a repeating solid arrangement from discrete molecules");
+
 const solarScaleIds=["g8s-019","g8s-020","g8s-021","g8s-div-a017","g8s-div-b017","g8s-div-b019"];
 for(const id of solarScaleIds)assert.equal(byId.get(id)?.standard,"6-8.ESS1.B.1",`${id}: solar-system scale item regressed to another expectation`);
 const magneticForceIds=["g8s-033","g8s-034","g8s-035","g8s-036"];
@@ -47,4 +64,4 @@ assert.match(capResourceEvidence,/population/i,"g8s-cap-008 lost the population 
 assert.match(capResourceEvidence,/(per person|per-person)/i,"g8s-cap-008 lost the per-capita consumption dimension of ESS3.C.1");
 assert.match(capResourceEvidence,/(water demand|total water|total demand)/i,"g8s-cap-008 must connect the two variables to resource demand");
 
-console.log(`PASS: all ${bank.length} Grade 8 Science items use source-defined middle-school expectations; all ${consolidatedEss2Ids.length} ESS2.A.2 time/spatial-scale repairs and the ESS3.C.1 population/per-capita calculation live directly in source banks.`);
+console.log(`PASS: all ${bank.length} Grade 8 Science items use source-defined middle-school expectations; ${consolidatedEss2Ids.length} ESS2.A.2 repairs, the g8s-003 insulation-evidence repair, the g8s-013 matter-model cue repair, and the ESS3.C.1 population/per-capita calculation are pinned in source.`);
